@@ -15,6 +15,12 @@ namespace The_Caves_of_Kardun.TileEngine
 {
     public sealed class Room
     {
+        #region Fields
+
+        private Random random;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -58,11 +64,26 @@ namespace The_Caves_of_Kardun.TileEngine
         /// </summary>
         public Point Center
         {
+            /*
             get
             {
-                return new Point(Left + Width / 2, Top + Height / 2);
+                try
+                {
+                    return new Point(Left + random.Next(3, Width - 3), Top + random.Next(3, Height - 3));
+                }
+                catch { }
+
+                return new Point(0, 0);
+            }*/
+
+            
+            get
+            {
+                return new Point(Left + Width/2, Top + Height/2);
             }
         }
+
+        public bool IsConnect { get; set; }
 
         #endregion
 
@@ -81,6 +102,8 @@ namespace The_Caves_of_Kardun.TileEngine
             this.Top = top;
             this.Width = width;
             this.Height = height;
+
+            this.random = new Random();
         }
 
         #endregion

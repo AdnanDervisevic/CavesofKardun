@@ -1,8 +1,0 @@
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\obj\x86\Debug\The Caves of Kardun.csprojResolveAssemblyReference.cache
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\bin\x86\Debug\Content\Tiles\floor.xnb
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\bin\x86\Debug\Content\Tiles\wall.xnb
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\bin\x86\Debug\The Caves of Kardun.exe
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\bin\x86\Debug\The Caves of Kardun.pdb
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\obj\x86\Debug\The Caves of Kardun.exe
-D:\Dropbox\HV\Årskurs 3\PDT200\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\The Caves of Kardun\obj\x86\Debug\The Caves of Kardun.pdb

@@ -1,2 +1,0 @@
-Content\Tiles\floor.xnb
-Content\Tiles\wall.xnb

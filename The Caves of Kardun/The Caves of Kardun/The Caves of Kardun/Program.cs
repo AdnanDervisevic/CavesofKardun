@@ -23,7 +23,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (TheCavesOfKardun game = new TheCavesOfKardun())
             {
                 game.Run();
             }
