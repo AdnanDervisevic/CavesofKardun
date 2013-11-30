@@ -91,18 +91,25 @@ namespace The_Caves_of_Kardun.TileEngine
             MakeLevel(this.randomSeed, this.amountOfRooms, this.maxFails);
         }
 
+        public void OpenDoor(Point point)
+        {
+            this.mapData[point.X, point.Y] = 1;
+        }
+
         /// <summary>
         /// Draws the level.
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="cameraPosition"></param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 cameraPosition, Point min, Point max)
+        public void Draw(SpriteBatch spriteBatch, Vector2 cameraPosition, Vector2 playerPosition, Point min, Point max)
         {
             min.X = Math.Max(min.X, 0);
             min.Y = Math.Max(min.Y, 0);
 
             max.X = Math.Min(max.X, mapDimensions.X);
             max.Y = Math.Min(max.Y, mapDimensions.Y);
+
+            //UpdateRooms(playerPosition);
 
             spriteBatch.Begin();
             for (int x = min.X; x < max.X; x++)
@@ -135,6 +142,35 @@ namespace The_Caves_of_Kardun.TileEngine
             spriteBatch.End();
         }
 
+        private void UpdateRooms(Vector2 playerPosition)
+        {
+            foreach (Room room in this.rooms)
+            {
+                if (DrawRoom(room, playerPosition))
+                {
+                    for (int x = 0; x < room.Width; x++)
+                    {
+                        for (int y = 0; y < room.Height; y++)
+                        {
+                            if (x > 0 && x < room.Width - 1 || y > 0 || y < room.Height - 1)
+                                mapData[room.Left + x, room.Top + y] = room.MapData[x, y];
+                        }
+                    }
+                }
+                else
+                {
+                    for (int x = 0; x < room.Width; x++)
+                    {
+                        for (int y = 0; y < room.Height; y++)
+                        {
+                            if (x > 0 && x < room.Width - 1 || y > 0 || y < room.Height - 1)
+                                mapData[room.Left + x, room.Top + y] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Private Helpers
@@ -159,8 +195,8 @@ namespace The_Caves_of_Kardun.TileEngine
 
             while (this.rooms.Count < amountOfRooms)
             {
-                int width = random.Next(8, 14);
-                int height = random.Next(8, 14);
+                int width = random.Next(8, 15);
+                int height = random.Next(8, 15);
 
                 Room room = new Room(
                     random.Next(0, mapDimensions.X - width),
@@ -180,12 +216,91 @@ namespace The_Caves_of_Kardun.TileEngine
             foreach (Room room in this.rooms)
                 MakeRoom(room);
 
+            OrderRooms();
+
             for (int i = 0; i < this.rooms.Count - 1; i++)
             {
                 MakeCorridor(this.rooms[i], this.rooms[i + 1]);
             }
 
             MakeWalls();
+            //MakeDoors();
+        }
+
+        private void MakeDoors()
+        {
+            foreach (Room room in this.rooms)
+            {
+                for (int x = room.Left; x < room.Right; x++)
+                {
+                    // If single door at the top, set door texture.
+                    if (this.mapData[x, room.Top] == 2 && this.mapData[x + 1, room.Top] == 1 && this.mapData[x + 2, room.Top] == 2)
+                    {
+                        this.mapData[x + 1, room.Top] = 3;
+                        room.MapData[x - room.Left + 1, 0] = 3;
+                    }
+
+                    // If double door at the top, set door texture.
+                    if (this.mapData[x, room.Top] == 2 && this.mapData[x + 1, room.Top] == 1 && this.mapData[x + 2, room.Top] == 1 && this.mapData[x + 3, room.Top] == 2)
+                    {
+                        this.mapData[x + 1, room.Top] = 3;
+                        this.mapData[x + 2, room.Top] = 3;
+                        room.MapData[x - room.Left + 1, 0] = 3;
+                        room.MapData[x - room.Left + 2, 0] = 3;
+                    }
+
+                    // If single door at the bottom, set door texture.
+                    if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 2)
+                    {
+                        this.mapData[x + 1, room.Bottom] = 3;
+                        room.MapData[x - room.Left + 1, room.MapData.GetLength(1) - 1] = 3;
+                    }
+
+                    // If double door at the bottom, set door texture.
+                    if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 1 && this.mapData[x + 3, room.Bottom] == 2)
+                    {
+                        this.mapData[x + 1, room.Bottom] = 3;
+                        this.mapData[x + 2, room.Bottom] = 3;
+                        room.MapData[x - room.Left + 1, room.MapData.GetLength(1) - 1] = 3;
+                        room.MapData[x - room.Left + 2, room.MapData.GetLength(1) - 1] = 3;
+                    }
+                }
+
+                for (int y = room.Top; y < room.Bottom; y++)
+                {
+                    // If single door at the top, set door texture.
+                    if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 2)
+                    {
+                        this.mapData[room.Left, y + 1] = 3;
+                        room.MapData[0, y - room.Top + 1] = 3;
+                    }
+
+                    // If double door at the top, set door texture.
+                    if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 1 && this.mapData[room.Left, y + 3] == 2)
+                    {
+                        this.mapData[room.Left, y + 1] = 3;
+                        this.mapData[room.Left, y + 2] = 3;
+                        room.MapData[0, y - room.Top + 1] = 3;
+                        room.MapData[0, y - room.Top + 2] = 3;
+                    }
+
+                    // If single door at the bottom, set door texture.
+                    if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 2)
+                    {
+                        this.mapData[room.Right, y + 1] = 3;
+                        room.MapData[room.MapData.GetLength(0) - 1, y - room.Top + 1] = 3;
+                    }
+
+                    // If double door at the bottom, set door texture.
+                    if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 1 && this.mapData[room.Right, y + 3] == 2)
+                    {
+                        this.mapData[room.Right, y + 1] = 3;
+                        this.mapData[room.Right, y + 2] = 3;
+                        room.MapData[room.MapData.GetLength(0) - 1, y - room.Top + 1] = 3;
+                        room.MapData[room.MapData.GetLength(0) - 1, y - room.Top + 2] = 3;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -199,11 +314,46 @@ namespace The_Caves_of_Kardun.TileEngine
                 for (int y = 0; y < room.Height; y++)
                 {
                     if (x == 0 || x == room.Width - 1 || y == 0 || y == room.Height - 1)
+                    {
                         mapData[room.Left + x, room.Top + y] = 2;
+                        room.MapData[x, y] = 2;
+                    }
                     else
+                    {
                         mapData[room.Left + x, room.Top + y] = 1;
+                        room.MapData[x, y] = 1;
+                    }
                 }
             }
+        }
+
+        private void OrderRooms()
+        {
+            Room[] rooms = new Room[this.rooms.Count];
+
+            rooms[0] = this.rooms[0];
+            int ri = 1;
+
+            for (int i = 0; i < this.rooms.Count - 1; i++)
+            {
+                Room nearestRoom = this.rooms[i + 1];
+
+                double nearestDistance = Math.Sqrt(Math.Pow(Math.Abs(this.rooms[i].Left - nearestRoom.Left), 2) + Math.Pow(Math.Abs(this.rooms[i].Top - nearestRoom.Top), 2));
+
+                for (int j = i + 2; j < this.rooms.Count; j++)
+                {
+                    double distance = Math.Sqrt(Math.Pow(Math.Abs(this.rooms[i].Left - nearestRoom.Left), 2) + Math.Pow(Math.Abs(this.rooms[i].Top - nearestRoom.Top), 2));
+
+                    if (distance < nearestDistance)
+                        nearestRoom = this.rooms[j];
+                }
+
+                rooms[ri] = nearestRoom;
+                ri++;
+            }
+
+            this.rooms.Clear();
+            this.rooms = new List<Room>(rooms);
         }
 
         /// <summary>
@@ -295,6 +445,55 @@ namespace The_Caves_of_Kardun.TileEngine
             foreach (Room r in this.rooms)
                 if (room.CollidesWith(r))
                     return true;
+
+            return false;
+        }
+
+        private bool DrawRoom(Room room, Vector2 playerPosition)
+        {
+            Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(playerPosition);
+
+            if (room.Left < playerCoords.X && room.Right > playerCoords.X && room.Top < playerCoords.Y && room.Bottom > playerCoords.Y)
+                return true;
+
+
+            for (int x = room.Left; x < room.Right; x++)
+            {
+                // If single door open at the top, draw room.
+                if (this.mapData[x, room.Top] == 2 && this.mapData[x + 1, room.Top] == 1 && this.mapData[x + 2, room.Top] == 2)
+                    return true;
+
+                // If double door at the top, draw room.
+                if (this.mapData[x, room.Top] == 2 && (this.mapData[x + 1, room.Top] == 1 || this.mapData[x + 2, room.Top] == 1) && this.mapData[x + 3, room.Top] == 2)
+                    return true;
+
+                // If single door at the bottom, draw room.
+                if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 2)
+                    return true;
+
+                // If double door at the bottom, draw room.
+                if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 1 && this.mapData[x + 3, room.Bottom] == 2)
+                    return true;
+            }
+
+            for (int y = room.Top; y < room.Bottom; y++)
+            {
+                // If single door at the top, draw room.
+                if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 2)
+                    return true;
+
+                // If double door at the top, draw room.
+                if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 1 && this.mapData[room.Left, y + 3] == 2)
+                    return true;
+
+                // If single door at the bottom, draw room.
+                if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 2)
+                    return true;
+
+                // If double door at the bottom, draw room.
+                if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 1 && this.mapData[room.Right, y + 3] == 2)
+                    return true;
+            }
 
             return false;
         }

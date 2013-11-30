@@ -38,13 +38,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tiles\floor.png">
-      <Name>floor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Tiles\wall.png">
       <Name>wall</Name>
       <Importer>TextureImporter</Importer>
@@ -61,6 +54,13 @@
   <ItemGroup>
     <Compile Include="Hover.png">
       <Name>Hover</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Tiles\floor.jpg">
+      <Name>floor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

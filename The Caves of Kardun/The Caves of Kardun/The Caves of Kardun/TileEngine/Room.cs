@@ -83,6 +83,8 @@ namespace The_Caves_of_Kardun.TileEngine
             }
         }
 
+        public int[,] MapData { get; set; }
+
         public bool IsConnect { get; set; }
 
         #endregion
@@ -104,6 +106,8 @@ namespace The_Caves_of_Kardun.TileEngine
             this.Height = height;
 
             this.random = new Random();
+
+            this.MapData = new int[width, height];
         }
 
         #endregion

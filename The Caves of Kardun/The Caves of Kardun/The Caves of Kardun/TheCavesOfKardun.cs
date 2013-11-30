@@ -41,8 +41,8 @@ namespace The_Caves_of_Kardun
 
         #region Consts
 
-        public const int TileWidth = 48;
-        public const int TileHeight = 48;
+        public static int TileWidth = 96;
+        public static int TileHeight = 96;
 
         #endregion
 
@@ -95,7 +95,7 @@ namespace The_Caves_of_Kardun
             this.Content.RootDirectory = "Content";
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.level = new Level(new Point(70, 70), null, 10, 50);
+            this.level = new Level(new Point(75, 75), null, 20, 100);
 
             base.Initialize();
         }
@@ -184,7 +184,7 @@ namespace The_Caves_of_Kardun
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            this.level.Draw(spriteBatch, cameraPosition, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
+            this.level.Draw(spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
             this.player.Draw(spriteBatch, cameraPosition);
 
