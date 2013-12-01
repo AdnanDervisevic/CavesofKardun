@@ -41,8 +41,8 @@ namespace The_Caves_of_Kardun
 
         #region Consts
 
-        public static int TileWidth = 96;
-        public static int TileHeight = 96;
+        public static int TileWidth = 16;
+        public static int TileHeight = 16;
 
         #endregion
 
@@ -57,6 +57,7 @@ namespace The_Caves_of_Kardun
 
         private Vector2 cameraPosition;
         private Player player;
+        private Player boss;
         private Level level;
 
         #endregion
@@ -110,11 +111,13 @@ namespace The_Caves_of_Kardun
 
             this.hoverTexture = Content.Load<Texture2D>("Hover");
 
-            int roomIndex = random.Next(0, this.level.Rooms.Count - 1);
-
             this.player = new Player(Content.Load<Texture2D>("Tiles/player"), new Vector2(
-                this.level.Rooms[roomIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[roomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500);
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500);
+
+            this.boss = new Player(Content.Load<Texture2D>("Tiles/player"), new Vector2(
+                this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
+                this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500);
         }
 
         /// <summary>
@@ -142,6 +145,8 @@ namespace The_Caves_of_Kardun
         #region Public Methods
 
         KeyboardState prevState;
+        MouseState mouseState;
+        MouseState prevMouseState;
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -150,29 +155,34 @@ namespace The_Caves_of_Kardun
         protected override void Update(GameTime gameTime)
         {
             KeyboardState state = Keyboard.GetState();
+            mouseState = Mouse.GetState();
 
             if (state.IsKeyDown(Keys.Enter) && prevState.IsKeyUp(Keys.Enter))
             {
                 this.level.RecreateLevel();
 
-                int roomIndex = random.Next(0, this.level.Rooms.Count - 1);
                 this.player.Position = new Vector2(
-                    this.level.Rooms[roomIndex].Center.X * TheCavesOfKardun.TileWidth,
-                    this.level.Rooms[roomIndex].Center.Y * TheCavesOfKardun.TileHeight);
+                    this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
+                    this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
+
+                this.boss.Position = new Vector2(
+                    this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
+                    this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight);
             }
 
             if (state.IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
                 Exit();
 
-            UpdateMovement(gameTime);
+            UpdateGameplay(gameTime);
 
-            if (this.player.Motion != Vector2.Zero || this.player.Attacks)
+            if (this.player.Motion != Vector2.Zero)
                 UpdateAI();
 
-            this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width/2;
+            this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
             this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
          
             prevState = state;
+            prevMouseState = mouseState;
             base.Update(gameTime);
         }
 
@@ -187,6 +197,7 @@ namespace The_Caves_of_Kardun
             this.level.Draw(spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
             this.player.Draw(spriteBatch, cameraPosition);
+            this.boss.Draw(spriteBatch, cameraPosition);
 
             spriteBatch.Begin();
             spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
@@ -210,84 +221,88 @@ namespace The_Caves_of_Kardun
         /// Handles movement for the player.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        private void UpdateMovement(GameTime gameTime)
+        private void UpdateGameplay(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
+            if (this.player.UpdateMovement(gameTime))
+                return;
 
-            if (this.player.Motion.X == 1 && this.player.Motion.Y == 0)
+            Point targetTile = Point.Zero;
+
+            // Reset the motion.
+            Vector2 motion = Vector2.Zero;
+            int amountOfTiles = 0;
+            if (this.mouseState.LeftButton == ButtonState.Pressed && this.prevMouseState.LeftButton == ButtonState.Released)
             {
-                if (this.player.Position.X >= this.player.TargetPosition.X)
+                // Check if we pressed the left mouse button.
+
+                // Convert the players position to the playerTile and the targetTile from the mouse position.
+                targetTile = TheCavesOfKardun.ConvertPositionToCell(new Vector2(this.mouseState.X + this.cameraPosition.X, this.mouseState.Y + this.cameraPosition.Y));
+                Point playerTile = TheCavesOfKardun.ConvertPositionToCell(this.player.Center);
+
+                // Does the X-axis match? 
+                if (playerTile.X == targetTile.X)
                 {
-                    this.player.Position.X = this.player.TargetPosition.X;
-                    this.player.Motion = Vector2.Zero;
-                    return;
+                    // Check if you clicked below or above the player.
+                    for (int i = 1; i <= this.player.AmountOfTilesToMove; i++)
+                    {
+                        if (playerTile.Y + i == targetTile.Y)
+                        {
+                            motion.Y++;
+                            amountOfTiles = i;
+                            break;
+                        }
+                        else if (playerTile.Y - i == targetTile.Y)
+                        {
+                            motion.Y--;
+                            amountOfTiles = i;
+                            break;
+                        }
+                    }
                 }
-            }
-            else if (this.player.Motion.X == -1 && this.player.Motion.Y == 0)
-            {
-                if (this.player.Position.X <= this.player.TargetPosition.X)
+                else if (playerTile.Y == targetTile.Y) // Does the Y-axis match instead?
                 {
-                    this.player.Position.X = this.player.TargetPosition.X;
-                    this.player.Motion = Vector2.Zero;
-                    return;
-                }
-            }
-            else if (this.player.Motion.X == 0 && this.player.Motion.Y == 1)
-            {
-                if (this.player.Position.Y >= this.player.TargetPosition.Y)
-                {
-                    this.player.Position.Y = this.player.TargetPosition.Y;
-                    this.player.Motion = Vector2.Zero;
-                    return;
-                }
-            }
-            else if (this.player.Motion.X == 0 && this.player.Motion.Y == -1)
-            {
-                if (this.player.Position.Y <= this.player.TargetPosition.Y)
-                {
-                    this.player.Position.Y = this.player.TargetPosition.Y;
-                    this.player.Motion = Vector2.Zero;
-                    return;
-                }
-            }
-            else
-            {
-                
-                Vector2 motion = Vector2.Zero;
-                if (state.IsKeyDown(Keys.W) && !prevState.IsKeyUp(Keys.W))
-                    motion.Y--;
-                else if (state.IsKeyDown(Keys.S) && !prevState.IsKeyUp(Keys.S))
-                    motion.Y++;
-                else if (state.IsKeyDown(Keys.A) && !prevState.IsKeyUp(Keys.A))
-                    motion.X--;
-                else if (state.IsKeyDown(Keys.D) && !prevState.IsKeyUp(Keys.D))
-                    motion.X++;
-
-                if (motion != Vector2.Zero)
-                {
-                    motion.Normalize();
-
-                    int[,] mapData = this.level.MapData;
-
-                    Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(this.player.Center);
-                    this.player.TargetPosition = Vector2.Zero;
-
-                    if (motion.X == 1 && motion.Y == 0 && mapData[playerCoords.X + 1, playerCoords.Y] == 1)
-                        this.player.TargetPosition.X = this.player.Position.X + TheCavesOfKardun.TileWidth;
-                    else if (motion.X == -1 && motion.Y == 0 && mapData[playerCoords.X - 1, playerCoords.Y] == 1)
-                        this.player.TargetPosition.X = this.player.Position.X - TheCavesOfKardun.TileWidth;
-                    else if (motion.X == 0 && motion.Y == 1 && mapData[playerCoords.X, playerCoords.Y + 1] == 1)
-                        this.player.TargetPosition.Y = this.player.Position.Y + TheCavesOfKardun.TileHeight;
-                    else if (motion.X == 0 && motion.Y == -1 && mapData[playerCoords.X, playerCoords.Y - 1] == 1)
-                        this.player.TargetPosition.Y = this.player.Position.Y - TheCavesOfKardun.TileHeight;
-
-                    if (this.player.TargetPosition != Vector2.Zero)
-                        this.player.Motion = motion;
+                    // Check if you clicked to the left or to the right of the player.
+                    for (int i = 1; i <= this.player.AmountOfTilesToMove; i++)
+                    {
+                        if (playerTile.X + i == targetTile.X)
+                        {
+                            motion.X++;
+                            amountOfTiles = i;
+                            break;
+                        }
+                        else if (playerTile.X - i == targetTile.X)
+                        {
+                            motion.X--;
+                            amountOfTiles = i;
+                            break;
+                        }
+                    }
                 }
             }
 
-            this.player.Position.X += this.player.Motion.X * this.player.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            this.player.Position.Y += this.player.Motion.Y * this.player.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            // If we should move, check if we can and if we can set the players motion.
+            if (motion != Vector2.Zero)
+            {
+                motion.Normalize();
+
+                Monster monster;
+                Objects typeOfObject;
+
+                // Check if we've clicked on a monster.
+                if (targetTile != Point.Zero && this.level.EncounterMonster(targetTile, out monster))
+                {
+
+                }
+                else if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Otherwise check if we can walk.
+                {
+                    this.player.Motion = motion;
+                }
+                else if (targetTile != Point.Zero && this.level.EncounterObject(targetTile, out typeOfObject))
+                {
+                    // We can't walk, maybe there is an item we can pickup.
+                    int i = 500;
+                }
+            }
         }
 
         #endregion

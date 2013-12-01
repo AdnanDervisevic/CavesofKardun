@@ -17,11 +17,16 @@ namespace The_Caves_of_Kardun.TileEngine
     {
         #region Fields
 
-        private Random random;
+        Random random;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the distance of this room to the spawn room.
+        /// </summary>
+        public double DistanceToSpawn { get; set; }
 
         /// <summary>
         /// Gets the left.
@@ -64,22 +69,24 @@ namespace The_Caves_of_Kardun.TileEngine
         /// </summary>
         public Point Center
         {
-            /*
-            get
-            {
-                try
-                {
-                    return new Point(Left + random.Next(3, Width - 3), Top + random.Next(3, Height - 3));
-                }
-                catch { }
-
-                return new Point(0, 0);
-            }*/
-
-            
             get
             {
                 return new Point(Left + Width/2, Top + Height/2);
+            }
+        }
+
+        /// <summary>
+        /// Gets a random floor tile.
+        /// </summary>
+        public Point RandomFloorTile
+        {
+            get
+            {
+                Point point = new Point();
+                point.X = random.Next((this.Left + 1), (this.Right - 1));
+                point.Y = random.Next((this.Top + 1), (this.Bottom - 1));
+
+                return point;
             }
         }
 
@@ -105,9 +112,9 @@ namespace The_Caves_of_Kardun.TileEngine
             this.Width = width;
             this.Height = height;
 
-            this.random = new Random();
-
+            this.DistanceToSpawn = 0;
             this.MapData = new int[width, height];
+            this.random = new Random();
         }
 
         #endregion

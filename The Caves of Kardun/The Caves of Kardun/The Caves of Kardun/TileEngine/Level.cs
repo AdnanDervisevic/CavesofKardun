@@ -11,11 +11,22 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 #endregion End of Using Statements
 
 namespace The_Caves_of_Kardun.TileEngine
 {
+    public enum Objects
+    {
+        None,
+        Gold,
+        Sword,
+        Shield,
+        Helmet,
+        Boots
+    }
+
     public class Level
     {
         #region Fields
@@ -25,12 +36,18 @@ namespace The_Caves_of_Kardun.TileEngine
         private int maxFails;
 
         private int[,] mapData;
+        private Objects[,] objectData;
+
         private List<Room> rooms = new List<Room>();
         private Point mapDimensions;
 
         private Texture2D doorTexture;
         private Texture2D floorTexture;
         private Texture2D wallTexture;
+
+        private Texture2D goldTexture;
+
+        private Random random;
 
         #endregion
 
@@ -49,6 +66,10 @@ namespace The_Caves_of_Kardun.TileEngine
             get { return this.rooms; }
         }
 
+        public int RoomSpawnIndex { get; private set; }
+
+        public int BossRoomIndex { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -64,12 +85,21 @@ namespace The_Caves_of_Kardun.TileEngine
         {
             this.mapDimensions = mapDimensions;
             this.mapData = new int[mapDimensions.X, mapDimensions.Y];
+            this.objectData = new Objects[mapDimensions.X, mapDimensions.Y];
+            for (int x = 0; x < mapDimensions.X; x++)
+                for (int y = 0; y < mapDimensions.Y; y++)
+                    this.objectData[x, y] = Objects.None;
 
             this.randomSeed = randomSeed;
             this.amountOfRooms = amountOfRooms;
             this.maxFails = maxFails;
 
-            MakeLevel(randomSeed, amountOfRooms, maxFails);
+            if (randomSeed.HasValue)
+                this.random = new Random(randomSeed.Value);
+            else
+                this.random = new Random();
+
+            MakeLevel(amountOfRooms, maxFails);
         }
 
         #endregion
@@ -81,6 +111,8 @@ namespace The_Caves_of_Kardun.TileEngine
             this.floorTexture = content.Load<Texture2D>("Tiles/floor");
             this.wallTexture = content.Load<Texture2D>("Tiles/wall");
             this.doorTexture = content.Load<Texture2D>("Tiles/door");
+
+            this.goldTexture = content.Load<Texture2D>("Objects/gold");
         }
 
         /// <summary>
@@ -88,12 +120,107 @@ namespace The_Caves_of_Kardun.TileEngine
         /// </summary>
         public void RecreateLevel()
         {
-            MakeLevel(this.randomSeed, this.amountOfRooms, this.maxFails);
+            MakeLevel(this.amountOfRooms, this.maxFails);
         }
 
-        public void OpenDoor(Point point)
+        /// <summary>
+        /// Checks whether someone can walk in the given direction.
+        /// </summary>
+        /// <param name="position">The position to check.</param>
+        /// <param name="motion">The direction as a motion vector.</param>
+        /// <returns>Returns true if the position can walk in a specific direction; otherwise false.</returns>
+        public bool CanWalk(Character character, Vector2 motion, int amountOfTiles, out Vector2 targetPosition)
         {
-            this.mapData[point.X, point.Y] = 1;
+            Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(character.Center);
+            targetPosition = Vector2.Zero;
+
+            if (motion.X == 1 && motion.Y == 0)
+            {
+                int i = 0;
+                for (i = 1; i <= amountOfTiles; i++)
+                {
+                    if (this.mapData[playerCoords.X + i, playerCoords.Y] != 1 || this.objectData[playerCoords.X + i, playerCoords.Y] != Objects.None)
+                        break;
+                }
+
+                if (i - 1 != 0)
+                {
+                    targetPosition.X = character.Position.X + TheCavesOfKardun.TileWidth * (i - 1);
+                    return true;        
+                }
+            }
+            else if (motion.X == -1 && motion.Y == 0)
+            {
+                int i = 0;
+                for (i = 1; i <= amountOfTiles; i++)
+                {
+                    if (this.mapData[playerCoords.X - i, playerCoords.Y] != 1 || this.objectData[playerCoords.X - i, playerCoords.Y] != Objects.None)
+                        break;
+                }
+
+                if (i - 1 != 0)
+                {
+                    targetPosition.X = character.Position.X - TheCavesOfKardun.TileWidth * (i - 1);
+                    return true;
+                }
+            }
+            else if (motion.X == 0 && motion.Y == 1)
+            {
+                int i = 0;
+                for (i = 1; i <= amountOfTiles; i++)
+                {
+                    if (this.mapData[playerCoords.X, playerCoords.Y + i] != 1 || this.objectData[playerCoords.X, playerCoords.Y + i] != Objects.None)
+                        break;
+                }
+
+                if (i - 1 != 0)
+                {
+                    targetPosition.Y = character.Position.Y + TheCavesOfKardun.TileHeight * (i - 1);
+                    return true;
+                }
+            }
+            else if (motion.X == 0 && motion.Y == -1)
+            {
+                int i = 0;
+                for (i = 1; i <= amountOfTiles; i++)
+                {
+                    if (this.mapData[playerCoords.X, playerCoords.Y - i] != 1 || this.objectData[playerCoords.X, playerCoords.Y - i] != Objects.None)
+                        break;
+                }
+
+                if (i - 1 != 0)
+                {
+                    targetPosition.Y = character.Position.Y - TheCavesOfKardun.TileHeight * (i - 1);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Check if the player encounters a monster.
+        /// </summary>
+        /// <param name="targetTile">The tile the player clicked on.</param>
+        /// <param name="monster">The monster that the player has encountered.</param>
+        /// <returns>Returns true if there are a monster at the targetTile; otherwise false.</returns>
+        public bool EncounterMonster(Point targetTile, out Monster monster)
+        {
+            monster = new Monster();
+            return false;
+        }
+
+        public bool EncounterObject(Point targetTile, out Objects typeOfObject)
+        {
+            typeOfObject = this.objectData[targetTile.X, targetTile.Y];
+
+            if (typeOfObject != Objects.None)
+            {
+                this.objectData[targetTile.X, targetTile.Y] = Objects.None;
+                return true;
+            }
+            
+            return false;
         }
 
         /// <summary>
@@ -108,8 +235,6 @@ namespace The_Caves_of_Kardun.TileEngine
 
             max.X = Math.Min(max.X, mapDimensions.X);
             max.Y = Math.Min(max.Y, mapDimensions.Y);
-
-            //UpdateRooms(playerPosition);
 
             spriteBatch.Begin();
             for (int x = min.X; x < max.X; x++)
@@ -137,10 +262,24 @@ namespace The_Caves_of_Kardun.TileEngine
                                 (int)(y * TheCavesOfKardun.TileHeight - cameraPosition.Y),
                                 TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight),
                             Color.White);
+
+                    if (objectData[x, y] == Objects.Gold)
+                        spriteBatch.Draw(this.goldTexture,
+                            new Rectangle(
+                                (int)(x * TheCavesOfKardun.TileWidth - cameraPosition.X),
+                                (int)(y * TheCavesOfKardun.TileHeight - cameraPosition.Y),
+                                TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight),
+                            Color.White);
                 }
             }
+
             spriteBatch.End();
         }
+
+        #endregion
+
+        #region Private Helpers
+
 
         private void UpdateRooms(Vector2 playerPosition)
         {
@@ -171,27 +310,17 @@ namespace The_Caves_of_Kardun.TileEngine
             }
         }
 
-        #endregion
-
-        #region Private Helpers
-
         /// <summary>
         /// Creates the entire level.
         /// </summary>
         /// <param name="randomSeed"></param>
         /// <param name="amountOfRooms"></param>
         /// <param name="maxFails"></param>
-        private void MakeLevel(int? randomSeed, int amountOfRooms, int maxFails)
+        private void MakeLevel(int amountOfRooms, int maxFails)
         {
             this.rooms.Clear();
             this.mapData = new int[mapDimensions.X, mapDimensions.Y];
-
-            Random random;
-
-            if (randomSeed.HasValue)
-                random = new Random(randomSeed.Value);
-            else
-                random = new Random();
+            this.objectData = new Objects[mapDimensions.X, mapDimensions.Y];
 
             while (this.rooms.Count < amountOfRooms)
             {
@@ -216,7 +345,10 @@ namespace The_Caves_of_Kardun.TileEngine
             foreach (Room room in this.rooms)
                 MakeRoom(room);
 
-            OrderRooms();
+            this.RoomSpawnIndex = random.Next(0, this.rooms.Count - 1);
+            OrderRoomsByDistanceToSpawn();
+
+            this.BossRoomIndex = random.Next(this.rooms.Count - 4, this.rooms.Count - 1);
 
             for (int i = 0; i < this.rooms.Count - 1; i++)
             {
@@ -224,7 +356,36 @@ namespace The_Caves_of_Kardun.TileEngine
             }
 
             MakeWalls();
-            //MakeDoors();
+            SpawnObjects();
+        }
+
+        private void SpawnObjects()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                int r = this.BossRoomIndex;
+                do
+                {
+                    r = random.Next(1, this.rooms.Count);
+                } while (r == this.BossRoomIndex);
+                              
+                Room room = this.rooms[r];
+
+                Point floorTile = Point.Zero;
+                int maxFailes = 10;
+                int tries = 0;
+                do
+                {
+                    if (tries == maxFailes)
+                        break;
+
+                    floorTile = room.RandomFloorTile;
+                    tries++;
+                } while (floorTile == Point.Zero || this.objectData[floorTile.X, floorTile.Y] != Objects.None);
+
+                this.objectData[floorTile.X, floorTile.Y] = Objects.Gold;
+
+            }
         }
 
         private void MakeDoors()
@@ -327,33 +488,17 @@ namespace The_Caves_of_Kardun.TileEngine
             }
         }
 
-        private void OrderRooms()
+        private void OrderRoomsByDistanceToSpawn()
         {
-            Room[] rooms = new Room[this.rooms.Count];
+            Room tmpRoom = this.rooms[0];
+            this.rooms[0] = this.rooms[this.RoomSpawnIndex];
+            this.rooms[this.RoomSpawnIndex] = tmpRoom;
+            this.RoomSpawnIndex = 0;
 
-            rooms[0] = this.rooms[0];
-            int ri = 1;
+            for (int i = 1; i < this.rooms.Count; i++)
+                this.rooms[i].DistanceToSpawn = Math.Sqrt(Math.Pow(Math.Abs(this.rooms[i].Left - this.rooms[0].Left), 2) + Math.Pow(Math.Abs(this.rooms[i].Top - this.rooms[0].Top), 2));
 
-            for (int i = 0; i < this.rooms.Count - 1; i++)
-            {
-                Room nearestRoom = this.rooms[i + 1];
-
-                double nearestDistance = Math.Sqrt(Math.Pow(Math.Abs(this.rooms[i].Left - nearestRoom.Left), 2) + Math.Pow(Math.Abs(this.rooms[i].Top - nearestRoom.Top), 2));
-
-                for (int j = i + 2; j < this.rooms.Count; j++)
-                {
-                    double distance = Math.Sqrt(Math.Pow(Math.Abs(this.rooms[i].Left - nearestRoom.Left), 2) + Math.Pow(Math.Abs(this.rooms[i].Top - nearestRoom.Top), 2));
-
-                    if (distance < nearestDistance)
-                        nearestRoom = this.rooms[j];
-                }
-
-                rooms[ri] = nearestRoom;
-                ri++;
-            }
-
-            this.rooms.Clear();
-            this.rooms = new List<Room>(rooms);
+            this.rooms = this.rooms.OrderBy(o => o.DistanceToSpawn).ToList();
         }
 
         /// <summary>
