@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 using System;
 #endregion End of Using Statements
 
-namespace The_Caves_of_Kardun.TileEngine
+namespace The_Caves_of_Kardun
 {
     public sealed class Room
     {

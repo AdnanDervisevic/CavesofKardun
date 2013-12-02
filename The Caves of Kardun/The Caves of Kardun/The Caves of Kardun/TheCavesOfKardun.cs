@@ -20,7 +20,6 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using The_Caves_of_Kardun.TileEngine;
 #endregion End of Using Statements
 
 namespace The_Caves_of_Kardun
@@ -41,13 +40,14 @@ namespace The_Caves_of_Kardun
 
         #region Consts
 
-        public static int TileWidth = 16;
-        public static int TileHeight = 16;
+        public static int TileWidth = 96;
+        public static int TileHeight = 96;
 
         #endregion
 
         #region Fields
 
+        private float combatTimer = 0;
 
         private Random random;
         private GraphicsDeviceManager graphicsDeviceManager;
@@ -96,7 +96,7 @@ namespace The_Caves_of_Kardun
             this.Content.RootDirectory = "Content";
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.level = new Level(new Point(75, 75), null, 20, 100);
+            this.level = new Level(this.Content, new Point(75, 75), null, 20, 100);
 
             base.Initialize();
         }
@@ -107,17 +107,19 @@ namespace The_Caves_of_Kardun
         /// </summary>
         protected override void LoadContent()
         {
-            this.level.LoadContent(Content);
+            this.level.LoadContent();
 
             this.hoverTexture = Content.Load<Texture2D>("Hover");
 
             this.player = new Player(Content.Load<Texture2D>("Tiles/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500);
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 200,
+                Content.Load<SpriteFont>("combatFont"));
 
             this.boss = new Player(Content.Load<Texture2D>("Tiles/player"), new Vector2(
                 this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500);
+                this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 80,
+                Content.Load<SpriteFont>("combatFont"));
         }
 
         /// <summary>
@@ -138,6 +140,18 @@ namespace The_Caves_of_Kardun
             return new Point(
                 (int)(position.X) / TheCavesOfKardun.TileWidth,
                 (int)(position.Y) / TheCavesOfKardun.TileHeight);
+        }
+
+        /// <summary>
+        /// Converts a pixel to the tile coordinates.
+        /// </summary>
+        /// <param name="position">The pixel position.</param>
+        /// <returns>The tile cell coordinates.</returns>
+        public static Vector2 ConvertCellToPosition(Point cell)
+        {
+            return new Vector2(
+                cell.X * TheCavesOfKardun.TileWidth,
+                cell.Y * TheCavesOfKardun.TileHeight);
         }
 
         #endregion
@@ -175,14 +189,15 @@ namespace The_Caves_of_Kardun
 
             UpdateGameplay(gameTime);
 
-            if (this.player.Motion != Vector2.Zero)
-                UpdateAI();
-
             this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
             this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
          
             prevState = state;
             prevMouseState = mouseState;
+
+            if (this.player.Health <= 0)
+                throw new Exception("Player died");
+
             base.Update(gameTime);
         }
 
@@ -194,10 +209,10 @@ namespace The_Caves_of_Kardun
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            this.level.Draw(spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
+            this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
-            this.player.Draw(spriteBatch, cameraPosition);
-            this.boss.Draw(spriteBatch, cameraPosition);
+            this.player.Draw(gameTime, spriteBatch, cameraPosition);
+            this.boss.Draw(gameTime, spriteBatch, cameraPosition);
 
             spriteBatch.Begin();
             spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
@@ -211,18 +226,13 @@ namespace The_Caves_of_Kardun
         #region Private Methods
 
         /// <summary>
-        /// Updates the AI
-        /// </summary>
-        private void UpdateAI()
-        {
-        }
-
-        /// <summary>
         /// Handles movement for the player.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateGameplay(GameTime gameTime)
         {
+            combatTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (this.player.UpdateMovement(gameTime))
                 return;
 
@@ -287,20 +297,25 @@ namespace The_Caves_of_Kardun
 
                 Monster monster;
                 Objects typeOfObject;
-
-                // Check if we've clicked on a monster.
-                if (targetTile != Point.Zero && this.level.EncounterMonster(targetTile, out monster))
-                {
-
-                }
-                else if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Otherwise check if we can walk.
+                
+                if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Check if we can walk.
                 {
                     this.player.Motion = motion;
+                    this.level.MonsterAI(this.player);
                 }
-                else if (targetTile != Point.Zero && this.level.EncounterObject(targetTile, out typeOfObject))
+                else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
                 {
-                    // We can't walk, maybe there is an item we can pickup.
-                    int i = 500;
+                    if (combatTimer >= 1)
+                    {
+                        this.player.Attack(gameTime, monster);
+                        this.level.MonsterAI(this.player);
+                        this.combatTimer = 0;
+                    }
+                }
+                else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterObject(targetTile, out typeOfObject)) // Check if we clicked on an item.
+                {
+                    this.player.PickUp(typeOfObject);
+                    this.level.MonsterAI(this.player);
                 }
             }
         }

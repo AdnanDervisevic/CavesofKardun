@@ -1,21 +1,22 @@
 ﻿#region File Description
-//////////////////////////////////////////////////////////////////////////
-// Level                                                         //
-//                                                                      //
-// Copyright (C) Untitled. All Rights reserved.                         //
+    //////////////////////////////////////////////////////////////////////////
+   // Level                                                                //
+  //                                                                      //
+ // Copyright (C) Untitled. All Rights reserved.                         //
 //////////////////////////////////////////////////////////////////////////
 #endregion
 
 #region Using Statements
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 #endregion End of Using Statements
 
-namespace The_Caves_of_Kardun.TileEngine
+namespace The_Caves_of_Kardun
 {
     public enum Objects
     {
@@ -38,6 +39,7 @@ namespace The_Caves_of_Kardun.TileEngine
         private int[,] mapData;
         private Objects[,] objectData;
 
+        private List<Monster> monsters = new List<Monster>();
         private List<Room> rooms = new List<Room>();
         private Point mapDimensions;
 
@@ -48,6 +50,8 @@ namespace The_Caves_of_Kardun.TileEngine
         private Texture2D goldTexture;
 
         private Random random;
+
+        private ContentManager contentManager;
 
         #endregion
 
@@ -81,8 +85,9 @@ namespace The_Caves_of_Kardun.TileEngine
         /// <param name="randomSeed"></param>
         /// <param name="amountOfRooms"></param>
         /// <param name="maxFails"></param>
-        public Level(Point mapDimensions, int? randomSeed, int amountOfRooms, int maxFails)
+        public Level(ContentManager contentManager, Point mapDimensions, int? randomSeed, int amountOfRooms, int maxFails)
         {
+            this.contentManager = contentManager;
             this.mapDimensions = mapDimensions;
             this.mapData = new int[mapDimensions.X, mapDimensions.Y];
             this.objectData = new Objects[mapDimensions.X, mapDimensions.Y];
@@ -106,13 +111,17 @@ namespace The_Caves_of_Kardun.TileEngine
 
         #region Public Methods
 
-        public void LoadContent(ContentManager content)
+        /// <summary>
+        /// Loads all the content.
+        /// </summary>
+        /// <param name="content">The contentManager</param>
+        public void LoadContent()
         {
-            this.floorTexture = content.Load<Texture2D>("Tiles/floor");
-            this.wallTexture = content.Load<Texture2D>("Tiles/wall");
-            this.doorTexture = content.Load<Texture2D>("Tiles/door");
+            this.floorTexture = this.contentManager.Load<Texture2D>("Tiles/floor");
+            this.wallTexture = this.contentManager.Load<Texture2D>("Tiles/wall");
+            this.doorTexture = this.contentManager.Load<Texture2D>("Tiles/door");
 
-            this.goldTexture = content.Load<Texture2D>("Objects/gold");
+            this.goldTexture = this.contentManager.Load<Texture2D>("Objects/gold");
         }
 
         /// <summary>
@@ -121,6 +130,33 @@ namespace The_Caves_of_Kardun.TileEngine
         public void RecreateLevel()
         {
             MakeLevel(this.amountOfRooms, this.maxFails);
+        }
+
+        /// <summary>
+        /// Called every time monsters should either move or attack.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        public void MonsterAI(Player player)
+        {
+            Point playerTile = TheCavesOfKardun.ConvertPositionToCell(player.Center);
+
+            foreach (Monster monster in this.monsters)
+            {
+                if (monster.Health <= 0)
+                    continue;
+
+                Point monsterTile = TheCavesOfKardun.ConvertPositionToCell(monster.Center);
+
+                // If the player is to the left of the monster, attack.
+                if (monsterTile.X + 1 == playerTile.X && monsterTile.Y == playerTile.Y)
+                    monster.Attack(player);
+                else if (monsterTile.X - 1 == playerTile.X && monsterTile.Y == playerTile.Y) // If the player is to the right of the monster, attack.
+                    monster.Attack(player);
+                else if (monsterTile.X == playerTile.X && monsterTile.Y + 1 == playerTile.Y) // If the player is below the monster, attack.
+                    monster.Attack(player);
+                else if (monsterTile.X == playerTile.X && monsterTile.Y - 1 == playerTile.Y) // If the player is abopve the monster, attack.
+                    monster.Attack(player);
+            }
         }
 
         /// <summary>
@@ -141,6 +177,14 @@ namespace The_Caves_of_Kardun.TileEngine
                 {
                     if (this.mapData[playerCoords.X + i, playerCoords.Y] != 1 || this.objectData[playerCoords.X + i, playerCoords.Y] != Objects.None)
                         break;
+
+                    bool shouldBreak = false;
+                    for (int j = 0; j < this.monsters.Count; j++)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X + i, playerCoords.Y) && this.monsters[j].Health > 0)
+                            shouldBreak = true;
+
+                    if (shouldBreak)
+                        break;
                 }
 
                 if (i - 1 != 0)
@@ -155,6 +199,14 @@ namespace The_Caves_of_Kardun.TileEngine
                 for (i = 1; i <= amountOfTiles; i++)
                 {
                     if (this.mapData[playerCoords.X - i, playerCoords.Y] != 1 || this.objectData[playerCoords.X - i, playerCoords.Y] != Objects.None)
+                        break;
+
+                    bool shouldBreak = false;
+                    for (int j = 0; j < this.monsters.Count; j++)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X - i, playerCoords.Y) && this.monsters[j].Health > 0)
+                            shouldBreak = true;
+
+                    if (shouldBreak)
                         break;
                 }
 
@@ -171,6 +223,14 @@ namespace The_Caves_of_Kardun.TileEngine
                 {
                     if (this.mapData[playerCoords.X, playerCoords.Y + i] != 1 || this.objectData[playerCoords.X, playerCoords.Y + i] != Objects.None)
                         break;
+
+                    bool shouldBreak = false;
+                    for (int j = 0; j < this.monsters.Count; j++)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X, playerCoords.Y + i) && this.monsters[j].Health > 0)
+                            shouldBreak = true;
+
+                    if (shouldBreak)
+                        break;
                 }
 
                 if (i - 1 != 0)
@@ -185,6 +245,14 @@ namespace The_Caves_of_Kardun.TileEngine
                 for (i = 1; i <= amountOfTiles; i++)
                 {
                     if (this.mapData[playerCoords.X, playerCoords.Y - i] != 1 || this.objectData[playerCoords.X, playerCoords.Y - i] != Objects.None)
+                        break;
+
+                    bool shouldBreak = false;
+                    for (int j = 0; j < this.monsters.Count; j++)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X, playerCoords.Y - i) && this.monsters[j].Health > 0)
+                            shouldBreak = true;
+
+                    if (shouldBreak)
                         break;
                 }
 
@@ -206,10 +274,24 @@ namespace The_Caves_of_Kardun.TileEngine
         /// <returns>Returns true if there are a monster at the targetTile; otherwise false.</returns>
         public bool EncounterMonster(Point targetTile, out Monster monster)
         {
-            monster = new Monster();
+            monster = null;
+
+            for (int i = 0; i < this.monsters.Count; i++)
+                if (targetTile == TheCavesOfKardun.ConvertPositionToCell(this.monsters[i].Center) && this.monsters[i].Health > 0)
+                    monster = this.monsters[i];
+
+            if (monster != null)
+                return true;
+
             return false;
         }
 
+        /// <summary>
+        /// Check if the player encounters an object.
+        /// </summary>
+        /// <param name="targetTile">The tile the player clicked on.</param>
+        /// <param name="typeOfObject">The type of object the player clicked on.</param>
+        /// <returns>Returns true if the player clicked on an item; otherwise false.</returns>
         public bool EncounterObject(Point targetTile, out Objects typeOfObject)
         {
             typeOfObject = this.objectData[targetTile.X, targetTile.Y];
@@ -228,7 +310,7 @@ namespace The_Caves_of_Kardun.TileEngine
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="cameraPosition"></param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 cameraPosition, Vector2 playerPosition, Point min, Point max)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition, Vector2 playerPosition, Point min, Point max)
         {
             min.X = Math.Max(min.X, 0);
             min.Y = Math.Max(min.Y, 0);
@@ -274,41 +356,14 @@ namespace The_Caves_of_Kardun.TileEngine
             }
 
             spriteBatch.End();
+
+            for (int i = 0; i < this.monsters.Count; i++)
+                this.monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
         }
 
         #endregion
 
         #region Private Helpers
-
-
-        private void UpdateRooms(Vector2 playerPosition)
-        {
-            foreach (Room room in this.rooms)
-            {
-                if (DrawRoom(room, playerPosition))
-                {
-                    for (int x = 0; x < room.Width; x++)
-                    {
-                        for (int y = 0; y < room.Height; y++)
-                        {
-                            if (x > 0 && x < room.Width - 1 || y > 0 || y < room.Height - 1)
-                                mapData[room.Left + x, room.Top + y] = room.MapData[x, y];
-                        }
-                    }
-                }
-                else
-                {
-                    for (int x = 0; x < room.Width; x++)
-                    {
-                        for (int y = 0; y < room.Height; y++)
-                        {
-                            if (x > 0 && x < room.Width - 1 || y > 0 || y < room.Height - 1)
-                                mapData[room.Left + x, room.Top + y] = 0;
-                        }
-                    }
-                }
-            }
-        }
 
         /// <summary>
         /// Creates the entire level.
@@ -357,8 +412,67 @@ namespace The_Caves_of_Kardun.TileEngine
 
             MakeWalls();
             SpawnObjects();
+            SpawnMonsters();
         }
 
+        /// <summary>
+        /// Spawns monsters on the map.
+        /// </summary>
+        private void SpawnMonsters()
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                int r = this.BossRoomIndex;
+                do
+                {
+                    r = random.Next(1, this.rooms.Count);
+                } while (r == this.BossRoomIndex);
+
+                Room room = this.rooms[r];
+
+                Point floorTile = Point.Zero;
+                int maxFailes = 10;
+                int tries = 0;
+
+                while (true)
+                {
+                    if (tries == maxFailes)
+                        break;
+
+                    floorTile = room.RandomFloorTile;
+                    tries++;
+
+                    if (this.objectData[floorTile.X, floorTile.Y] != Objects.None)
+                        continue;
+
+                    bool positionAlreadyOccupied = false;
+                    for (int j = 0; j < this.monsters.Count; j++)
+                    {
+                        if (floorTile == TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center))
+                        {
+                            positionAlreadyOccupied = true;
+                            break;
+                        }
+                    }
+
+                    if (positionAlreadyOccupied)
+                        continue;
+
+                    break;
+                }
+
+                if (floorTile != Point.Zero)
+                {
+                    // Skapa random(?) monster
+                    this.monsters.Add(new Monster(contentManager.Load<Texture2D>("Tiles/player"), TheCavesOfKardun.ConvertCellToPosition(floorTile), 500, 90, 
+                        contentManager.Load<SpriteFont>("combatFont")));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Spawns object on the map.
+        /// </summary>
         private void SpawnObjects()
         {
             for (int i = 0; i < 100; i++)
@@ -383,84 +497,8 @@ namespace The_Caves_of_Kardun.TileEngine
                     tries++;
                 } while (floorTile == Point.Zero || this.objectData[floorTile.X, floorTile.Y] != Objects.None);
 
-                this.objectData[floorTile.X, floorTile.Y] = Objects.Gold;
-
-            }
-        }
-
-        private void MakeDoors()
-        {
-            foreach (Room room in this.rooms)
-            {
-                for (int x = room.Left; x < room.Right; x++)
-                {
-                    // If single door at the top, set door texture.
-                    if (this.mapData[x, room.Top] == 2 && this.mapData[x + 1, room.Top] == 1 && this.mapData[x + 2, room.Top] == 2)
-                    {
-                        this.mapData[x + 1, room.Top] = 3;
-                        room.MapData[x - room.Left + 1, 0] = 3;
-                    }
-
-                    // If double door at the top, set door texture.
-                    if (this.mapData[x, room.Top] == 2 && this.mapData[x + 1, room.Top] == 1 && this.mapData[x + 2, room.Top] == 1 && this.mapData[x + 3, room.Top] == 2)
-                    {
-                        this.mapData[x + 1, room.Top] = 3;
-                        this.mapData[x + 2, room.Top] = 3;
-                        room.MapData[x - room.Left + 1, 0] = 3;
-                        room.MapData[x - room.Left + 2, 0] = 3;
-                    }
-
-                    // If single door at the bottom, set door texture.
-                    if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 2)
-                    {
-                        this.mapData[x + 1, room.Bottom] = 3;
-                        room.MapData[x - room.Left + 1, room.MapData.GetLength(1) - 1] = 3;
-                    }
-
-                    // If double door at the bottom, set door texture.
-                    if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 1 && this.mapData[x + 3, room.Bottom] == 2)
-                    {
-                        this.mapData[x + 1, room.Bottom] = 3;
-                        this.mapData[x + 2, room.Bottom] = 3;
-                        room.MapData[x - room.Left + 1, room.MapData.GetLength(1) - 1] = 3;
-                        room.MapData[x - room.Left + 2, room.MapData.GetLength(1) - 1] = 3;
-                    }
-                }
-
-                for (int y = room.Top; y < room.Bottom; y++)
-                {
-                    // If single door at the top, set door texture.
-                    if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 2)
-                    {
-                        this.mapData[room.Left, y + 1] = 3;
-                        room.MapData[0, y - room.Top + 1] = 3;
-                    }
-
-                    // If double door at the top, set door texture.
-                    if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 1 && this.mapData[room.Left, y + 3] == 2)
-                    {
-                        this.mapData[room.Left, y + 1] = 3;
-                        this.mapData[room.Left, y + 2] = 3;
-                        room.MapData[0, y - room.Top + 1] = 3;
-                        room.MapData[0, y - room.Top + 2] = 3;
-                    }
-
-                    // If single door at the bottom, set door texture.
-                    if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 2)
-                    {
-                        this.mapData[room.Right, y + 1] = 3;
-                        room.MapData[room.MapData.GetLength(0) - 1, y - room.Top + 1] = 3;
-                    }
-
-                    // If double door at the bottom, set door texture.
-                    if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 1 && this.mapData[room.Right, y + 3] == 2)
-                    {
-                        this.mapData[room.Right, y + 1] = 3;
-                        this.mapData[room.Right, y + 2] = 3;
-                        room.MapData[room.MapData.GetLength(0) - 1, y - room.Top + 1] = 3;
-                        room.MapData[room.MapData.GetLength(0) - 1, y - room.Top + 2] = 3;
-                    }
-                }
+                if (floorTile != Point.Zero)
+                    this.objectData[floorTile.X, floorTile.Y] = Objects.Gold;
             }
         }
 
@@ -488,6 +526,9 @@ namespace The_Caves_of_Kardun.TileEngine
             }
         }
 
+        /// <summary>
+        /// Order the rooms by distance to the spawn room.
+        /// </summary>
         private void OrderRoomsByDistanceToSpawn()
         {
             Room tmpRoom = this.rooms[0];
@@ -594,58 +635,6 @@ namespace The_Caves_of_Kardun.TileEngine
             return false;
         }
 
-        private bool DrawRoom(Room room, Vector2 playerPosition)
-        {
-            Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(playerPosition);
-
-            if (room.Left < playerCoords.X && room.Right > playerCoords.X && room.Top < playerCoords.Y && room.Bottom > playerCoords.Y)
-                return true;
-
-
-            for (int x = room.Left; x < room.Right; x++)
-            {
-                // If single door open at the top, draw room.
-                if (this.mapData[x, room.Top] == 2 && this.mapData[x + 1, room.Top] == 1 && this.mapData[x + 2, room.Top] == 2)
-                    return true;
-
-                // If double door at the top, draw room.
-                if (this.mapData[x, room.Top] == 2 && (this.mapData[x + 1, room.Top] == 1 || this.mapData[x + 2, room.Top] == 1) && this.mapData[x + 3, room.Top] == 2)
-                    return true;
-
-                // If single door at the bottom, draw room.
-                if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 2)
-                    return true;
-
-                // If double door at the bottom, draw room.
-                if (this.mapData[x, room.Bottom] == 2 && this.mapData[x + 1, room.Bottom] == 1 && this.mapData[x + 2, room.Bottom] == 1 && this.mapData[x + 3, room.Bottom] == 2)
-                    return true;
-            }
-
-            for (int y = room.Top; y < room.Bottom; y++)
-            {
-                // If single door at the top, draw room.
-                if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 2)
-                    return true;
-
-                // If double door at the top, draw room.
-                if (this.mapData[room.Left, y] == 2 && this.mapData[room.Left, y + 1] == 1 && this.mapData[room.Left, y + 2] == 1 && this.mapData[room.Left, y + 3] == 2)
-                    return true;
-
-                // If single door at the bottom, draw room.
-                if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 2)
-                    return true;
-
-                // If double door at the bottom, draw room.
-                if (this.mapData[room.Right, y] == 2 && this.mapData[room.Right, y + 1] == 1 && this.mapData[room.Right, y + 2] == 1 && this.mapData[room.Right, y + 3] == 2)
-                    return true;
-            }
-
-            return false;
-        }
-
-        #endregion
-
-        #region Nested Types
         #endregion
     }
 }

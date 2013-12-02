@@ -11,7 +11,10 @@ namespace The_Caves_of_Kardun
     {
         #region Fields
 
-        private Texture2D texture;
+        private SpriteFont combatFont;
+        private float timer = 0;
+
+        protected Texture2D texture;
 
         public Vector2 Motion;
         public Vector2 Position;
@@ -22,10 +25,18 @@ namespace The_Caves_of_Kardun
         #region Properties
 
         /// <summary>
+        /// Gets or sets the health of the character.
+        /// </summary>
+        public int Health { get; set; }
+
+        /// <summary>
         /// Gets or sets he speed of the character.
         /// </summary>
         public float Speed { get; set; }
 
+        /// <summary>
+        /// Gets the center position of the character.
+        /// </summary>
         public Vector2 Center
         {
             get
@@ -33,6 +44,23 @@ namespace The_Caves_of_Kardun
                 return new Vector2(
                     this.Position.X + texture.Width / 2,
                     this.Position.Y + texture.Height / 2);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the combat text.
+        /// </summary>
+        public string CombatText { get; set; }
+
+        /// <summary>
+        /// Gets the position where to position the combat text.
+        /// </summary>
+        public Vector2 CombatTextPosition
+        {
+            get
+            {
+                Vector2 measure = this.combatFont.MeasureString(this.CombatText);
+                return new Vector2((this.Position.X + TheCavesOfKardun.TileWidth / 2) - measure.X / 2, this.Position.Y + 30);
             }
         }
 
@@ -51,11 +79,13 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The character texture.</param>
         /// <param name="position">The character position.</param>
         /// <param name="speed">The speed of the character.</param>
-        public Character(Texture2D texture, Vector2 position, float speed)
+        public Character(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont)
         {
             this.texture = texture;
             this.Position = position;
             this.Speed = speed;
+            this.Health = health;
+            this.combatFont = combatFont;
         }
 
         #endregion
@@ -67,17 +97,10 @@ namespace The_Caves_of_Kardun
         /// </summary>
         /// <param name="spriteBatch">The spritebatch used to draw the character.</param>
         /// <param name="cameraPosition">The camera position.</param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 cameraPosition)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
         {
-            /*
-            spriteBatch.Begin();
-            spriteBatch.Draw(this.texture,
-                new Rectangle(
-                    (int)(this.Position.X - cameraPosition.X),
-                    (int)(this.Position.Y - cameraPosition.Y),
-                    TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight), Color.White);
-            spriteBatch.End();
-            */
+            if (this.Health <= 0)
+                return;
 
             spriteBatch.Begin();
             spriteBatch.Draw(this.texture,
@@ -85,6 +108,24 @@ namespace The_Caves_of_Kardun
                     (int)(this.Position.X - cameraPosition.X),
                     (int)(this.Position.Y - cameraPosition.Y),
                     TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight), Color.White);
+
+            if (!string.IsNullOrWhiteSpace(this.CombatText))
+            {
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                spriteBatch.DrawString(this.combatFont, this.CombatText, 
+                    new Vector2(
+                        this.CombatTextPosition.X - cameraPosition.X, 
+                        this.CombatTextPosition.Y - cameraPosition.Y),
+                    Color.Red);
+
+                if (timer >= 1)
+                {
+                    timer = 0;
+                    this.CombatText = string.Empty;
+                }
+            }
+
             spriteBatch.End();
         }
 

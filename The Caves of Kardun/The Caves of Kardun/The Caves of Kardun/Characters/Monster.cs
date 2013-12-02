@@ -23,7 +23,7 @@ namespace The_Caves_of_Kardun
         /// Creates an empty monster object.
         /// </summary>
         public Monster()
-            : base(null, Vector2.Zero, 0) { }
+            : base(null, Vector2.Zero, 0, 0, null) { }
 
         /// <summary>
         /// Creates a new monster.
@@ -31,8 +31,22 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the monster.</param>
         /// <param name="position">The position of the monster.</param>
         /// <param name="speed">The speed of the monster.</param>
-        public Monster(Texture2D texture, Vector2 position, float speed)
-            : base(texture, position, speed) { }
+        public Monster(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont)
+            : base(texture, position, speed, health, combatFont) { }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Attack a monster.
+        /// </summary>
+        /// <param name="monster">The monster to attack.</param>
+        public void Attack(Player player)
+        {
+            player.CombatText = "-30 Damage";
+            player.Health -= 30;
+        }
 
         #endregion
     }
