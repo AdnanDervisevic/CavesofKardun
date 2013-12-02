@@ -93,6 +93,19 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\The Caves of Kardun ContentPipeline\The Caves of Kardun ContentPipeline.csproj">
+      <Project>{35046685-5ef7-453c-88a9-efc716e5177d}</Project>
+      <Name>The Caves of Kardun ContentPipeline</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="test.item">
+      <Name>test</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

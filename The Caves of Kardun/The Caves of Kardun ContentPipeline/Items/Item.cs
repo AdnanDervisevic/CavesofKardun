@@ -121,47 +121,4 @@ namespace The_Caves_of_Kardun
 
         #endregion
     }
-
-    #region Content Type Reader
-
-    /// <summary>
-    /// Class for reading an item from a content file.
-    /// </summary>
-    public class ItemReader : ContentTypeReader<Item>
-    {
-        /// <summary>
-        /// Reads the Item from the content file.
-        /// </summary>
-        /// <param name="input">The input file.</param>
-        /// <param name="existingInstance">The existing instance.</param>
-        /// <returns>Returns the newly created item.</returns>
-        protected override Item Read(ContentReader input, Item existingInstance)
-        {
-            Item item = existingInstance;
-            if (item == null)
-                item = new Item();
-
-            item.OverworldTextureName = input.ReadString();
-            if (!string.IsNullOrWhiteSpace(item.OverworldTextureName))
-                item.OverworldTexture = input.ContentManager.Load<Texture2D>(item.OverworldTextureName);
-            item.TextureName = input.ReadString();
-            if (!string.IsNullOrWhiteSpace(item.TextureName))
-                item.Texture = input.ContentManager.Load<Texture2D>(item.TextureName);
-            item.Type = (ItemTypes)input.ReadInt32();
-            item.Value = input.ReadInt32();
-            item.MinDamage = input.ReadInt32();
-            item.MaxDamage = input.ReadInt32();
-            item.DotDamage = input.ReadInt32();
-            item.DotDuration = input.ReadInt32();
-            item.MissChance = input.ReadInt32();
-            item.Speed = input.ReadInt32();
-            item.Health = input.ReadInt32();
-            item.Block = input.ReadInt32();
-            item.Special = (ItemSpecials)input.ReadInt32();
-
-            return item;
-        }
-    }
-
-    #endregion
 }

@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "The Caves of Kardun", "The Caves of Kardun\The Caves of Kardun\The Caves of Kardun.csproj", "{1AC0B6AF-F479-49D7-814C-FFDDDCD29C1E}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "The Caves of KardunContent", "The Caves of Kardun\The Caves of KardunContent\The Caves of KardunContent.contentproj", "{5607F99E-D227-4751-ADFB-BCDBFF4B27F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "The Caves of KardunContent", "The Caves of Kardun\The Caves of KardunContent\The Caves of KardunContent.contentproj", "{5607F99E-D227-4751-ADFB-BCDBFF4B27F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "The Caves of Kardun ContentPipeline", "The Caves of Kardun ContentPipeline\The Caves of Kardun ContentPipeline.csproj", "{35046685-5EF7-453C-88A9-EFC716E5177D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +21,10 @@ Global
 		{1AC0B6AF-F479-49D7-814C-FFDDDCD29C1E}.Release|x86.Build.0 = Release|x86
 		{5607F99E-D227-4751-ADFB-BCDBFF4B27F0}.Debug|x86.ActiveCfg = Debug|x86
 		{5607F99E-D227-4751-ADFB-BCDBFF4B27F0}.Release|x86.ActiveCfg = Release|x86
+		{35046685-5EF7-453C-88A9-EFC716E5177D}.Debug|x86.ActiveCfg = Debug|x86
+		{35046685-5EF7-453C-88A9-EFC716E5177D}.Debug|x86.Build.0 = Debug|x86
+		{35046685-5EF7-453C-88A9-EFC716E5177D}.Release|x86.ActiveCfg = Release|x86
+		{35046685-5EF7-453C-88A9-EFC716E5177D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

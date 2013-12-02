@@ -118,6 +118,8 @@ namespace The_Caves_of_Kardun
                 this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 80,
                 Content.Load<SpriteFont>("combatFont"));
+
+            Item it = Content.Load<Item>("test");
         }
 
         /// <summary>

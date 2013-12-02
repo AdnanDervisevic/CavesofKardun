@@ -13,6 +13,7 @@ namespace The_Caves_of_Kardun
     /// </summary>
     public enum ItemTypes
     {
+        None,
         Gold,
         Sword,
         Shield,
