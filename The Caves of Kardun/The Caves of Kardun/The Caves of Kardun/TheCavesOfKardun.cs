@@ -47,8 +47,6 @@ namespace The_Caves_of_Kardun
 
         #region Fields
 
-        private float combatTimer = 0;
-
         private Random random;
         private GraphicsDeviceManager graphicsDeviceManager;
         private SpriteBatch spriteBatch;
@@ -231,8 +229,6 @@ namespace The_Caves_of_Kardun
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateGameplay(GameTime gameTime)
         {
-            combatTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             if (this.player.UpdateMovement(gameTime))
                 return;
 
@@ -305,11 +301,10 @@ namespace The_Caves_of_Kardun
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
                 {
-                    if (combatTimer >= 1)
+                    if (string.IsNullOrWhiteSpace(this.player.CombatText))
                     {
                         this.player.Attack(gameTime, monster);
                         this.level.MonsterAI(this.player);
-                        this.combatTimer = 0;
                     }
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterObject(targetTile, out typeOfObject)) // Check if we clicked on an item.

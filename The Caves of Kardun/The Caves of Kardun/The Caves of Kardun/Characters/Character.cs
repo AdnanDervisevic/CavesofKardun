@@ -11,14 +11,17 @@ namespace The_Caves_of_Kardun
     {
         #region Fields
 
-        private SpriteFont combatFont;
-        private float timer = 0;
-
         protected Texture2D texture;
 
         public Vector2 Motion;
         public Vector2 Position;
         public Vector2 TargetPosition;
+
+        private string combatText;
+        private float alphaValue = 1;
+        private float fadeDelay = .020f;
+        private Vector2 combatTextPosition;
+        private SpriteFont combatFont;
 
         #endregion
 
@@ -50,17 +53,19 @@ namespace The_Caves_of_Kardun
         /// <summary>
         /// Gets or sets the combat text.
         /// </summary>
-        public string CombatText { get; set; }
-
-        /// <summary>
-        /// Gets the position where to position the combat text.
-        /// </summary>
-        public Vector2 CombatTextPosition
+        public string CombatText
         {
-            get
+            get { return this.combatText; }
+            set
             {
-                Vector2 measure = this.combatFont.MeasureString(this.CombatText);
-                return new Vector2((this.Position.X + TheCavesOfKardun.TileWidth / 2) - measure.X / 2, this.Position.Y + 30);
+                this.combatText = value;
+                if (!string.IsNullOrWhiteSpace(this.combatText))
+                {
+                    Vector2 measure = this.combatFont.MeasureString(this.CombatText);
+                    this.combatTextPosition = new Vector2((this.Position.X + TheCavesOfKardun.TileWidth / 2) - measure.X / 2, this.Position.Y + TheCavesOfKardun.TileHeight - TheCavesOfKardun.TileHeight / 3);
+                    this.alphaValue = 1;
+                    this.fadeDelay = .035f;
+                }
             }
         }
 
@@ -99,34 +104,74 @@ namespace The_Caves_of_Kardun
         /// <param name="cameraPosition">The camera position.</param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
         {
-            if (this.Health <= 0)
-                return;
-
             spriteBatch.Begin();
-            spriteBatch.Draw(this.texture,
+
+            // If we're alive then draw our texture.
+            if (this.Health > 0)
+            {
+                spriteBatch.Draw(this.texture,
                 new Rectangle(
                     (int)(this.Position.X - cameraPosition.X),
                     (int)(this.Position.Y - cameraPosition.Y),
                     TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight), Color.White);
+            }            
 
+            // If combatText is not set to empty or whitespaces only draw it.
             if (!string.IsNullOrWhiteSpace(this.CombatText))
             {
-                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                spriteBatch.DrawString(this.combatFont, this.CombatText, 
-                    new Vector2(
-                        this.CombatTextPosition.X - cameraPosition.X, 
-                        this.CombatTextPosition.Y - cameraPosition.Y),
-                    Color.Red);
-
-                if (timer >= 1)
+                // Fade out the text.
+                fadeDelay -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (fadeDelay <= 0)
                 {
-                    timer = 0;
+                    fadeDelay = .035f;
+                    alphaValue -= .08f;
+                }
+
+                // Move the combat text position.
+                this.combatTextPosition.Y += -100f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                // Draw the combat text.
+                DrawCombatText(spriteBatch, cameraPosition);
+
+                // If we've faded out then set the combat text to empty.
+                if (alphaValue <= 0)
+                {
                     this.CombatText = string.Empty;
                 }
             }
 
             spriteBatch.End();
+        }
+
+        /// <summary>
+        /// Helper for drawing the combat text and its outline.
+        /// </summary>
+        /// <param name="spriteBatch">The spritebatch used to draw.</param>
+        /// <param name="cameraPosition">The position of the camera.</param>
+        private void DrawCombatText(SpriteBatch spriteBatch, Vector2 cameraPosition)
+        {
+
+            // Draws the text five times in different locations to make it look like an outline effect.
+            Vector2 targetPosition = new Vector2(this.combatTextPosition.X, this.combatTextPosition.Y);
+            Color color = Color.Black * MathHelper.Clamp(alphaValue, 0, 1);
+
+            targetPosition.X += 1;
+            targetPosition.Y += 1;
+            spriteBatch.DrawString(this.combatFont, this.CombatText, targetPosition - cameraPosition, color);
+
+            targetPosition.Y -= 2;
+            spriteBatch.DrawString(this.combatFont, this.CombatText, targetPosition - cameraPosition, color);
+
+            targetPosition.X -= 2;
+            targetPosition.Y += 2;
+            spriteBatch.DrawString(this.combatFont, this.CombatText, targetPosition - cameraPosition, color);
+
+            targetPosition.Y -= 2;
+            spriteBatch.DrawString(this.combatFont, this.CombatText, targetPosition - cameraPosition, color);
+
+            color = new Color(227, 66, 52) * MathHelper.Clamp(alphaValue, 0, 1);
+            spriteBatch.DrawString(this.combatFont, this.CombatText, this.combatTextPosition - cameraPosition, color);
+
         }
 
         /// <summary>

@@ -464,7 +464,7 @@ namespace The_Caves_of_Kardun
                 if (floorTile != Point.Zero)
                 {
                     // Skapa random(?) monster
-                    this.monsters.Add(new Monster(contentManager.Load<Texture2D>("Tiles/player"), TheCavesOfKardun.ConvertCellToPosition(floorTile), 500, 90, 
+                    this.monsters.Add(new Monster(contentManager.Load<Texture2D>("Sprites/spider"), TheCavesOfKardun.ConvertCellToPosition(floorTile), 500, 90, 
                         contentManager.Load<SpriteFont>("combatFont")));
                 }
             }
@@ -591,11 +591,11 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
-        /// Check if we should se a wall.
+        /// Helper for checking if a tile has adjacent floor.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <param name="x">The X-coordinate of the tile.</param>
+        /// <param name="y">The Y-coordinate of the tile.</param>
+        /// <returns>Returns true if the tile has adjacent floor; otherwise false.</returns>
         private bool HasAdjacentFloor(int x, int y)
         {
             if (x > 0 && this.mapData[x - 1, y] == 1)

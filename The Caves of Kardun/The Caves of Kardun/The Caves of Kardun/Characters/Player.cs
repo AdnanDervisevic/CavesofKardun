@@ -69,6 +69,7 @@ namespace The_Caves_of_Kardun
             monster.Health -= 30;
             this.AttacksMonster = monster;
 
+            // If the monster dies then we're not attacking a monster anymore.
             if (monster.Health <= 0)
                 this.AttacksMonster = null;
         }
