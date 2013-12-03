@@ -174,7 +174,7 @@ namespace The_Caves_of_Kardun
 
             // Draw Items.
             for (int i = 0; i < this.items.Length; i++)
-                if (this.items[i] != null)
+                if (this.items[i] != null && this.items[i].Type != ItemTypes.Gold)
                     spriteBatch.Draw(this.items[i].Texture, 
                         this.bounds[i], Color.White);
 

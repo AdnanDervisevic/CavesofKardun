@@ -37,6 +37,10 @@ namespace The_Caves_of_Kardun
         private Texture2D wallTexture;
 
         private List<Item> goldItems = new List<Item>();
+        private List<Item> swordItems = new List<Item>();
+        private List<Item> shieldItems = new List<Item>();
+        private List<Item> helmItems = new List<Item>();
+        private List<Item> bootsItems = new List<Item>();
 
         private Random random;
 
@@ -92,8 +96,6 @@ namespace The_Caves_of_Kardun
                 this.random = new Random(randomSeed.Value);
             else
                 this.random = new Random();
-
-            MakeLevel(amountOfRooms, maxFails);
         }
 
         #endregion
@@ -109,13 +111,22 @@ namespace The_Caves_of_Kardun
             this.floorTexture = this.contentManager.Load<Texture2D>("Textures/floor");
             this.wallTexture = this.contentManager.Load<Texture2D>("Textures/wall");
 
+            // Load Gold Items
             this.goldItems.Add(this.contentManager.Load<Item>("Items/Gold/minGold"));
             this.goldItems.Add(this.contentManager.Load<Item>("Items/Gold/medGold"));
             this.goldItems.Add(this.contentManager.Load<Item>("Items/Gold/maxGold"));
 
+            // Temporary set textures.
             this.goldItems[0].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Gold/gold");
             this.goldItems[1].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Gold/gold");
             this.goldItems[2].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Gold/gold");
+
+            // Load Sword Items
+            this.swordItems.Add(this.contentManager.Load<Item>("Items/Swords/lightning"));
+            this.swordItems[0].Texture = this.contentManager.Load<Texture2D>("Textures/Items/Swords/lightning");
+            this.swordItems[0].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Swords/lightningOverworld");
+
+            MakeLevel(this.amountOfRooms, this.maxFails);
         }
 
         /// <summary>
@@ -179,7 +190,7 @@ namespace The_Caves_of_Kardun
 
                     bool shouldBreak = false;
                     for (int j = 0; j < this.monsters.Count; j++)
-                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X + i, playerCoords.Y) && this.monsters[i].Alive)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X + i, playerCoords.Y) && this.monsters[j].Alive)
                             shouldBreak = true;
 
                     if (shouldBreak)
@@ -202,7 +213,7 @@ namespace The_Caves_of_Kardun
 
                     bool shouldBreak = false;
                     for (int j = 0; j < this.monsters.Count; j++)
-                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X - i, playerCoords.Y) && this.monsters[i].Alive)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X - i, playerCoords.Y) && this.monsters[j].Alive)
                             shouldBreak = true;
 
                     if (shouldBreak)
@@ -225,7 +236,7 @@ namespace The_Caves_of_Kardun
 
                     bool shouldBreak = false;
                     for (int j = 0; j < this.monsters.Count; j++)
-                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X, playerCoords.Y + i) && this.monsters[i].Alive)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X, playerCoords.Y + i) && this.monsters[j].Alive)
                             shouldBreak = true;
 
                     if (shouldBreak)
@@ -248,7 +259,7 @@ namespace The_Caves_of_Kardun
 
                     bool shouldBreak = false;
                     for (int j = 0; j < this.monsters.Count; j++)
-                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X, playerCoords.Y - i) && this.monsters[i].Alive)
+                        if (TheCavesOfKardun.ConvertPositionToCell(this.monsters[j].Center) == new Point(playerCoords.X, playerCoords.Y - i) && this.monsters[j].Alive)
                             shouldBreak = true;
 
                     if (shouldBreak)
@@ -419,7 +430,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         private void SpawnMonsters()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 30; i++)
             {
                 int r = this.BossRoomIndex;
                 do
@@ -474,12 +485,18 @@ namespace The_Caves_of_Kardun
         /// </summary>
         private void SpawnObjects()
         {
-            /*
-            Item item = this.
-
-
             for (int i = 0; i < 100; i++)
             {
+                Item item;
+
+                int types = random.Next(0, 10);
+                if (types > 8)
+                {
+                    item = this.swordItems[random.Next(0, this.swordItems.Count - 1)];
+                }
+                else
+                    item = this.goldItems[random.Next(0, 2)];
+
                 int r = this.BossRoomIndex;
                 do
                 {
@@ -498,12 +515,11 @@ namespace The_Caves_of_Kardun
 
                     floorTile = room.RandomFloorTile;
                     tries++;
-                } while (floorTile == Point.Zero || this.itemsData[floorTile.X, floorTile.Y] != Objects.None);
+                } while (floorTile == Point.Zero || this.itemsData[floorTile.X, floorTile.Y] != null);
 
                 if (floorTile != Point.Zero)
-                    this.itemsData[floorTile.X, floorTile.Y] = Objects.Gold;
+                    this.itemsData[floorTile.X, floorTile.Y] = item;
             }
-             * */
         }
 
         /// <summary>

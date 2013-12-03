@@ -138,7 +138,28 @@ namespace The_Caves_of_Kardun
         /// <param name="item">The item to equip.</param>
         public Item EquipItem(Item item)
         {
-            throw new Exception("Equip Item");
+            Item rItem = null;
+
+            for (int i = 0; i < this.Equipment.Length; i++)
+            {
+                if (this.Equipment[i] != null && this.Equipment[i].Type == item.Type)
+                {
+                    rItem = this.Equipment[i];
+                    this.Equipment[i] = item;
+                    return rItem;
+                }
+            }
+
+            for (int i = 0; i < this.Equipment.Length; i++)
+            {
+                if (this.Equipment[i] == null)
+                {
+                    this.Equipment[i] = item;
+                    return null;
+                }
+            }
+
+            throw new Exception("Something went wrong:!");
         }
 
         /// <summary>

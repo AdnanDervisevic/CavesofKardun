@@ -1,7 +1,8 @@
 ﻿<item>
   <overworldTextureName>Textures/Items/Gold/maxGoldOverworld</overworldTextureName>
   <textureName>Textures/Items/Gold/maxGold</textureName>
+  <type>Gold</type>
   <value>3</value>
-  <minGold>300</minGold>
-  <maxGold>500</maxGold>
+  <minGold>45</minGold>
+  <maxGold>75</maxGold>
 </item>

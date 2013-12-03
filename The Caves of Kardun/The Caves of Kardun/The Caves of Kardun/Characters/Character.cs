@@ -84,7 +84,7 @@ namespace The_Caves_of_Kardun
                     Vector2 measure = this.combatFont.MeasureString(this.CombatText);
                     this.combatTextPosition = new Vector2((this.Position.X + TheCavesOfKardun.TileWidth / 2) - measure.X / 2, this.Position.Y + TheCavesOfKardun.TileHeight - TheCavesOfKardun.TileHeight / 3);
                     this.alphaValue = 1;
-                    this.fadeDelay = .035f;
+                    this.fadeDelay = .020f;
                 }
             }
         }
@@ -156,11 +156,11 @@ namespace The_Caves_of_Kardun
                 if (fadeDelay <= 0)
                 {
                     fadeDelay = .035f;
-                    alphaValue -= .08f;
+                    alphaValue -= .06f;
                 }
 
                 // Move the combat text position.
-                this.combatTextPosition.Y += -100f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                this.combatTextPosition.Y += -75f * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 // Draw the combat text.
                 DrawCombatText(spriteBatch, cameraPosition);
