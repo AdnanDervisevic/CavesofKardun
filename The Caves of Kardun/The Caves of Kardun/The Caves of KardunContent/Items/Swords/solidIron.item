@@ -1,0 +1,11 @@
+<item>
+	<name>Solid Iron</name>
+	<overworldTextureName>Textures/Items/Swords/solidIronOverworld</overworldTextureName>
+	<textureName>Textures/Items/Swords/solidIron</textureName>
+	<type>Sword</type>
+	<value>3</value>
+	<minDmg>2</minDmg>
+	<maxDmg>5</maxDmg>
+	<dotDmg>0</dotDmg>
+	<dotDuration>0</dotDuration>
+</item>

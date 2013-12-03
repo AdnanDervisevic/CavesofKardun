@@ -1,0 +1,11 @@
+<item>
+	<name>Lava</name>
+	<overworldTextureName>Textures/Items/Swords/lavaOverworld</overworldTextureName>
+	<textureName>Textures/Items/Swords/lava</textureName>
+	<type>Sword</type>
+	<value>6</value>
+	<minDmg>2</minDmg>
+	<maxDmg>2</maxDmg>
+	<dotDmg>10</dotDmg>
+	<dotDuration>4</dotDuration>
+</item>

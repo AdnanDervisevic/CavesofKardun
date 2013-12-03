@@ -1,0 +1,10 @@
+<item>
+	<name>Spiked Iron</name>
+	<overworldTextureName>Textures/Items/Boots/spikedIronOverworld</overworldTextureName>
+	<textureName>Textures/Items/Boots/spikedIron</textureName>
+	<type>Boots</type>
+	<value>3</value>
+	<speed>2</speed>
+	<minDmg>2</minDmg>
+	<maxDmg>4</maxDmg>
+</item>

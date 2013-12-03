@@ -8,6 +8,11 @@ namespace The_Caves_of_Kardun
         #region Properties
 
         /// <summary>
+        /// Gets the damage that the monster should take on his enemy.
+        /// </summary>
+        public int Damage { get; private set; }
+
+        /// <summary>
         /// Gets the amount of tiles to move.
         /// </summary>
         public override int AmountOfTilesToMove
@@ -31,21 +36,10 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the monster.</param>
         /// <param name="position">The position of the monster.</param>
         /// <param name="speed">The speed of the monster.</param>
-        public Monster(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont)
-            : base(texture, position, speed, health, combatFont) { }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Attack a monster.
-        /// </summary>
-        /// <param name="monster">The monster to attack.</param>
-        public void Attack(Player player)
+        public Monster(Texture2D texture, Vector2 position, float speed, int baseHealth, int baseDamage, SpriteFont combatFont)
+            : base(texture, position, speed, baseHealth, combatFont) 
         {
-            player.CombatText = "-30 Damage";
-            player.Health -= 30;
+            this.Damage = baseDamage;
         }
 
         #endregion

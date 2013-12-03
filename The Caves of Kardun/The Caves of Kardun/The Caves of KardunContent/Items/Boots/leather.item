@@ -1,0 +1,10 @@
+<item>
+	<name>Leather</name>
+	<overworldTextureName>Textures/Items/Boots/leatherOverworld</overworldTextureName>
+	<textureName>Textures/Items/Boots/leather</textureName>
+	<type>Boots</type>
+	<value>1</value>
+	<speed>2</speed>
+	<minDmg>1</minDmg>
+	<maxDmg>1</maxDmg>
+</item>	

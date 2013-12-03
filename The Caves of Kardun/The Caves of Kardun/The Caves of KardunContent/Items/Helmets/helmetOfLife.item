@@ -1,0 +1,8 @@
+<item>
+	<name>Helmet of Life</name>
+	<overworldTextureName>Textures/Items/Helmets/helmetOfLifeOverworld</overworldTextureName>
+	<textureName>Textures/Items/Helmets/helmetOfLife</textureName>
+	<type>Helmet</type>
+	<value>3</value>
+	<hp>15</hp>
+</item>

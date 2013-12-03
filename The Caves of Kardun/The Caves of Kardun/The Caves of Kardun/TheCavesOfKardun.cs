@@ -40,8 +40,8 @@ namespace The_Caves_of_Kardun
 
         #region Consts
 
-        public static int TileWidth = 96;
-        public static int TileHeight = 96;
+        public const int TileWidth = 96;
+        public const int TileHeight = 96;
 
         #endregion
 
@@ -55,16 +55,50 @@ namespace The_Caves_of_Kardun
 
         private Vector2 cameraPosition;
         private Player player;
-        private Player boss;
         private Level level;
 
-        private KeyboardState prevState;
-        private MouseState mouseState;
-        private MouseState prevMouseState;
+        private static MouseState currentMouseState;
+        private static MouseState previousMouseState;
+
+        private static KeyboardState currentKeyboardState;
+        private static KeyboardState previousKeyboardState;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the current mouse state.
+        /// </summary>
+        public static MouseState CurrentMouseState
+        {
+            get { return currentMouseState; }
+        }
+
+        /// <summary>
+        /// Gets the previous mouse state.
+        /// </summary>
+        public static MouseState PreviousMouseState
+        {
+            get { return previousMouseState; }
+        }
+
+        /// <summary>
+        /// Gets the current keyboard state.
+        /// </summary>
+        public static KeyboardState CurrentKeyboardState
+        {
+            get { return currentKeyboardState; }
+        }
+
+        /// <summary>
+        /// Gets the previous keyboard state.
+        /// </summary>
+        public static KeyboardState PreviousKeyboardState
+        {
+            get { return previousKeyboardState; }
+        }
+
         #endregion
 
         #region Constructors
@@ -111,17 +145,13 @@ namespace The_Caves_of_Kardun
         {
             this.level.LoadContent();
 
-            this.hoverTexture = Content.Load<Texture2D>("Hover");
+            this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
 
-            this.player = new Player(Content.Load<Texture2D>("Tiles/player"), new Vector2(
+            this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 200,
-                Content.Load<SpriteFont>("combatFont"));
-
-            this.boss = new Player(Content.Load<Texture2D>("Tiles/player"), new Vector2(
-                this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 80,
-                Content.Load<SpriteFont>("combatFont"));
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
+                Content.Load<SpriteFont>("Fonts/combatFont"), 
+                new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), Content.Load<Texture2D>("Textures/Inventory"));
         }
 
         /// <summary>
@@ -167,35 +197,33 @@ namespace The_Caves_of_Kardun
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState state = Keyboard.GetState();
-            mouseState = Mouse.GetState();
+            TheCavesOfKardun.currentKeyboardState = Keyboard.GetState();
+            TheCavesOfKardun.currentMouseState = Mouse.GetState();
 
-            if (state.IsKeyDown(Keys.Enter) && prevState.IsKeyUp(Keys.Enter))
+            if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Enter) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Enter))
             {
                 this.level.RecreateLevel();
 
                 this.player.Position = new Vector2(
                     this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                     this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
-
-                this.boss.Position = new Vector2(
-                    this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
-                    this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight);
             }
 
-            if (state.IsKeyDown(Keys.Escape) && prevState.IsKeyUp(Keys.Escape))
+            if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Escape) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Escape))
                 Exit();
 
             UpdateGameplay(gameTime);
 
+            this.player.Update(gameTime);
+
             this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
             this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
-         
-            prevState = state;
-            prevMouseState = mouseState;
 
-            if (this.player.Health <= 0)
+            if (!this.player.Alive)
                 throw new Exception("Player died");
+
+            TheCavesOfKardun.previousKeyboardState = TheCavesOfKardun.currentKeyboardState;
+            TheCavesOfKardun.previousMouseState = TheCavesOfKardun.currentMouseState;
 
             base.Update(gameTime);
         }
@@ -210,12 +238,11 @@ namespace The_Caves_of_Kardun
 
             this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
-            this.player.Draw(gameTime, spriteBatch, cameraPosition);
-            this.boss.Draw(gameTime, spriteBatch, cameraPosition);
-
             spriteBatch.Begin();
             spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
             spriteBatch.End();
+
+            this.player.Draw(gameTime, spriteBatch, cameraPosition);
 
             base.Draw(gameTime);
         }
@@ -238,12 +265,12 @@ namespace The_Caves_of_Kardun
             // Reset the motion.
             Vector2 motion = Vector2.Zero;
             int amountOfTiles = 0;
-            if (this.mouseState.LeftButton == ButtonState.Pressed && this.prevMouseState.LeftButton == ButtonState.Released)
+            if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
             {
                 // Check if we pressed the left mouse button.
 
                 // Convert the players position to the playerTile and the targetTile from the mouse position.
-                targetTile = TheCavesOfKardun.ConvertPositionToCell(new Vector2(this.mouseState.X + this.cameraPosition.X, this.mouseState.Y + this.cameraPosition.Y));
+                targetTile = TheCavesOfKardun.ConvertPositionToCell(new Vector2(TheCavesOfKardun.CurrentMouseState.X + this.cameraPosition.X, TheCavesOfKardun.CurrentMouseState.Y + this.cameraPosition.Y));
                 Point playerTile = TheCavesOfKardun.ConvertPositionToCell(this.player.Center);
 
                 // Does the X-axis match? 
@@ -293,7 +320,7 @@ namespace The_Caves_of_Kardun
                 motion.Normalize();
 
                 Monster monster;
-                Objects typeOfObject;
+                Item item;
                 
                 if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Check if we can walk.
                 {
@@ -308,10 +335,14 @@ namespace The_Caves_of_Kardun
                         this.level.MonsterAI(this.player);
                     }
                 }
-                else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterObject(targetTile, out typeOfObject)) // Check if we clicked on an item.
+                else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterItem(targetTile, out item)) // Check if we clicked on an item.
                 {
-                    this.player.PickUp(typeOfObject);
-                    this.level.MonsterAI(this.player);
+                    if (this.player.PickUp(item))
+                    {
+                        this.level.RemoveItemFromTile(targetTile);
+                        this.level.MonsterAI(this.player);
+                    }
+                    
                 }
             }
         }

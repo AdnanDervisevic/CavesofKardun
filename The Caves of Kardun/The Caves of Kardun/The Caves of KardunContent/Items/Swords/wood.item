@@ -1,0 +1,11 @@
+<item>
+	<name>Wood</name>
+	<overworldTextureName>Textures/Items/Swords/woodOverworld</overworldTextureName>
+	<textureName>Textures/Items/Swords/wood</textureName>
+	<type>Sword</type>
+	<value>1</value>
+	<minDmg>1</minDmg>
+	<maxDmg>2</maxDmg>
+	<dotDmg>0</dotDmg>
+	<dotDuration>0</dotDuration>
+</item>

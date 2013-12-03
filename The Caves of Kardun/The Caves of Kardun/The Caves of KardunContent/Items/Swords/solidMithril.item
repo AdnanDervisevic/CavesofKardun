@@ -1,0 +1,11 @@
+<item>
+	<name>Solid Mithril</name>
+	<overworldTextureName>Textures/Items/Swords/solidMithrilOverworld</overworldTextureName>
+	<textureName>Textures/Items/Swords/solidMithril</textureName>
+	<type>Sword</type>
+	<value>5</value>
+	<minDmg>3</minDmg>
+	<maxDmg>6</maxDmg>
+	<dotDmg>0</dotDmg>
+	<dotDuration>0</dotDuration>
+</item>

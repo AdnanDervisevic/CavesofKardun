@@ -1,0 +1,11 @@
+<item>
+	<name>Rusty Coppar</name>
+	<overworldTextureName>Textures/Items/Swords/rustyCopparOverworld</overworldTextureName>
+	<textureName>Textures/Items/Swords/rustyCoppar</textureName>
+	<type>Sword</type>
+	<value>2</value>
+	<minDmg>2</minDmg>
+	<maxDmg>3</maxDmg>
+	<dotDmg>0</dotDmg>
+	<dotDuration>0</dotDuration>
+</item>

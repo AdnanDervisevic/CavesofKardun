@@ -31,63 +31,56 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tiles\door.png">
-      <Name>door</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Tiles\wall.png">
+    <Compile Include="Textures\wall.png">
       <Name>wall</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tiles\player.png">
+    <Compile Include="Textures\Characters\player.png">
       <Name>player</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Hover.png">
+    <Compile Include="Textures\Hover.png">
       <Name>Hover</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tiles\floor.jpg">
+    <Compile Include="Textures\floor.jpg">
       <Name>floor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Objects\gold.png">
+    <Compile Include="Textures\Items\Gold\gold.png">
       <Name>gold</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="combatFont.spritefont">
+    <Compile Include="Fonts\combatFont.spritefont">
       <Name>combatFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\spider.png">
+    <Compile Include="Textures\Characters\spider.png">
       <Name>spider</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\shade.png">
+    <Compile Include="Textures\Characters\shade.png">
       <Name>shade</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -100,10 +93,151 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="test.item">
-      <Name>test</Name>
+    <Compile Include="Items\Gold\minGold.item">
+      <Name>minGold</Name>
       <Importer>ItemImporter</Importer>
       <Processor>ItemProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Items\Gold\medGold.item">
+      <Name>medGold</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Items\Gold\maxGold.item">
+      <Name>maxGold</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Items\Boots\leather.item">
+      <Name>leather</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Boots\spiked.item">
+      <Name>spiked</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Boots\spikedIron.item">
+      <Name>spikedIron</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Boots\spikedMithril.item">
+      <Name>spikedMithril</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Helmets\drGizmos.item">
+      <Name>drGizmos</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Helmets\helmetOfLife.item">
+      <Name>helmetOfLife</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Helmets\maphack.item">
+      <Name>maphack</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Helmets\optics.item">
+      <Name>optics</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\heaterShield.item">
+      <Name>heaterShield</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\mirrorShield.item">
+      <Name>mirrorShield</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\plainBuckler.item">
+      <Name>plainBuckler</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\redWall.item">
+      <Name>redWall</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\redWound.item">
+      <Name>redWound</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\spikedBuckler.item">
+      <Name>spikedBuckler</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\spikedMithrilBuckler.item">
+      <Name>spikedMithrilBuckler</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Shields\theEpic.item">
+      <Name>theEpic</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\fire.item">
+      <Name>fire</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\lava.item">
+      <Name>lava</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\lightning.item">
+      <Name>lightning</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\rustyCoppar.item">
+      <Name>rustyCoppar</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\solidIron.item">
+      <Name>solidIron</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\solidMithril.item">
+      <Name>solidMithril</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <Compile Include="Items\Swords\wood.item">
+      <Name>wood</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Inventory.png">
+      <Name>Inventory</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

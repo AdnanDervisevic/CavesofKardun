@@ -1,0 +1,12 @@
+<item>
+	<name>Red Wound</name>
+	<overworldTextureName>Textures/Items/Shields/redWoundOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/redWound</textureName>
+	<type>Shield</type>
+	<value>5</value>
+	<hp>10</hp>
+	<block>2</block>
+	<minDmg>10</minDmg>
+	<maxDmg>10</maxDmg>
+	<miss>0</miss>
+</item>

@@ -1,0 +1,9 @@
+<item>
+	<name>Optics</name>
+	<overworldTextureName>Textures/Items/Helmets/opticsOverworld</overworldTextureName>
+	<textureName>Textures/Items/Helmets/optics</textureName>
+	<type>Helmet</type>
+	<value>1</value>
+	<hp>1</hp>
+	<special>Sight</special>
+</item>

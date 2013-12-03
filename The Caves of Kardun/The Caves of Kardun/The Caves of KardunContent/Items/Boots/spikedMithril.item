@@ -1,0 +1,10 @@
+<item>
+	<name>Spiked Mithril</name>
+	<overworldTextureName>Textures/Items/Boots/spikedMithrilOverworld</overworldTextureName>
+	<textureName>Textures/Items/Boots/spikedMithril</textureName>
+	<type>Boots</type>
+	<value>4</value>
+	<speed>2</speed>
+	<minDmg>3</minDmg>
+	<maxDmg>6</maxDmg>
+</item>

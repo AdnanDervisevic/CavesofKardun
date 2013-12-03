@@ -1,0 +1,12 @@
+<item>
+	<name>The Epic</name>
+	<overworldTextureName>Textures/Items/Shields/theEpicOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/theEpic</textureName>
+	<type>Shield</type>
+	<value>8</value>
+	<hp>20</hp>
+	<block>10</block>
+	<minDmg>5</minDmg>
+	<maxDmg>5</maxDmg>
+	<miss>0</miss>
+</item>

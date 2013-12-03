@@ -1,0 +1,9 @@
+<item>
+	<name>Maphack</name>
+	<overworldTextureName>Textures/Items/Helmets/maphackOverworld</overworldTextureName>
+	<textureName>Textures/Items/Helmets/maphack</textureName>
+	<type>Helmet</type>
+	<value>4</value>
+	<hp>10</hp>
+	<special>Minimap</special>
+</item>

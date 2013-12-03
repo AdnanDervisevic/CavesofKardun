@@ -56,6 +56,16 @@ namespace The_Caves_of_Kardun
         public int Value { get; set; }
 
         /// <summary>
+        /// The minimum amount of gold.
+        /// </summary>
+        public int MinGold { get; set; }
+
+        /// <summary>
+        /// The max amount of gold.
+        /// </summary>
+        public int MaxGold { get; set; }
+
+        /// <summary>
         /// The minimum damage.
         /// </summary>
         public int MinDamage { get; set; }
@@ -114,6 +124,8 @@ namespace The_Caves_of_Kardun
             this.TextureName = string.Empty;
             this.Type = ItemTypes.None;
             this.Value = 0;
+            this.MinGold = 0;
+            this.MaxGold = 0;
             this.MinDamage = 0;
             this.MaxDamage = 0;
             this.DotDamage = 0;
@@ -149,13 +161,15 @@ namespace The_Caves_of_Kardun
 
             item.Name = input.ReadString();
             item.OverworldTextureName = input.ReadString();
-            if (!string.IsNullOrWhiteSpace(item.OverworldTextureName))
-                item.OverworldTexture = input.ContentManager.Load<Texture2D>(item.OverworldTextureName);
+            //if (!string.IsNullOrWhiteSpace(item.OverworldTextureName))
+            //    item.OverworldTexture = input.ContentManager.Load<Texture2D>(item.OverworldTextureName);
             item.TextureName = input.ReadString();
-            if (!string.IsNullOrWhiteSpace(item.TextureName))
-                item.Texture = input.ContentManager.Load<Texture2D>(item.TextureName);
+            //if (!string.IsNullOrWhiteSpace(item.TextureName))
+            //    item.Texture = input.ContentManager.Load<Texture2D>(item.TextureName);
             item.Type = (ItemTypes)input.ReadInt32();
             item.Value = input.ReadInt32();
+            item.MinGold = input.ReadInt32();
+            item.MaxGold = input.ReadInt32();
             item.MinDamage = input.ReadInt32();
             item.MaxDamage = input.ReadInt32();
             item.DotDamage = input.ReadInt32();

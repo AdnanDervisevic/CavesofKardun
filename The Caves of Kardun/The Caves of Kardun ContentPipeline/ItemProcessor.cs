@@ -48,6 +48,14 @@ namespace The_Caves_of_Kardun_ContentPipeline
                 foreach (XmlNode valueNode in valueNodeList)
                     item.Value += int.Parse(valueNode.InnerText);
 
+                XmlNodeList minGoldNodeList = itemElement.GetElementsByTagName("minGold");
+                foreach (XmlNode minGoldNode in minGoldNodeList)
+                    item.MinGold += int.Parse(minGoldNode.InnerText);
+
+                XmlNodeList maxGoldNodeList = itemElement.GetElementsByTagName("maxGold");
+                foreach (XmlNode maxGoldNode in maxGoldNodeList)
+                    item.MaxGold += int.Parse(maxGoldNode.InnerText);
+
                 XmlNodeList minDamageNodeList = itemElement.GetElementsByTagName("minDmg");
                 foreach (XmlNode minDamageNode in minDamageNodeList)
                     item.MinDamage += int.Parse(minDamageNode.InnerText);

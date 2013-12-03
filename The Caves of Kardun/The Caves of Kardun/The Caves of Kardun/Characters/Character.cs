@@ -23,6 +23,10 @@ namespace The_Caves_of_Kardun
         private Vector2 combatTextPosition;
         private SpriteFont combatFont;
 
+        private int baseHealth;
+
+        private Random random;
+
         #endregion
 
         #region Properties
@@ -30,7 +34,23 @@ namespace The_Caves_of_Kardun
         /// <summary>
         /// Gets or sets the health of the character.
         /// </summary>
-        public int Health { get; set; }
+        public virtual int Health
+        {
+            get { return this.baseHealth; }
+        }
+
+        /// <summary>
+        /// Gets the total damage taken to this character.
+        /// </summary>
+        public int DamageTaken { get; private set; }
+
+        /// <summary>
+        /// Determines if the character is alive.
+        /// </summary>
+        public bool Alive
+        {
+            get { return Health > DamageTaken; }
+        }
 
         /// <summary>
         /// Gets or sets he speed of the character.
@@ -84,12 +104,14 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The character texture.</param>
         /// <param name="position">The character position.</param>
         /// <param name="speed">The speed of the character.</param>
-        public Character(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont)
+        public Character(Texture2D texture, Vector2 position, float speed, int baseHealth, SpriteFont combatFont)
         {
+            this.random = new Random();
             this.texture = texture;
             this.Position = position;
             this.Speed = speed;
-            this.Health = health;
+            this.DamageTaken = 0;
+            this.baseHealth = baseHealth;
             this.combatFont = combatFont;
         }
 
@@ -98,16 +120,26 @@ namespace The_Caves_of_Kardun
         #region Public Methods
 
         /// <summary>
+        /// Inflicts damage to this character.
+        /// </summary>
+        /// <param name="damage">The damage to inflict.</param>
+        public void InflictDamage(int damage)
+        {
+            this.DamageTaken += damage;
+            this.CombatText = "-" + damage + " Damage";
+        }
+
+        /// <summary>
         /// Draws the character.
         /// </summary>
         /// <param name="spriteBatch">The spritebatch used to draw the character.</param>
         /// <param name="cameraPosition">The camera position.</param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
         {
             spriteBatch.Begin();
 
             // If we're alive then draw our texture.
-            if (this.Health > 0)
+            if (this.Alive)
             {
                 spriteBatch.Draw(this.texture,
                 new Rectangle(

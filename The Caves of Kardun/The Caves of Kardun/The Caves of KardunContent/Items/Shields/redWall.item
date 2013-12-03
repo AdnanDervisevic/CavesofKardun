@@ -1,0 +1,12 @@
+<item>
+	<name>Red Wall</name>
+	<overworldTextureName>Textures/Items/Shields/redWallOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/redWall</textureName>
+	<type>Shield</type>
+	<value>7</value>
+	<hp>10</hp>
+	<block>10</block>
+	<minDmg>2</minDmg>
+	<maxDmg>2</maxDmg>
+	<miss>0</miss>
+</item>

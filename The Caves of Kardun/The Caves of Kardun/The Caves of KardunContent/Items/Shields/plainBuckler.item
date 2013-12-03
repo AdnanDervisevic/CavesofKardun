@@ -1,0 +1,12 @@
+<item>
+	<name>Plain Buckler</name>
+	<overworldTextureName>Textures/Items/Shields/plainBucklerOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/plainBuckler</textureName>
+	<type>Shield</type>
+	<value>1</value>
+	<hp>1</hp>
+	<block>0</block>
+	<minDmg>0</minDmg>
+	<maxDmg>0</maxDmg>
+	<miss>0</miss>
+</item>

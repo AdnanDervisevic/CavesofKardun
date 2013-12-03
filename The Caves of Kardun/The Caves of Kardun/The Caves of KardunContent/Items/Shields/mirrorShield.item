@@ -1,0 +1,12 @@
+<item>
+	<name>Mirror Shield</name>
+	<overworldTextureName>Textures/Items/Shields/mirrorShieldOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/mirrorShield</textureName>
+	<type>Shield</type>
+	<value>4</value>
+	<hp>8</hp>
+	<block>3</block>
+	<minDmg>3</minDmg>
+	<maxDmg>3</maxDmg>
+	<miss>50</miss>
+</item>

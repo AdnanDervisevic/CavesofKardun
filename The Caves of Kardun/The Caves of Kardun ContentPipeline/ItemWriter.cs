@@ -30,6 +30,8 @@ namespace The_Caves_of_Kardun_ContentPipeline
             output.Write(value.TextureName);
             output.Write((int)value.Type);
             output.Write(value.Value);
+            output.Write(value.MinGold);
+            output.Write(value.MaxGold);
             output.Write(value.MinDamage);
             output.Write(value.MaxDamage);
             output.Write(value.DotDamage);

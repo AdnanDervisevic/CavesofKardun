@@ -1,8 +1,8 @@
 ﻿#region File Description
-    //////////////////////////////////////////////////////////////////////////
-   // Item                                                            //
-  //                                                                      //
- // Copyright (C) Untitled. All Rights reserved.                         //
+//////////////////////////////////////////////////////////////////////////
+// Item                                                            //
+//                                                                      //
+// Copyright (C) Untitled. All Rights reserved.                         //
 //////////////////////////////////////////////////////////////////////////
 #endregion
 
@@ -54,6 +54,16 @@ namespace The_Caves_of_Kardun
         /// Gets or sets the value of the item.
         /// </summary>
         public int Value { get; set; }
+
+        /// <summary>
+        /// The minimum amount of gold.
+        /// </summary>
+        public int MinGold { get; set; }
+
+        /// <summary>
+        /// The max amount of gold.
+        /// </summary>
+        public int MaxGold { get; set; }
 
         /// <summary>
         /// The minimum damage.
@@ -114,6 +124,8 @@ namespace The_Caves_of_Kardun
             this.TextureName = string.Empty;
             this.Type = ItemTypes.None;
             this.Value = 0;
+            this.MinGold = 0;
+            this.MaxGold = 0;
             this.MinDamage = 0;
             this.MaxDamage = 0;
             this.DotDamage = 0;

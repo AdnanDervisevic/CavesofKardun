@@ -1,0 +1,12 @@
+<item>
+	<name>Spiked Buckler</name>
+	<overworldTextureName>Textures/Items/Shields/spikedBucklerOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/spikedBuckler</textureName>
+	<type>Shield</type>
+	<value>2</value>
+	<hp>1</hp>
+	<block>1</block>
+	<minDmg>1</minDmg>
+	<maxDmg>1</maxDmg>
+	<miss>0</miss>
+</item>

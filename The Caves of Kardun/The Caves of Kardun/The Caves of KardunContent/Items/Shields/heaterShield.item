@@ -1,0 +1,12 @@
+<item>
+	<name>Heater Shield</name>
+	<overworldTextureName>Textures/Items/Shields/heaterShieldOverworld</overworldTextureName>
+	<textureName>Textures/Items/Shields/heaterShield</textureName>
+	<type>Shield</type>
+	<value>3</value>
+	<hp>4</hp>
+	<block>5</block>
+	<minDmg>2</minDmg>
+	<maxDmg>2</maxDmg>
+	<miss>0</miss>
+</item>

@@ -1,0 +1,9 @@
+<item>
+	<name>Dr Gizmos</name>
+	<overworldTextureName>Textures/Items/Helmets/drGizmosOverworld</overworldTextureName>
+	<textureName>Textures/Items/Helmets/drGizmos</textureName>
+	<type>Helmet</type>
+	<value>2</value>
+	<hp>5</hp>
+	<special>Colour</special>
+</item>

@@ -1,0 +1,11 @@
+<item>
+	<name>Lightning</name>
+	<overworldTextureName>Textures/Items/Swords/lightningOverworld</overworldTextureName>
+	<textureName>Textures/Items/Swords/lightning</textureName>
+	<type>Sword</type>
+	<value>4</value>
+	<minDmg>5</minDmg>
+	<maxDmg>5</maxDmg>
+	<dotDmg>0</dotDmg>
+	<dotDuration>0</dotDuration>
+</item>
