@@ -134,11 +134,11 @@ namespace The_Caves_of_Kardun
                 // Check if we intersects with any item slot.
                 if (this.bounds[i].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
                 {
-                    /*if (this.items[i] == null)
+                    if (this.items[i] == null)
                     {
                         this.hover = null;
                         return;
-                    }*/
+                    }
 
                     this.hover = this.items[i];
 
