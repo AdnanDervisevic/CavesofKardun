@@ -201,7 +201,7 @@ namespace The_Caves_of_Kardun
             targetPosition.Y -= 2;
             spriteBatch.DrawString(this.combatFont, this.CombatText, targetPosition - cameraPosition, color);
 
-            color = new Color(227, 66, 52) * MathHelper.Clamp(alphaValue, 0, 1);
+            color = new Color(34, 133, 255) * MathHelper.Clamp(alphaValue, 0, 1);
             spriteBatch.DrawString(this.combatFont, this.CombatText, this.combatTextPosition - cameraPosition, color);
 
         }
