@@ -21,6 +21,11 @@ namespace The_Caves_of_Kardun
         #region Properties
 
         /// <summary>
+        /// Gets or sets the name of the item.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the overworld texture name.
         /// </summary>
         public string OverworldTextureName { get; set; }
@@ -104,6 +109,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public Item()
         {
+            this.Name = string.Empty;
             this.OverworldTextureName = string.Empty;
             this.TextureName = string.Empty;
             this.Type = ItemTypes.None;
@@ -141,6 +147,7 @@ namespace The_Caves_of_Kardun
             if (item == null)
                 item = new Item();
 
+            item.Name = input.ReadString();
             item.OverworldTextureName = input.ReadString();
             if (!string.IsNullOrWhiteSpace(item.OverworldTextureName))
                 item.OverworldTexture = input.ContentManager.Load<Texture2D>(item.OverworldTextureName);

@@ -1,5 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<XnaContent>
-  <!-- TODO: replace this Asset with your own XML asset data. -->
-  <Asset Type="System.String"></Asset>
-</XnaContent>
+﻿<item>
+  <name>BEST WEAPON IN GAME:!</name>
+  <type>Sword</type>
+  <overworldTextureName>Sprites/spider</overworldTextureName>
+  <textureName>Sprites/spider</textureName>
+  <value>300</value>
+  <minDmg>100</minDmg>
+  <maxDmg>1000</maxDmg>
+  <dotDmg>2000</dotDmg>
+  <dotDuration>3</dotDuration>
+  <hp>100</hp>
+  <block>200</block>
+  <miss>50</miss>
+  <special>Colour</special>
+  <speed>2</speed>
+</item>

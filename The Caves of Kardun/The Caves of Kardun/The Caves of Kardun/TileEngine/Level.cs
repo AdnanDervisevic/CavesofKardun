@@ -373,6 +373,7 @@ namespace The_Caves_of_Kardun
         /// <param name="maxFails"></param>
         private void MakeLevel(int amountOfRooms, int maxFails)
         {
+            this.monsters.Clear();
             this.rooms.Clear();
             this.mapData = new int[mapDimensions.X, mapDimensions.Y];
             this.objectData = new Objects[mapDimensions.X, mapDimensions.Y];

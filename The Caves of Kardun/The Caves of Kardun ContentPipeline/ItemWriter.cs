@@ -25,6 +25,7 @@ namespace The_Caves_of_Kardun_ContentPipeline
     {
         protected override void Write(ContentWriter output, Item value)
         {
+            output.Write(value.Name);
             output.Write(value.OverworldTextureName);
             output.Write(value.TextureName);
             output.Write((int)value.Type);

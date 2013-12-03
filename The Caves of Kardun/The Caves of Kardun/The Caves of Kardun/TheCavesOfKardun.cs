@@ -58,6 +58,10 @@ namespace The_Caves_of_Kardun
         private Player boss;
         private Level level;
 
+        private KeyboardState prevState;
+        private MouseState mouseState;
+        private MouseState prevMouseState;
+
         #endregion
 
         #region Properties
@@ -118,8 +122,6 @@ namespace The_Caves_of_Kardun
                 this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 80,
                 Content.Load<SpriteFont>("combatFont"));
-
-            Item it = Content.Load<Item>("test");
         }
 
         /// <summary>
@@ -158,9 +160,6 @@ namespace The_Caves_of_Kardun
 
         #region Public Methods
 
-        KeyboardState prevState;
-        MouseState mouseState;
-        MouseState prevMouseState;
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.

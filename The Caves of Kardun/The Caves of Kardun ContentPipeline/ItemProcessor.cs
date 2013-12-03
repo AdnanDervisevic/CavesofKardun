@@ -10,6 +10,7 @@
 using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using The_Caves_of_Kardun;
+using System;
 #endregion
 
 namespace The_Caves_of_Kardun_ContentPipeline
@@ -21,46 +22,68 @@ namespace The_Caves_of_Kardun_ContentPipeline
         {
             Item item = new Item();
 
-            /*
-            XmlNodeList mapNodeList = input.GetElementsByTagName("Map");
+            XmlNodeList itemNodeList = input.GetElementsByTagName("item");
 
-            foreach (XmlNode mapNode in mapNodeList)
+            foreach (XmlNode itemNode in itemNodeList)
             {
-                XmlElement mapElement = (XmlElement)mapNode;
+                XmlElement itemElement = (XmlElement)itemNode;
 
-                XmlNodeList tilesetNodeList = mapElement.GetElementsByTagName("Tileset");
-                foreach (XmlNode tilesetNode in tilesetNodeList)
-                {
-                    Tileset tileset = new Tileset();
-                    tileset.Name = tilesetNode.Attributes["Name"].InnerText;
-                    tileset.TextureName = tilesetNode.Attributes["TextureName"].InnerText;
-                    tileset.Dimensions = Size.FromString(tilesetNode.Attributes["Dimensions"].InnerText);
-                    tileset.TileSize = Size.FromString(tilesetNode.Attributes["TileSize"].InnerText);
-                    tileset.Margin = Size.FromString(tilesetNode.Attributes["Margin"].InnerText);
-                    tileset.Spacing = Size.FromString(tilesetNode.Attributes["Spacing"].InnerText);
+                XmlNodeList nameNodeList = itemElement.GetElementsByTagName("name");
+                foreach (XmlNode nameNode in nameNodeList)
+                    item.Name = nameNode.InnerText;
 
-                    map.AddTileset(tileset);
-                }
+                XmlNodeList overworldTextureNameNodeList = itemElement.GetElementsByTagName("overworldTextureName");
+                foreach (XmlNode overworldTextureNameNode in overworldTextureNameNodeList)
+                    item.OverworldTextureName = overworldTextureNameNode.InnerText;
 
-                XmlNodeList collisionLayerNodeList = mapElement.GetElementsByTagName("CollisionLayer");
-                foreach (XmlNode collisionLayerNode in collisionLayerNodeList)
-                {
-                    XmlNodeList childNodes = collisionLayerNode.ChildNodes;
+                XmlNodeList textureNameNodeList = itemElement.GetElementsByTagName("textureName");
+                foreach (XmlNode textureNameNode in textureNameNodeList)
+                    item.TextureName = textureNameNode.InnerText;
 
-                }
+                XmlNodeList typeNodeList = itemElement.GetElementsByTagName("type");
+                foreach (XmlNode typeNode in typeNodeList)
+                    item.Type = (ItemTypes)Enum.Parse(typeof(ItemTypes), typeNode.InnerText);
+
+                XmlNodeList valueNodeList = itemElement.GetElementsByTagName("value");
+                foreach (XmlNode valueNode in valueNodeList)
+                    item.Value += int.Parse(valueNode.InnerText);
+
+                XmlNodeList minDamageNodeList = itemElement.GetElementsByTagName("minDmg");
+                foreach (XmlNode minDamageNode in minDamageNodeList)
+                    item.MinDamage += int.Parse(minDamageNode.InnerText);
+
+                XmlNodeList maxDamageNodeList = itemElement.GetElementsByTagName("maxDmg");
+                foreach (XmlNode maxDamageNode in maxDamageNodeList)
+                    item.MaxDamage += int.Parse(maxDamageNode.InnerText);
+
+                XmlNodeList dotDamageNodeList = itemElement.GetElementsByTagName("dotDmg");
+                foreach (XmlNode dotDamageNode in dotDamageNodeList)
+                    item.DotDamage += int.Parse(dotDamageNode.InnerText);
+
+                XmlNodeList dotDurationNodeList = itemElement.GetElementsByTagName("dotDuration");
+                foreach (XmlNode dotDurationNode in dotDurationNodeList)
+                    item.DotDuration += int.Parse(dotDurationNode.InnerText);
+
+                XmlNodeList healthNodeList = itemElement.GetElementsByTagName("hp");
+                foreach (XmlNode healthNode in healthNodeList)
+                    item.Health += int.Parse(healthNode.InnerText);
+
+                XmlNodeList blockNodeList = itemElement.GetElementsByTagName("block");
+                foreach (XmlNode blockNode in blockNodeList)
+                    item.Block += int.Parse(blockNode.InnerText);
+
+                XmlNodeList missNodeList = itemElement.GetElementsByTagName("miss");
+                foreach (XmlNode missNode in missNodeList)
+                    item.MissChance += int.Parse(missNode.InnerText);
+
+                XmlNodeList speedNodeList = itemElement.GetElementsByTagName("speed");
+                foreach (XmlNode speedNode in speedNodeList)
+                    item.Speed += int.Parse(speedNode.InnerText);
+
+                XmlNodeList specialNodeList = itemElement.GetElementsByTagName("special");
+                foreach (XmlNode specialNode in specialNodeList)
+                    item.Special = (ItemSpecials)Enum.Parse(typeof(ItemSpecials), specialNode.InnerText);
             }
-
-
-            XmlNode mapNode = mapNodeList.Item(0);
-            Map map = new Map(mapNode.Attributes["Name"].InnerText, Size.FromString(mapNode.Attributes["Dimensions"].InnerText), Size.FromString(mapNode.Attributes["TileSize"].InnerText));
-
-            XmlNodeList tilesetsNodeList = ((XmlElement)mapNode).GetElementsByTagName("Tilesets");
-            foreach (XmlNode tilesetNode in tilesetsNodeList)
-            {
-                Tileset tileset = map.AddTileset("test", "test", Size.Zero, Size.Zero);
-                tileset.Margin = new Size(10, 10);
-            }
-             * */
 
             return item;
         }
