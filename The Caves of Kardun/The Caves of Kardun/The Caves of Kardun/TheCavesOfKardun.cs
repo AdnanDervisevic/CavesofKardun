@@ -220,7 +220,7 @@ namespace The_Caves_of_Kardun
             this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
 
             if (!this.player.Alive)
-                throw new Exception("Player died");
+                Exit();
 
             TheCavesOfKardun.previousKeyboardState = TheCavesOfKardun.currentKeyboardState;
             TheCavesOfKardun.previousMouseState = TheCavesOfKardun.currentMouseState;
