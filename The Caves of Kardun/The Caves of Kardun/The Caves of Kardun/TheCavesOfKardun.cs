@@ -29,15 +29,6 @@ namespace The_Caves_of_Kardun
     /// </summary>
     public class TheCavesOfKardun : Game
     {
-        /*
-         * 
-         * FOG OF WAR
-         * ----------
-         * Rita bara det som spelaren har sett
-         * Ändra Alpha på varje tile beroende på hur nära spelaren har varit
-         * 
-         * */
-
         #region Consts
 
         public const int TileWidth = 96;
@@ -111,7 +102,7 @@ namespace The_Caves_of_Kardun
             this.graphicsDeviceManager = new GraphicsDeviceManager(this);
             graphicsDeviceManager.PreferredBackBufferWidth = 1280;
             graphicsDeviceManager.PreferredBackBufferHeight = 720;
-            //graphicsDeviceManager.IsFullScreen = true;
+            graphicsDeviceManager.IsFullScreen = true;
             graphicsDeviceManager.ApplyChanges();
             IsMouseVisible = true;
             this.random = new Random();
@@ -325,13 +316,13 @@ namespace The_Caves_of_Kardun
                 if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Check if we can walk.
                 {
                     this.player.Motion = motion;
-                    this.level.MonsterAI(this.player);
+                    this.level.MonsterAI(gameTime, this.player);
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
                 {
                     if (string.IsNullOrWhiteSpace(this.player.CombatText))
                     {
-                        this.level.MonsterAI(this.player);
+                        this.level.MonsterAI(gameTime, this.player);
                         this.player.Attack(gameTime, monster);
                     }
                 }
@@ -340,7 +331,7 @@ namespace The_Caves_of_Kardun
                     if (this.player.PickUp(item))
                     {
                         this.level.RemoveItemFromTile(targetTile);
-                        this.level.MonsterAI(this.player);
+                        this.level.MonsterAI(gameTime, this.player);
                     }
                 }
             }
