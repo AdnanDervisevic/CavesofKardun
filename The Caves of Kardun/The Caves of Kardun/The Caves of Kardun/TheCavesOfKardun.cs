@@ -102,7 +102,7 @@ namespace The_Caves_of_Kardun
             this.graphicsDeviceManager = new GraphicsDeviceManager(this);
             graphicsDeviceManager.PreferredBackBufferWidth = 1280;
             graphicsDeviceManager.PreferredBackBufferHeight = 720;
-            graphicsDeviceManager.IsFullScreen = true;
+            //graphicsDeviceManager.IsFullScreen = true;
             graphicsDeviceManager.ApplyChanges();
             IsMouseVisible = true;
             this.random = new Random();

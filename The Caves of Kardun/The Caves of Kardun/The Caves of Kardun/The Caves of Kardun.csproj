@@ -88,6 +88,7 @@
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Inventory.cs" />
     <Compile Include="Characters\Monster.cs" />
+    <Compile Include="Dot.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Characters\Player.cs" />
     <Compile Include="Items\ItemSpecials.cs" />

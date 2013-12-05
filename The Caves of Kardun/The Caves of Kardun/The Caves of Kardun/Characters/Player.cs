@@ -33,9 +33,17 @@ namespace The_Caves_of_Kardun
             get
             {
                 int bonusHealth = 0;
-                for (int i = 0; i < this.Equipment.Length; i++)
-                    if (this.Equipment[i] != null)
-                        bonusHealth += this.Equipment[i].Health;
+                if (this.Helmet != null)
+                    bonusHealth += this.Helmet.Health;
+
+                if (this.LeftHand != null)
+                    bonusHealth += this.LeftHand.Health;
+
+                if (this.RightHand != null)
+                    bonusHealth += this.RightHand.Health;
+
+                if (this.Boots != null)
+                    bonusHealth += this.Boots.Health;
 
                 return base.Health + bonusHealth;
             }
@@ -48,29 +56,50 @@ namespace The_Caves_of_Kardun
         {
             get
             {
-                bool sword = false;
-                for (int i = 0; i < this.Equipment.Length; i++)
+                // Check if we're holding a sword or a shield.
+                bool swordOrShield = (this.RightHand != null && (this.RightHand.Type == ItemTypes.Sword || this.RightHand.Type == ItemTypes.Shield)) || (this.LeftHand != null && (this.LeftHand.Type == ItemTypes.Sword || this.LeftHand.Type == ItemTypes.Shield));
+
+                // If we're not holding a shield or sword set the default damage to 1.
+                int minDamage = swordOrShield ? 0 : 1;
+                int maxDamage = swordOrShield ? 0 : 1;
+
+                // Add the min&max damage of all the gear.
+                if (this.Helmet != null)
                 {
-                    if (this.Equipment[i] != null && this.Equipment[i].Type == ItemTypes.Sword)
-                    {
-                        sword = true;
-                        break;
-                    }
+                    minDamage += this.Helmet.MinDamage;
+                    maxDamage += this.Helmet.MaxDamage;
                 }
 
-                int minDamage = sword ? 0 : 1;
-                int maxDamage = sword ? 0 : 1;
-
-                for (int i = 0; i < this.Equipment.Length; i++)
+                if (this.LeftHand != null)
                 {
-                    if (this.Equipment[i] == null)
-                        continue;
+                    minDamage += this.LeftHand.MinDamage;
+                    maxDamage += this.LeftHand.MaxDamage;
+                }
 
-                    minDamage += this.Equipment[i].MinDamage;
-                    maxDamage += this.Equipment[i].MaxDamage;
+                if (this.RightHand != null)
+                {
+                    minDamage += this.RightHand.MinDamage;
+                    maxDamage += this.RightHand.MaxDamage;
+                }
+
+                if (this.Boots != null)
+                {
+                    minDamage += this.Boots.MinDamage;
+                    maxDamage += this.Boots.MaxDamage;
                 }
 
                 return random.Next(minDamage, maxDamage);
+            }
+        }
+
+        /// <summary>
+        /// Gets the damage the player should take on his enemy over time.
+        /// </summary>
+        public Dot DotDamage
+        {
+            get
+            {
+                return new Dot();
             }
         }
 
@@ -80,9 +109,24 @@ namespace The_Caves_of_Kardun
         public Inventory Inventory { get; set; }
 
         /// <summary>
-        /// The items the player has equiped.
+        /// Gets the head the player has equiped.
         /// </summary>
-        public Item[] Equipment { get; private set; }
+        public Item Helmet { get; private set; }
+
+        /// <summary>
+        /// Gets the sword or shield the player has equiped in the left hand.
+        /// </summary>
+        public Item LeftHand { get; private set; }
+
+        /// <summary>
+        /// Gets the sword or shield the player has equiped in the right hand.
+        /// </summary>
+        public Item RightHand { get; private set; }
+
+        /// <summary>
+        /// Gets the boots the player has equiped.
+        /// </summary>
+        public Item Boots { get; private set; }
 
         /// <summary>
         /// Gets the amount of tiles to move.
@@ -105,7 +149,6 @@ namespace The_Caves_of_Kardun
         public Player(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont, Vector2 inventoryPositionOffset, Texture2D inventoryBackgroundTexture)
             : base(texture, position, speed, health, combatFont) 
         {
-            this.Equipment = new Item[4];
             this.random = new Random();
             this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture);
         }
@@ -136,30 +179,48 @@ namespace The_Caves_of_Kardun
         /// Equips an item.
         /// </summary>
         /// <param name="item">The item to equip.</param>
-        public Item EquipItem(Item item)
+        public Item EquipItem(Item item, bool rightHand)
         {
             Item rItem = null;
 
-            for (int i = 0; i < this.Equipment.Length; i++)
+            if (item.Type == ItemTypes.Helmet)
             {
-                if (this.Equipment[i] != null && this.Equipment[i].Type == item.Type)
+                rItem = this.Helmet;
+                this.Helmet = item;
+            }
+            else if (item.Type == ItemTypes.Boots)
+            {
+                rItem = this.Boots;
+                this.Boots = item;
+            }
+            else if (item.Type == ItemTypes.Sword)
+            {
+                if (rightHand)
                 {
-                    rItem = this.Equipment[i];
-                    this.Equipment[i] = item;
-                    return rItem;
+                    rItem = this.RightHand;
+                    this.RightHand = item;
+                }
+                else
+                {
+                    rItem = this.LeftHand;
+                    this.LeftHand = item;
+                }
+            }
+            else if (item.Type == ItemTypes.Shield)
+            {
+                if (rightHand)
+                {
+                    rItem = this.RightHand;
+                    this.RightHand = item;
+                }
+                else
+                {
+                    rItem = this.LeftHand;
+                    this.LeftHand = item;
                 }
             }
 
-            for (int i = 0; i < this.Equipment.Length; i++)
-            {
-                if (this.Equipment[i] == null)
-                {
-                    this.Equipment[i] = item;
-                    return null;
-                }
-            }
-
-            throw new Exception("Something went wrong:!");
+            return rItem;
         }
 
         /// <summary>

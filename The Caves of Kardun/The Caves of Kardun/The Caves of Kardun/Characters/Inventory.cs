@@ -145,7 +145,7 @@ namespace The_Caves_of_Kardun
                     if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                     {
                         // Equips the item and moves the old item to the inventory.
-                        this.items[i] = this.player.EquipItem(this.items[i]);
+                        this.items[i] = this.player.EquipItem(this.items[i], true);
                     }
                     else if (TheCavesOfKardun.CurrentMouseState.RightButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.RightButton == ButtonState.Released)
                     {
