@@ -190,7 +190,7 @@ namespace The_Caves_of_Kardun
                         if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             // Equips the item and moves the old item to the inventory.
-                            bool AllowTwoSwords = true;
+                            bool AllowTwoSwords = false;
 
                             this.allowLeftHand = (this.player.Equipment.LeftHand == null || this.player.Equipment.LeftHand.Type == ItemTypes.Sword || this.player.Equipment.LeftHand.Type == ItemTypes.Shield) &&
                                 (this.player.Equipment.RightHand == null || this.player.Equipment.RightHand.Type == ItemTypes.Shield) || AllowTwoSwords;
