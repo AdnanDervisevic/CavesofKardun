@@ -316,13 +316,13 @@ namespace The_Caves_of_Kardun
                 if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Check if we can walk.
                 {
                     this.player.Motion = motion;
-                    this.level.MonsterAI(gameTime, this.player);
+                    this.level.UpdateMonstersAI(gameTime, this.player);
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
                 {
                     if (string.IsNullOrWhiteSpace(this.player.CombatText))
                     {
-                        this.level.MonsterAI(gameTime, this.player);
+                        this.level.UpdateMonstersAI(gameTime, this.player);
                         this.player.Attack(gameTime, monster);
                     }
                 }
@@ -331,7 +331,7 @@ namespace The_Caves_of_Kardun
                     if (this.player.PickUp(item))
                     {
                         this.level.RemoveItemFromTile(targetTile);
-                        this.level.MonsterAI(gameTime, this.player);
+                        this.level.UpdateMonstersAI(gameTime, this.player);
                     }
                 }
             }

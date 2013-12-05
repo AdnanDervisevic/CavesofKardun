@@ -141,7 +141,7 @@ namespace The_Caves_of_Kardun
         /// Called every time monsters should either move or attack.
         /// </summary>
         /// <param name="player">The player.</param>
-        public void MonsterAI(GameTime gameTime, Player player)
+        public void UpdateMonstersAI(GameTime gameTime, Player player)
         {
             Point playerTile = TheCavesOfKardun.ConvertPositionToCell(player.Center);
 
@@ -149,34 +149,7 @@ namespace The_Caves_of_Kardun
             int totalDamage = 0;
 
             foreach (Monster monster in this.monsters)
-            {
-                if (!monster.Alive)
-                    continue;
-
-                Point monsterTile = TheCavesOfKardun.ConvertPositionToCell(monster.Center);
-
-                // If the player is to the left of the monster, attack.
-                if (monsterTile.X + 1 == playerTile.X && monsterTile.Y == playerTile.Y)
-                    totalDamage += monster.Damage;
-                else if (monsterTile.X - 1 == playerTile.X && monsterTile.Y == playerTile.Y) // If the player is to the right of the monster, attack.
-                    totalDamage += monster.Damage;
-                else if (monsterTile.X == playerTile.X && monsterTile.Y + 1 == playerTile.Y) // If the player is below the monster, attack.
-                    totalDamage += monster.Damage;
-                else if (monsterTile.X == playerTile.X && monsterTile.Y - 1 == playerTile.Y) // If the player is abopve the monster, attack.
-                    totalDamage += monster.Damage;
-                else // If the monster is not close to the player move towards him
-                {
-                    // If the monster is between two tiles then jump to the next iteration.
-                    if (monster.UpdateMovement(gameTime))
-                        continue;
-                    // Otherwise we're calculating the AI
-
-                    // Compare playerTile and monsterTile to calculate the motion the monster should have.
-                    // Then call if (CanWalk(monster, calculatedMotion, 1, out monster.TargetPosition))
-                    // If this returns true just continue to the next iteration like we did @line 171
-                    // Otherwise there're something in the way and we need to re-calculate a new motion and try again.
-                }
-            }
+                totalDamage += monster.UpdateAI(gameTime, playerTile);
 
             // When we've moved/calculated damage for all monsters then inflict the combined damage to the player.
             if (totalDamage > 0)
