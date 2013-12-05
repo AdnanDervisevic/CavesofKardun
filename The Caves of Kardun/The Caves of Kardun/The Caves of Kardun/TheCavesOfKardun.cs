@@ -142,7 +142,9 @@ namespace The_Caves_of_Kardun
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
                 Content.Load<SpriteFont>("Fonts/combatFont"), 
-                new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), Content.Load<Texture2D>("Textures/Inventory"));
+                new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), Content.Load<Texture2D>("Textures/Inventory"),
+                Content.Load<Texture2D>("Textures/Menus/InventoryMenu"), Content.Load<Texture2D>("Textures/Menus/InventoryLeftHandMenu"), Content.Load<Texture2D>("Textures/Menus/InventoryRightHandMenu"),
+                new Vector2(0, GraphicsDevice.Viewport.Height - 248), Content.Load<Texture2D>("Textures/Equipment"));
         }
 
         /// <summary>

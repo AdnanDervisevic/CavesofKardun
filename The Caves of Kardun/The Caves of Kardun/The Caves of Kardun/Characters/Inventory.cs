@@ -30,6 +30,9 @@ namespace The_Caves_of_Kardun
 
         #region Fields
 
+        private bool allowRightHand;
+        private bool allowLeftHand;
+
         private Random random;
 
         private Texture2D backgroundTexture;
@@ -37,6 +40,15 @@ namespace The_Caves_of_Kardun
         private Vector2 positionOffset;
 
         private Rectangle[] bounds;
+
+        private Texture2D bothHandsTexture;
+        private Texture2D leftHandTexture;
+        private Texture2D rightHandTexture;
+        
+        private Vector2 menuPosition;
+        private Rectangle[] menuBounds;
+        private int itemIndexClicked;
+
 
         private Item hover;
         private Player player;
@@ -73,8 +85,12 @@ namespace The_Caves_of_Kardun
         /// <param name="player">The player.</param>
         /// <param name="positionOffset">The position offset from the top left corner (0, 0).</param>
         /// <param name="backgroundTexture">The background texture.</param>
-        public Inventory(Player player, Vector2 positionOffset, Texture2D backgroundTexture)
+        public Inventory(Player player, Vector2 positionOffset, Texture2D backgroundTexture, Texture2D bothHandsTexture, Texture2D leftHandTexture, Texture2D rightHandTexture)
         {
+            this.bothHandsTexture = bothHandsTexture;
+            this.leftHandTexture = leftHandTexture;
+            this.rightHandTexture = rightHandTexture;
+            this.itemIndexClicked = -1;
             this.player = player;
             this.random = new Random();
             this.items = new Item[Inventory.MaxSlots];
@@ -129,32 +145,92 @@ namespace The_Caves_of_Kardun
             if (!this.Visible)
                 return;
 
-            for (int i = 0; i < Inventory.MaxSlots; i++)
+            if (this.itemIndexClicked >= 0)
             {
-                // Check if we intersects with any item slot.
-                if (this.bounds[i].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
+                if (this.menuBounds[0].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
                 {
-                    if (this.items[i] == null)
+                    for (int i = 1; i < this.menuBounds.Length; i++)
                     {
-                        this.hover = null;
-                        return;
-                    }
+                        if (this.menuBounds[i].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
+                        {
+                            if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
+                            {
+                                if (i == this.menuBounds.Length - 1)
+                                {
+                                    this.items[this.itemIndexClicked] = null;
+                                }
+                                else
+                                {
+                                    bool rightHand = (this.allowLeftHand && this.allowRightHand && i == 2) || (this.allowRightHand && !this.allowLeftHand && i == 1);
+                                    this.items[this.itemIndexClicked] = this.player.EquipItem(this.items[this.itemIndexClicked], rightHand);
+                                }
 
-                    this.hover = this.items[i];
-
-                    if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
-                    {
-                        // Equips the item and moves the old item to the inventory.
-                        this.items[i] = this.player.EquipItem(this.items[i], true);
-                    }
-                    else if (TheCavesOfKardun.CurrentMouseState.RightButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.RightButton == ButtonState.Released)
-                    {
-                        this.items[i] = null;
+                                this.itemIndexClicked = -1;
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    this.hover = null;
+                    this.itemIndexClicked = -1;
+                }                
+            }
+            else
+            {
+                for (int i = 0; i < Inventory.MaxSlots; i++)
+                {
+                    // Check if we intersects with any item slot.
+                    if (this.bounds[i].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
+                    {
+                        this.hover = this.items[i];
+
+                        if (this.hover == null)
+                            return;
+
+                        if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
+                        {
+                            // Equips the item and moves the old item to the inventory.
+                            bool AllowTwoSwords = true;
+
+                            this.allowLeftHand = (this.player.Equipment.LeftHand == null || this.player.Equipment.LeftHand.Type == ItemTypes.Sword || this.player.Equipment.LeftHand.Type == ItemTypes.Shield) &&
+                                (this.player.Equipment.RightHand == null || this.player.Equipment.RightHand.Type == ItemTypes.Shield) || AllowTwoSwords;
+
+                            this.allowRightHand = (this.player.Equipment.LeftHand == null || this.player.Equipment.LeftHand.Type == ItemTypes.Shield) &&
+                                (this.player.Equipment.RightHand == null || this.player.Equipment.RightHand.Type == ItemTypes.Sword || this.player.Equipment.RightHand.Type == ItemTypes.Shield) || AllowTwoSwords;
+
+                            if (this.allowLeftHand && this.allowRightHand)
+                            {
+                                // Show both options.
+                                this.menuBounds = new Rectangle[4];
+                                this.menuPosition = new Vector2(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y);
+                                this.menuPosition.Y -= 38;
+                                this.menuPosition.X -= 51;
+
+                                this.menuBounds[0] = new Rectangle((int)this.menuPosition.X, (int)this.menuPosition.Y, 103, 77);
+                                this.menuBounds[1] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 3, 97, 22);
+                                this.menuBounds[2] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 28, 97, 22);
+                                this.menuBounds[3] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 53, 97, 22);
+                            }
+                            else
+                            {
+                                // Show only right hand.
+                                this.menuBounds = new Rectangle[3];
+                                this.menuPosition = new Vector2(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y);
+                                this.menuPosition.Y -= 26;
+                                this.menuPosition.X -= 51;
+
+                                this.menuBounds[0] = new Rectangle((int)this.menuPosition.X, (int)this.menuPosition.Y, 103, 52);
+                                this.menuBounds[1] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 3, 97, 22);
+                                this.menuBounds[2] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 28, 97, 22);
+                            }
+
+                            this.itemIndexClicked = i;
+                        }
+                    }
+                    else
+                    {
+                        this.hover = null;
+                    }
                 }
             }
         }
@@ -177,6 +253,16 @@ namespace The_Caves_of_Kardun
                 if (this.items[i] != null && this.items[i].Type != ItemTypes.Gold)
                     spriteBatch.Draw(this.items[i].Texture, 
                         this.bounds[i], Color.White);
+
+            if (this.itemIndexClicked >= 0)
+            {
+                if (this.allowLeftHand && this.allowRightHand)
+                    spriteBatch.Draw(this.bothHandsTexture, this.menuPosition, Color.White);
+                else if (this.allowLeftHand && !this.allowRightHand)
+                    spriteBatch.Draw(this.leftHandTexture, this.menuPosition, Color.White);
+                else if (!this.allowLeftHand && this.allowRightHand)
+                    spriteBatch.Draw(this.rightHandTexture, this.menuPosition, Color.White);
+            }
 
             spriteBatch.End();
         }

@@ -33,17 +33,17 @@ namespace The_Caves_of_Kardun
             get
             {
                 int bonusHealth = 0;
-                if (this.Helmet != null)
-                    bonusHealth += this.Helmet.Health;
+                if (this.Equipment.Helmet != null)
+                    bonusHealth += this.Equipment.Helmet.Health;
 
-                if (this.LeftHand != null)
-                    bonusHealth += this.LeftHand.Health;
+                if (this.Equipment.LeftHand != null)
+                    bonusHealth += this.Equipment.LeftHand.Health;
 
-                if (this.RightHand != null)
-                    bonusHealth += this.RightHand.Health;
+                if (this.Equipment.RightHand != null)
+                    bonusHealth += this.Equipment.RightHand.Health;
 
-                if (this.Boots != null)
-                    bonusHealth += this.Boots.Health;
+                if (this.Equipment.Boots != null)
+                    bonusHealth += this.Equipment.Boots.Health;
 
                 return base.Health + bonusHealth;
             }
@@ -57,35 +57,36 @@ namespace The_Caves_of_Kardun
             get
             {
                 // Check if we're holding a sword or a shield.
-                bool swordOrShield = (this.RightHand != null && (this.RightHand.Type == ItemTypes.Sword || this.RightHand.Type == ItemTypes.Shield)) || (this.LeftHand != null && (this.LeftHand.Type == ItemTypes.Sword || this.LeftHand.Type == ItemTypes.Shield));
+                bool swordOrShield = (this.Equipment.RightHand != null && (this.Equipment.RightHand.Type == ItemTypes.Sword || this.Equipment.RightHand.Type == ItemTypes.Shield)) ||
+                    (this.Equipment.LeftHand != null && (this.Equipment.LeftHand.Type == ItemTypes.Sword || this.Equipment.LeftHand.Type == ItemTypes.Shield));
 
                 // If we're not holding a shield or sword set the default damage to 1.
                 int minDamage = swordOrShield ? 0 : 1;
                 int maxDamage = swordOrShield ? 0 : 1;
 
                 // Add the min&max damage of all the gear.
-                if (this.Helmet != null)
+                if (this.Equipment.Helmet != null)
                 {
-                    minDamage += this.Helmet.MinDamage;
-                    maxDamage += this.Helmet.MaxDamage;
+                    minDamage += this.Equipment.Helmet.MinDamage;
+                    maxDamage += this.Equipment.Helmet.MaxDamage;
                 }
 
-                if (this.LeftHand != null)
+                if (this.Equipment.LeftHand != null)
                 {
-                    minDamage += this.LeftHand.MinDamage;
-                    maxDamage += this.LeftHand.MaxDamage;
+                    minDamage += this.Equipment.LeftHand.MinDamage;
+                    maxDamage += this.Equipment.LeftHand.MaxDamage;
                 }
 
-                if (this.RightHand != null)
+                if (this.Equipment.RightHand != null)
                 {
-                    minDamage += this.RightHand.MinDamage;
-                    maxDamage += this.RightHand.MaxDamage;
+                    minDamage += this.Equipment.RightHand.MinDamage;
+                    maxDamage += this.Equipment.RightHand.MaxDamage;
                 }
 
-                if (this.Boots != null)
+                if (this.Equipment.Boots != null)
                 {
-                    minDamage += this.Boots.MinDamage;
-                    maxDamage += this.Boots.MaxDamage;
+                    minDamage += this.Equipment.Boots.MinDamage;
+                    maxDamage += this.Equipment.Boots.MaxDamage;
                 }
 
                 return random.Next(minDamage, maxDamage);
@@ -99,7 +100,21 @@ namespace The_Caves_of_Kardun
         {
             get
             {
-                return new Dot();
+                Dot dot = new Dot();
+
+                if (this.Equipment.RightHand != null && this.Equipment.RightHand.Type == ItemTypes.Sword)
+                {
+                    dot.Damage += this.Equipment.RightHand.DotDamage;
+                    dot.DotDuration += this.Equipment.RightHand.DotDuration;
+                }
+
+                if (this.Equipment.LeftHand != null && this.Equipment.LeftHand.Type == ItemTypes.Sword)
+                {
+                    dot.Damage += this.Equipment.LeftHand.DotDamage;
+                    dot.DotDuration += this.Equipment.LeftHand.DotDuration;
+                }
+
+                return dot;
             }
         }
 
@@ -109,24 +124,9 @@ namespace The_Caves_of_Kardun
         public Inventory Inventory { get; set; }
 
         /// <summary>
-        /// Gets the head the player has equiped.
+        /// Gets or sets the equipment.
         /// </summary>
-        public Item Helmet { get; private set; }
-
-        /// <summary>
-        /// Gets the sword or shield the player has equiped in the left hand.
-        /// </summary>
-        public Item LeftHand { get; private set; }
-
-        /// <summary>
-        /// Gets the sword or shield the player has equiped in the right hand.
-        /// </summary>
-        public Item RightHand { get; private set; }
-
-        /// <summary>
-        /// Gets the boots the player has equiped.
-        /// </summary>
-        public Item Boots { get; private set; }
+        public Equipment Equipment { get; set; }
 
         /// <summary>
         /// Gets the amount of tiles to move.
@@ -146,11 +146,15 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the player.</param>
         /// <param name="position">The position of the player.</param>
         /// <param name="speed">The movement speed of the player.</param>
-        public Player(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont, Vector2 inventoryPositionOffset, Texture2D inventoryBackgroundTexture)
+        public Player(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont, 
+            Vector2 inventoryPositionOffset, Texture2D inventoryBackgroundTexture, 
+            Texture2D inventoryMenuTexture, Texture2D inventoryLeftHandMenuTexture, Texture2D inventoryRightHandMenuTexture, 
+            Vector2 equipmentPositionOffset, Texture2D equipmentBackgroundTexture)
             : base(texture, position, speed, health, combatFont) 
         {
             this.random = new Random();
-            this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture);
+            this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture, inventoryMenuTexture, inventoryLeftHandMenuTexture, inventoryRightHandMenuTexture);
+            this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentBackgroundTexture);
         }
 
         #endregion
@@ -185,42 +189,52 @@ namespace The_Caves_of_Kardun
 
             if (item.Type == ItemTypes.Helmet)
             {
-                rItem = this.Helmet;
-                this.Helmet = item;
+                rItem = this.Equipment.Helmet;
+                this.Equipment.Helmet = item;
             }
             else if (item.Type == ItemTypes.Boots)
             {
-                rItem = this.Boots;
-                this.Boots = item;
+                rItem = this.Equipment.Boots;
+                this.Equipment.Boots = item;
             }
             else if (item.Type == ItemTypes.Sword)
             {
                 if (rightHand)
                 {
-                    rItem = this.RightHand;
-                    this.RightHand = item;
+                    rItem = this.Equipment.RightHand;
+                    this.Equipment.RightHand = item;
                 }
                 else
                 {
-                    rItem = this.LeftHand;
-                    this.LeftHand = item;
+                    rItem = this.Equipment.LeftHand;
+                    this.Equipment.LeftHand = item;
                 }
             }
             else if (item.Type == ItemTypes.Shield)
             {
                 if (rightHand)
                 {
-                    rItem = this.RightHand;
-                    this.RightHand = item;
+                    rItem = this.Equipment.RightHand;
+                    this.Equipment.RightHand = item;
                 }
                 else
                 {
-                    rItem = this.LeftHand;
-                    this.LeftHand = item;
+                    rItem = this.Equipment.LeftHand;
+                    this.Equipment.LeftHand = item;
                 }
             }
 
             return rItem;
+        }
+
+        /// <summary>
+        /// Unequip an item.
+        /// </summary>
+        /// <param name="item">The item to unequip.</param>
+        /// <returns>Returns true if the item could be unequipped.</returns>
+        public bool UnequipItem(Item item)
+        {
+            return this.Inventory.TryAddItem(item);
         }
 
         /// <summary>
@@ -230,6 +244,7 @@ namespace The_Caves_of_Kardun
         public void Update(GameTime gameTime)
         {
             this.Inventory.Update(gameTime);
+            this.Equipment.Update(gameTime);
         }
 
         /// <summary>
@@ -243,6 +258,7 @@ namespace The_Caves_of_Kardun
             base.Draw(gameTime, spriteBatch, cameraPosition);
 
             this.Inventory.Draw(spriteBatch);
+            this.Equipment.Draw(spriteBatch);
         }
 
         #endregion

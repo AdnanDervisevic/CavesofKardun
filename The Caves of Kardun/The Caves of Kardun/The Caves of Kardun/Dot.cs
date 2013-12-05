@@ -11,9 +11,9 @@
         public int Damage { get; set; }
 
         /// <summary>
-        /// Gets or sets the rounds.
+        /// Gets or sets the dot duration
         /// </summary>
-        public int Rounds { get; set; }
+        public int DotDuration { get; set; }
 
         /// <summary>
         /// Gets the damage per round.
@@ -22,7 +22,7 @@
         {
             get
             {
-                return this.Damage / this.Rounds;
+                return this.Damage / this.DotDuration;
             }
         }
     }

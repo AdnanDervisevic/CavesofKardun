@@ -36,3 +36,6 @@ Content\Items\Gold\minGold.xnb
 Content\Textures\Items\Swords\lightning.xnb
 Content\Textures\Items\Swords\lightningOverworld.xnb
 Content\Textures\Equipment.xnb
+Content\Textures\Menus\InventoryMenu.xnb
+Content\Textures\Menus\InventoryLeftHandMenu.xnb
+Content\Textures\Menus\InventoryRightHandMenu.xnb
