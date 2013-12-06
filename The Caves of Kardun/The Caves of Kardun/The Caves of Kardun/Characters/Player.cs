@@ -11,6 +11,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 #endregion End of Using Statements
 
 namespace The_Caves_of_Kardun
@@ -136,6 +137,11 @@ namespace The_Caves_of_Kardun
             get { return 2; }
         }
 
+        /// <summary>
+        /// Gets or sets the monster the player is attacking.
+        /// </summary>
+        public Monster Attacks { get; set; }
+
         #endregion
 
         #region Constructors
@@ -146,20 +152,27 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the player.</param>
         /// <param name="position">The position of the player.</param>
         /// <param name="speed">The movement speed of the player.</param>
-        public Player(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont, 
-            Vector2 inventoryPositionOffset, Texture2D inventoryBackgroundTexture, 
-            Texture2D inventoryMenuTexture, Texture2D inventoryLeftHandMenuTexture, Texture2D inventoryRightHandMenuTexture, 
-            Vector2 equipmentPositionOffset, Texture2D equipmentBackgroundTexture)
+        public Player(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont)
             : base(texture, position, speed, health, combatFont) 
         {
             this.random = new Random();
-            this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture, inventoryMenuTexture, inventoryLeftHandMenuTexture, inventoryRightHandMenuTexture);
-            this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentBackgroundTexture);
         }
 
         #endregion
 
         #region Public Methods
+
+        public void LoadContent(ContentManager Content, Vector2 inventoryPositionOffset, Vector2 equipmentPositionOffset)
+        {          
+            Texture2D inventoryBackgroundTexture = Content.Load<Texture2D>("Textures/Inventory");
+            Texture2D inventoryMenuTexture = Content.Load<Texture2D>("Textures/Menus/InventoryMenu");
+            Texture2D inventoryLeftHandMenuTexture = Content.Load<Texture2D>("Textures/Menus/InventoryLeftHandMenu");
+            Texture2D inventoryRightHandMenuTexture = Content.Load<Texture2D>("Textures/Menus/InventoryRightHandMenu");
+            Texture2D equipmentBackgroundTexture = Content.Load<Texture2D>("Textures/Equipment");
+
+            this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture, inventoryMenuTexture, inventoryLeftHandMenuTexture, inventoryRightHandMenuTexture);
+            this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentBackgroundTexture);
+        }
 
         /// <summary>
         /// Attack a monster.
@@ -167,7 +180,21 @@ namespace The_Caves_of_Kardun
         /// <param name="monster">The monster to attack.</param>
         public void Attack(GameTime gameTime, Monster monster)
         {
-            monster.InflictDamage(this.Damage);
+            // If the monster doesn't have a dot and the weapon we're using have dot damage then apply the dot and reset the round counter.
+            if (monster.Dot == null && this.DotDamage.Damage > 0)
+            {
+                monster.Dot = this.DotDamage;
+                monster.Dot.RoundCounter = 0;
+            }
+
+            // If our monster has a dot inflict the normal damage + the damage from the dot to the monster and increase the round counter.
+            if (monster.Dot != null)
+            {
+                monster.InflictDamage(this.Damage + monster.Dot.DamagePerRound);
+                monster.Dot.RoundCounter++;
+            }
+            else // If our monster doesn't have a dot then inflict the normal damage only.
+                monster.InflictDamage(this.Damage);
         }
 
         /// <summary>

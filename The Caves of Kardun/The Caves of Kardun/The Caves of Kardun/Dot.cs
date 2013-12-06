@@ -3,7 +3,7 @@
     /// <summary>
     /// A struct containing data about how much damage you should take other the amoung of rounds.
     /// </summary>
-    public struct Dot
+    public class Dot
     {
         /// <summary>
         /// Gets or sets the damage.
@@ -25,5 +25,10 @@
                 return this.Damage / this.DotDuration;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the round counter.
+        /// </summary>
+        public int RoundCounter { get; set; }
     }
 }

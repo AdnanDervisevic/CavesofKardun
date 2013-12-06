@@ -141,10 +141,9 @@ namespace The_Caves_of_Kardun
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
-                Content.Load<SpriteFont>("Fonts/combatFont"), 
-                new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), Content.Load<Texture2D>("Textures/Inventory"),
-                Content.Load<Texture2D>("Textures/Menus/InventoryMenu"), Content.Load<Texture2D>("Textures/Menus/InventoryLeftHandMenu"), Content.Load<Texture2D>("Textures/Menus/InventoryRightHandMenu"),
-                new Vector2(0, GraphicsDevice.Viewport.Height - 248), Content.Load<Texture2D>("Textures/Equipment"));
+                Content.Load<SpriteFont>("Fonts/combatFont"));
+
+            this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
         }
 
         /// <summary>
@@ -322,10 +321,13 @@ namespace The_Caves_of_Kardun
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
                 {
+                    // We can't spam kill him, wait for the combat text to fade out.
                     if (string.IsNullOrWhiteSpace(this.player.CombatText))
                     {
+                        this.player.Attacks = monster;
                         this.level.UpdateMonstersAI(gameTime, this.player);
                         this.player.Attack(gameTime, monster);
+                        this.player.Attacks = null;
                     }
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterItem(targetTile, out item)) // Check if we clicked on an item.

@@ -20,6 +20,11 @@ namespace The_Caves_of_Kardun
             get { return 1; }
         }
 
+        /// <summary>
+        /// Gets or sets the dot doing damage to this monster.
+        /// </summary>
+        public Dot Dot { get; set; }
+
         #endregion
 
         #region Constructors
@@ -52,13 +57,26 @@ namespace The_Caves_of_Kardun
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="playerTile">The player position, as a tile.</param>
         /// <returns>Returns the damage to inflict to the player.</returns>
-        public int UpdateAI(GameTime gameTime, Point playerTile)
+        public int UpdateAI(GameTime gameTime, Player player)
         {
             // If the monster is not alive, return zero.
             if (!this.Alive)
                 return 0;
 
+            Point playerTile = TheCavesOfKardun.ConvertPositionToCell(player.Center);
             Point monsterTile = TheCavesOfKardun.ConvertPositionToCell(this.Center);
+
+            // If the player is not attacking this monster and the monster has a dot, inflict the damage and increase the round counter.
+            if (player.Attacks != this && this.Dot != null)
+            {
+                if (this.Dot.RoundCounter < this.Dot.DotDuration)
+                {
+                    this.InflictDamage(this.Dot.DamagePerRound);
+                    this.Dot.RoundCounter++;
+                }
+                else
+                    this.Dot = null;
+            }
 
             // If the player is to the left of the monster, attack.
             if (monsterTile.X + 1 == playerTile.X && monsterTile.Y == playerTile.Y) // If the player is to the right of the monster, return the damage the monster should inflict.

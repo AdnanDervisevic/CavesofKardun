@@ -143,13 +143,11 @@ namespace The_Caves_of_Kardun
         /// <param name="player">The player.</param>
         public void UpdateMonstersAI(GameTime gameTime, Player player)
         {
-            Point playerTile = TheCavesOfKardun.ConvertPositionToCell(player.Center);
-
             // The total damage to inflict on the player.
             int totalDamage = 0;
 
             foreach (Monster monster in this.monsters)
-                totalDamage += monster.UpdateAI(gameTime, playerTile);
+                totalDamage += monster.UpdateAI(gameTime, player);
 
             // When we've moved/calculated damage for all monsters then inflict the combined damage to the player.
             if (totalDamage > 0)
