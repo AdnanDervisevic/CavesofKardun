@@ -31,7 +31,7 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\wall.png">
+    <Compile Include="Textures\Tiles\wall.png">
       <Name>wall</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -52,15 +52,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\floor.jpg">
+    <Compile Include="Textures\Tiles\floor.jpg">
       <Name>floor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\Items\Gold\gold.png">
-      <Name>gold</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -93,160 +86,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Items\Gold\minGold.item">
-      <Name>minGold</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-      <SubType>Designer</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Items\Gold\medGold.item">
-      <Name>medGold</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-      <SubType>Designer</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Items\Gold\maxGold.item">
-      <Name>maxGold</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\Items\Swords\lightning.png">
-      <Name>lightning</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Textures\Items\Swords\lightningOverworld.png">
-      <Name>lightningOverworld</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Items\Boots\leather.item">
-      <Name>leather</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Boots\spiked.item">
-      <Name>spiked</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Boots\spikedIron.item">
-      <Name>spikedIron</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Boots\spikedMithril.item">
-      <Name>spikedMithril</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Helmets\drGizmos.item">
-      <Name>drGizmos</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Helmets\helmetOfLife.item">
-      <Name>helmetOfLife</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Helmets\maphack.item">
-      <Name>maphack</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Helmets\optics.item">
-      <Name>optics</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\heaterShield.item">
-      <Name>heaterShield</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\mirrorShield.item">
-      <Name>mirrorShield</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\plainBuckler.item">
-      <Name>plainBuckler</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\redWall.item">
-      <Name>redWall</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\redWound.item">
-      <Name>redWound</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\spikedBuckler.item">
-      <Name>spikedBuckler</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\spikedMithrilBuckler.item">
-      <Name>spikedMithrilBuckler</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Shields\theEpic.item">
-      <Name>theEpic</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\fire.item">
-      <Name>fire</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\lava.item">
-      <Name>lava</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\lightning.item">
-      <Name>lightning</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\rustyCoppar.item">
-      <Name>rustyCoppar</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\solidIron.item">
-      <Name>solidIron</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\solidMithril.item">
-      <Name>solidMithril</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-    <Compile Include="Items\Swords\wood.item">
-      <Name>wood</Name>
-      <Importer>ItemImporter</Importer>
-      <Processor>ItemProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Textures\Inventory.png">
-      <Name>Inventory</Name>
+    <Compile Include="Textures\Inventory\Background.png">
+      <Name>Background</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -259,20 +100,353 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\Menus\InventoryMenu.png">
-      <Name>InventoryMenu</Name>
+    <Compile Include="items.tcoki">
+      <Name>items</Name>
+      <Importer>ItemImporter</Importer>
+      <Processor>ItemProcessor</Processor>
+    </Compile>
+    <None Include="monsters.tcokm">
+      <Name>monsters</Name>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Gold\minGold.png">
+      <Name>minGold</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Gold\medGold.png">
+      <Name>medGold</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Gold\maxGold.png">
+      <Name>maxGold</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\Menus\InventoryLeftHandMenu.png">
-      <Name>InventoryLeftHandMenu</Name>
+    <Compile Include="Textures\Items\Swords\Coppar.png">
+      <Name>Coppar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Menus\InventoryRightHandMenu.png">
-      <Name>InventoryRightHandMenu</Name>
+    <Compile Include="Textures\Items\Swords\CopparOverworld.png">
+      <Name>CopparOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Swords\Fire.png">
+      <Name>Fire</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Swords\FireOverworld.png">
+      <Name>FireOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Swords\Iron.png">
+      <Name>Iron</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Swords\IronOverworld.png">
+      <Name>IronOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Swords\Lava.png">
+      <Name>Lava</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Swords\LavaOverworld.png">
+      <Name>LavaOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Swords\Lightning.png">
+      <Name>Lightning</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Swords\LightningOverworld.png">
+      <Name>LightningOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Swords\Mithril.png">
+      <Name>Mithril</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Swords\MithrilOverworld.png">
+      <Name>MithrilOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Swords\Wood.png">
+      <Name>Wood</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Swords\WoodOverworld.png">
+      <Name>WoodOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\Buckler.png">
+      <Name>Buckler</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\BucklerOverworld.png">
+      <Name>BucklerOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\Epic.png">
+      <Name>Epic</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\EpicOverworld.png">
+      <Name>EpicOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\Heater.png">
+      <Name>Heater</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\HeaterOverworld.png">
+      <Name>HeaterOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\Mirror.png">
+      <Name>Mirror</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\MirrorOverworld.png">
+      <Name>MirrorOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\RedWall.png">
+      <Name>RedWall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\RedWallOverworld.png">
+      <Name>RedWallOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\RedWound.png">
+      <Name>RedWound</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\RedWoundOverworld.png">
+      <Name>RedWoundOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\SpikedBuckler.png">
+      <Name>SpikedBuckler</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\SpikedBucklerOverworld.png">
+      <Name>SpikedBucklerOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Shields\SpikedMithrilBuckler.png">
+      <Name>SpikedMithrilBuckler</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Shields\SpikedMithrilBucklerOverworld.png">
+      <Name>SpikedMithrilBucklerOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Helmets\Gizmo.png">
+      <Name>Gizmo</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Helmets\GizmoOverworld.png">
+      <Name>GizmoOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Helmets\Life.png">
+      <Name>Life</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Helmets\LifeOverworld.png">
+      <Name>LifeOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Helmets\Maphack.png">
+      <Name>Maphack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Helmets\MaphackOverworld.png">
+      <Name>MaphackOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Helmets\Optics.png">
+      <Name>Optics</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Helmets\OpticsOverworld.png">
+      <Name>OpticsOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Boots\Leather.png">
+      <Name>Leather</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Boots\LeatherOverworld.png">
+      <Name>LeatherOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Boots\SpikedIron.png">
+      <Name>SpikedIron</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Boots\SpikedIronOverworld.png">
+      <Name>SpikedIronOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Boots\SpikedLeather.png">
+      <Name>SpikedLeather</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Boots\SpikedLeatherOverworld.png">
+      <Name>SpikedLeatherOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Boots\SpikedMithril.png">
+      <Name>SpikedMithril</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Items\Boots\SpikedMithrilOverworld.png">
+      <Name>SpikedMithrilOverworld</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Characters\boss.png">
+      <Name>boss</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Characters\bunny.png">
+      <Name>bunny</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Characters\cat.png">
+      <Name>cat</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Characters\crab.png">
+      <Name>crab</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Characters\floatingEye.png">
+      <Name>floatingEye</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Characters\flyingSacuer.png">
+      <Name>flyingSacuer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Characters\theBlob.png">
+      <Name>theBlob</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Inventory\EquipMenu.png">
+      <Name>EquipMenu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\Inventory\EquipMenuChoice.png">
+      <Name>EquipMenuChoice</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

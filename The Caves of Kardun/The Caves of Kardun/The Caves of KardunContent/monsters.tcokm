@@ -1,0 +1,82 @@
+<monsters>
+	<monster>
+		<name>Bunny</name>
+		<textureName>Textures/Characters/bunny</textureName>
+		<value>1</value>
+		<hp>3</hp>
+		<minDmg>1</minDmg>
+		<maxDmg>1</maxDmg>
+	</monster>
+
+	<monster>
+		<name>Crab</name>
+		<textureName>Textures/Characters/crab</textureName>
+		<value>2</value>
+		<hp>3</hp>
+		<minDmg>1</minDmg>
+		<maxDmg>2</maxDmg>
+	</monster>
+
+	<monster>
+		<name>Spider</name>
+		<textureName>Textures/Characters/spider</textureName>
+		<value>3</value>
+		<hp>3</hp>
+		<minDmg>2</minDmg>
+		<maxDmg>3</maxDmg>
+	</monster>
+
+	<monster>
+		<name>Tiger</name>
+		<textureName>Textures/Characters/tiger</textureName>
+		<value>4</value>
+		<hp>2</hp>
+		<minDmg>3</minDmg>
+		<maxDmg>5</maxDmg>
+	</monster>
+
+	<monster>
+		<name>Flying Saucer</name>
+		<textureName>Textures/Characters/flyingSaucer</textureName>
+		<value>5</value>
+		<hp>1</hp>
+		<minDmg>5</minDmg>
+		<maxDmg>10</maxDmg>
+	</monster>
+
+	<monster>
+		<name>The Blob</name>
+		<textureName>Textures/Characters/theBlob</textureName>
+		<value>6</value>
+		<hp>10</hp>
+		<minDmg>8</minDmg>
+		<maxDmg>10</maxDmg>
+	</monster>
+
+	<monster>
+		<name>Flying Eye</name>
+		<textureName>Textures/Characters/flyingEyee</textureName>
+		<value>7</value>
+		<hp>10</hp>
+		<minDmg>10</minDmg>
+		<maxDmg>15</maxDmg>
+	</monster>
+
+	<monster>
+		<name>Shade</name>
+		<textureName>Textures/Characters/shade</textureName>
+		<value>8</value>
+		<hp>15</hp>
+		<minDmg>12</minDmg>
+		<maxDmg>15</maxDmg>
+	</monster>
+
+	<monster>
+		<name>The Boss</name>
+		<textureName>Textures/Characters/boss</textureName>
+		<value>9</value>
+		<hp>50</hp>
+		<minDmg>9</minDmg>
+		<maxDmg>10</maxDmg>
+	</monster>	
+</monsters>

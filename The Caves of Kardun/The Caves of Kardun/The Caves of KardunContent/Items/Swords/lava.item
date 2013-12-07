@@ -6,6 +6,6 @@
 	<value>6</value>
 	<minDmg>2</minDmg>
 	<maxDmg>2</maxDmg>
-	<dotDmg>10</dotDmg>
+	<dotDmg>12</dotDmg>
 	<dotDuration>4</dotDuration>
 </item>

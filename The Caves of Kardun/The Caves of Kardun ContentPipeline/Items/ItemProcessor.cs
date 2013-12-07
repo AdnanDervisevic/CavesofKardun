@@ -11,21 +11,24 @@ using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using The_Caves_of_Kardun;
 using System;
+using System.Collections.Generic;
 #endregion
 
-namespace The_Caves_of_Kardun_ContentPipeline
+namespace The_Caves_of_Kardun
 {
-    [ContentProcessor(DisplayName = "Item Processor")]
-    public class ItemProcessor : ContentProcessor<XmlDocument, Item>
+    [ContentProcessor(DisplayName = "TCOK Items Processor")]
+    public class ItemProcessor : ContentProcessor<XmlDocument, Items>
     {
-        public override Item Process(XmlDocument input, ContentProcessorContext context)
+        public override Items Process(XmlDocument input, ContentProcessorContext context)
         {
-            Item item = new Item();
-
+            Items items = new Items();
+            
             XmlNodeList itemNodeList = input.GetElementsByTagName("item");
 
             foreach (XmlNode itemNode in itemNodeList)
             {
+                Item item = new Item();
+
                 XmlElement itemElement = (XmlElement)itemNode;
 
                 XmlNodeList nameNodeList = itemElement.GetElementsByTagName("name");
@@ -91,9 +94,11 @@ namespace The_Caves_of_Kardun_ContentPipeline
                 XmlNodeList specialNodeList = itemElement.GetElementsByTagName("special");
                 foreach (XmlNode specialNode in specialNodeList)
                     item.Special = (ItemSpecials)Enum.Parse(typeof(ItemSpecials), specialNode.InnerText);
-            }
 
-            return item;
+                items.Values.Add(item);
+            }
+            
+            return items;
         }
     }
 }

@@ -9,10 +9,38 @@
 #region Using Statements
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 #endregion
 
 namespace The_Caves_of_Kardun
 {
+    /// <summary>
+    /// A class holding a list of items.
+    /// </summary>
+    public sealed class Items
+    {
+        #region Properties
+
+        /// <summary>
+        /// A list of items.
+        /// </summary>
+        public List<Item> Values { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Creates a new item collection.
+        /// </summary>
+        public Items()
+        {
+            this.Values = new List<Item>();
+        }
+
+        #endregion
+    }
+
     /// <summary>
     /// An Item gives the character different bonuses.
     /// </summary>
@@ -145,7 +173,7 @@ namespace The_Caves_of_Kardun
     /// <summary>
     /// Class for reading an item from a content file.
     /// </summary>
-    public class ItemReader : ContentTypeReader<Item>
+    public class ItemReader : ContentTypeReader<List<Item>>
     {
         /// <summary>
         /// Reads the Item from the content file.
@@ -153,34 +181,43 @@ namespace The_Caves_of_Kardun
         /// <param name="input">The input file.</param>
         /// <param name="existingInstance">The existing instance.</param>
         /// <returns>Returns the newly created item.</returns>
-        protected override Item Read(ContentReader input, Item existingInstance)
+        protected override List<Item> Read(ContentReader input, List<Item> existingInstance)
         {
-            Item item = existingInstance;
-            if (item == null)
-                item = new Item();
+            List<Item> items = existingInstance;
+            if (items == null)
+                items = new List<Item>();
 
-            item.Name = input.ReadString();
-            item.OverworldTextureName = input.ReadString();
-            //if (!string.IsNullOrWhiteSpace(item.OverworldTextureName))
-            //    item.OverworldTexture = input.ContentManager.Load<Texture2D>(item.OverworldTextureName);
-            item.TextureName = input.ReadString();
-            //if (!string.IsNullOrWhiteSpace(item.TextureName))
-            //    item.Texture = input.ContentManager.Load<Texture2D>(item.TextureName);
-            item.Type = (ItemTypes)input.ReadInt32();
-            item.Value = input.ReadInt32();
-            item.MinGold = input.ReadInt32();
-            item.MaxGold = input.ReadInt32();
-            item.MinDamage = input.ReadInt32();
-            item.MaxDamage = input.ReadInt32();
-            item.DotDamage = input.ReadInt32();
-            item.DotDuration = input.ReadInt32();
-            item.MissChance = input.ReadInt32();
-            item.Speed = input.ReadInt32();
-            item.Health = input.ReadInt32();
-            item.Block = input.ReadInt32();
-            item.Special = (ItemSpecials)input.ReadInt32();
+            int count = input.ReadInt32();
 
-            return item;
+            for (int i = 0; i < count; i++)
+            {
+                Item item = new Item();
+
+                item.Name = input.ReadString();
+                item.OverworldTextureName = input.ReadString();
+                if (!string.IsNullOrWhiteSpace(item.OverworldTextureName))
+                    item.OverworldTexture = input.ContentManager.Load<Texture2D>(item.OverworldTextureName);
+                item.TextureName = input.ReadString();
+                if (!string.IsNullOrWhiteSpace(item.TextureName))
+                    item.Texture = input.ContentManager.Load<Texture2D>(item.TextureName);
+                item.Type = (ItemTypes)input.ReadInt32();
+                item.Value = input.ReadInt32();
+                item.MinGold = input.ReadInt32();
+                item.MaxGold = input.ReadInt32();
+                item.MinDamage = input.ReadInt32();
+                item.MaxDamage = input.ReadInt32();
+                item.DotDamage = input.ReadInt32();
+                item.DotDuration = input.ReadInt32();
+                item.MissChance = input.ReadInt32();
+                item.Speed = input.ReadInt32();
+                item.Health = input.ReadInt32();
+                item.Block = input.ReadInt32();
+                item.Special = (ItemSpecials)input.ReadInt32();
+
+                items.Add(item);
+            }
+
+            return items;
         }
     }
 

@@ -9,10 +9,38 @@
 #region Using Statements
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 #endregion
 
 namespace The_Caves_of_Kardun
 {
+    /// <summary>
+    /// A class holding a list of items.
+    /// </summary>
+    public sealed class Items
+    {
+        #region Properties
+
+        /// <summary>
+        /// A list of items.
+        /// </summary>
+        public List<Item> Values { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Creates a new item collection.
+        /// </summary>
+        public Items()
+        {
+            this.Values = new List<Item>();
+        }
+
+        #endregion
+    }
+
     /// <summary>
     /// An Item gives the character different bonuses.
     /// </summary>

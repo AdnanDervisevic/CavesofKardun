@@ -59,7 +59,7 @@ namespace The_Caves_of_Kardun
             {
                 // Check if we're holding a sword or a shield.
                 bool swordOrShield = (this.Equipment.RightHand != null && (this.Equipment.RightHand.Type == ItemTypes.Sword || this.Equipment.RightHand.Type == ItemTypes.Shield)) ||
-                    (this.Equipment.LeftHand != null && (this.Equipment.LeftHand.Type == ItemTypes.Sword || this.Equipment.LeftHand.Type == ItemTypes.Shield));
+                    (this.Equipment.LeftHand != null && this.Equipment.LeftHand.Type == ItemTypes.Sword);
 
                 // If we're not holding a shield or sword set the default damage to 1.
                 int minDamage = swordOrShield ? 0 : 1;
@@ -90,7 +90,7 @@ namespace The_Caves_of_Kardun
                     maxDamage += this.Equipment.Boots.MaxDamage;
                 }
 
-                return random.Next(minDamage, maxDamage);
+                return random.Next(minDamage, maxDamage + 1);
             }
         }
 
@@ -164,13 +164,12 @@ namespace The_Caves_of_Kardun
 
         public void LoadContent(ContentManager Content, Vector2 inventoryPositionOffset, Vector2 equipmentPositionOffset)
         {          
-            Texture2D inventoryBackgroundTexture = Content.Load<Texture2D>("Textures/Inventory");
-            Texture2D inventoryMenuTexture = Content.Load<Texture2D>("Textures/Menus/InventoryMenu");
-            Texture2D inventoryLeftHandMenuTexture = Content.Load<Texture2D>("Textures/Menus/InventoryLeftHandMenu");
-            Texture2D inventoryRightHandMenuTexture = Content.Load<Texture2D>("Textures/Menus/InventoryRightHandMenu");
+            Texture2D inventoryBackgroundTexture = Content.Load<Texture2D>("Textures/Inventory/Background");
+            Texture2D inventoryEquipMenuTexture = Content.Load<Texture2D>("Textures/Inventory/EquipMenu");
+            Texture2D inventoryEquipMenuChoiceTexture = Content.Load<Texture2D>("Textures/Inventory/EquipMenuChoice");
             Texture2D equipmentBackgroundTexture = Content.Load<Texture2D>("Textures/Equipment");
 
-            this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture, inventoryMenuTexture, inventoryLeftHandMenuTexture, inventoryRightHandMenuTexture);
+            this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture, inventoryEquipMenuTexture, inventoryEquipMenuChoiceTexture);
             this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentBackgroundTexture);
         }
 
@@ -239,16 +238,8 @@ namespace The_Caves_of_Kardun
             }
             else if (item.Type == ItemTypes.Shield)
             {
-                if (rightHand)
-                {
-                    rItem = this.Equipment.RightHand;
-                    this.Equipment.RightHand = item;
-                }
-                else
-                {
-                    rItem = this.Equipment.LeftHand;
-                    this.Equipment.LeftHand = item;
-                }
+                rItem = this.Equipment.RightHand;
+                this.Equipment.RightHand = item;
             }
 
             return rItem;

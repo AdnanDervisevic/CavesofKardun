@@ -1,0 +1,285 @@
+<items>
+	<!-- Sword Items -->
+	<item>
+		<name>Wood</name>
+		<textureName>Textures/Items/Swords/Wood</textureName>
+    <overworldTextureName>Textures/Items/Swords/WoodOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>0</value>
+		<minDmg>1</minDmg>
+		<maxDmg>2</maxDmg>
+	</item>
+
+	<item>
+		<name>Rusty Coppar</name>
+		<textureName>Textures/Items/Swords/Coppar</textureName>
+    <overworldTextureName>Textures/Items/Swords/CopparOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>1</value>
+		<minDmg>2</minDmg>
+		<maxDmg>3</maxDmg>
+	</item>
+
+	<item>
+		<name>Solid Iron</name>
+		<textureName>Textures/Items/Swords/Iron</textureName>
+    <overworldTextureName>Textures/Items/Swords/IronOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>2</value>
+		<minDmg>2</minDmg>
+		<maxDmg>5</maxDmg>
+	</item>
+
+	<item>
+		<name>Lightning</name>
+		<textureName>Textures/Items/Swords/Lightning</textureName>
+    <overworldTextureName>Textures/Items/Swords/LightningOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>3</value>
+		<minDmg>5</minDmg>
+		<maxDmg>5</maxDmg>
+	</item>
+
+	<item>
+		<name>Solid Mithril</name>
+		<textureName>Textures/Items/Swords/Mithril</textureName>
+    <overworldTextureName>Textures/Items/Swords/MithrilOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>4</value>
+		<minDmg>3</minDmg>
+		<maxDmg>6</maxDmg>
+	</item>
+
+	<item>
+		<name>Lava</name>
+		<textureName>Textures/Items/Swords/Lava</textureName>
+    <overworldTextureName>Textures/Items/Swords/LavaOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>5</value>
+		<minDmg>2</minDmg>
+		<maxDmg>2</maxDmg>
+		<dotDmg>12</dotDmg>
+		<dotDuration>4</dotDuration>
+	</item>
+
+	<item>
+		<name>Fire</name>
+		<textureName>Textures/Items/Swords/Fire</textureName>
+    <overworldTextureName>Textures/Items/Swords/FireOverworld</overworldTextureName>
+		<type>Sword</type>
+		<value>6</value>
+		<minDmg>3</minDmg>
+		<maxDmg>7</maxDmg>
+		<dotDmg>3</dotDmg>
+		<dotDuration>3</dotDuration>
+	</item>
+
+	<!-- Shield Items -->
+
+	<item>
+		<name>Buckler</name>
+		<textureName>Textures/Items/Shields/Buckler</textureName>
+    <overworldTextureName>Textures/Items/Shields/BucklerOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>0</value>
+		<hp>1</hp>
+	</item>
+
+	<item>
+		<name>Spiked Buckler</name>
+		<textureName>Textures/Items/Shields/SpikedBuckler</textureName>
+    <overworldTextureName>Textures/Items/Shields/SpikedBucklerOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>1</value>
+		<hp>1</hp>
+		<block>1</block>
+		<minDmg>1</minDmg>
+		<maxDmg>1</maxDmg>
+	</item>
+
+	<item>
+		<name>Heater Shield</name>
+		<textureName>Textures/Items/Shields/Heater</textureName>
+    <overworldTextureName>Textures/Items/Shields/HeaterOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>2</value>
+		<hp>4</hp>
+		<block>5</block>
+		<minDmg>2</minDmg>
+		<maxDmg>2</maxDmg>
+	</item>
+
+	<item>
+		<name>Mirror Shield</name>
+		<textureName>Textures/Items/Shields/Mirror</textureName>
+    <overworldTextureName>Textures/Items/Shields/MirrorOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>3</value>
+		<hp>8</hp>
+		<block>3</block>
+		<minDmg>3</minDmg>
+		<maxDmg>3</maxDmg>
+		<miss>50</miss>
+	</item>
+
+	<item>
+		<name>Red Wound</name>
+		<textureName>Textures/Items/Shields/RedWound</textureName>
+    <overworldTextureName>Textures/Items/Shields/RedWoundOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>4</value>
+		<hp>10</hp>
+		<block>2</block>
+		<minDmg>10</minDmg>
+		<maxDmg>10</maxDmg>
+	</item>
+
+	<item>
+		<name>Spiked Mithril Buckler</name>
+		<textureName>Textures/Items/Shields/SpikedMithrilBuckler</textureName>
+    <overworldTextureName>Textures/Items/Shields/SpikedMithrilBucklerOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>5</value>
+		<hp>8</hp>
+		<block>8</block>
+		<minDmg>5</minDmg>
+		<maxDmg>5</maxDmg>
+	</item>
+
+	<item>
+		<name>Red Wall</name>
+		<textureName>Textures/Items/Shields/RedWall</textureName>
+    <overworldTextureName>Textures/Items/Shields/RedWallOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>6</value>
+		<hp>10</hp>
+		<block>10</block>
+		<minDmg>2</minDmg>
+		<maxDmg>2</maxDmg>
+	</item>
+
+	<item>
+		<name>The Epic</name>
+		<textureName>Textures/Items/Shields/Epic</textureName>
+    <overworldTextureName>Textures/Items/Shields/EpicOverworld</overworldTextureName>
+		<type>Shield</type>
+		<value>7</value>
+		<hp>20</hp>
+		<block>10</block>
+		<minDmg>5</minDmg>
+		<maxDmg>5</maxDmg>
+	</item>
+
+	<!-- Helmet Items -->
+
+	<item>
+		<name>Optics</name>
+		<textureName>Textures/Items/Helmets/Optics</textureName>
+    <overworldTextureName>Textures/Items/Helmets/OpticsOverworld</overworldTextureName>
+		<type>Helmet</type>
+		<value>0</value>
+		<hp>1</hp>
+		<special>Sight</special>
+	</item>
+
+	<item>
+		<name>Dr Gizmos</name>
+		<textureName>Textures/Items/Helmets/Gizmo</textureName>
+    <overworldTextureName>Textures/Items/Helmets/GizmoOverworld</overworldTextureName>
+		<type>Helmet</type>
+		<value>1</value>
+		<hp>5</hp>
+		<special>Colour</special>
+	</item>
+
+	<item>
+		<name>Helmet of Life</name>
+		<textureName>Textures/Items/Helmets/Life</textureName>
+    <overworldTextureName>Textures/Items/Helmets/LifeOverworld</overworldTextureName>
+		<type>Helmet</type>
+		<value>2</value>
+		<hp>15</hp>
+	</item>
+
+	<item>
+		<name>Maphack</name>
+		<textureName>Textures/Items/Helmets/Maphack</textureName>
+    <overworldTextureName>Textures/Items/Helmets/MaphackOverworld</overworldTextureName>
+		<type>Helmet</type>
+		<value>3</value>
+		<hp>10</hp>
+		<special>Minimap</special>
+	</item>
+
+	<!-- Boots Items -->
+
+	<item>
+		<name>Leather</name>
+		<textureName>Textures/Items/Boots/Leather</textureName>
+    <overworldTextureName>Textures/Items/Boots/LeatherOverworld</overworldTextureName>
+		<type>Boots</type>
+		<value>0</value>
+		<minDmg>1</minDmg>
+		<maxDmg>1</maxDmg>
+		<speed>2</speed>
+	</item>
+
+	<item>
+		<name>Spiked Leather</name>
+		<textureName>Textures/Items/Boots/SpikedLeather</textureName>
+    <overworldTextureName>Textures/Items/Boots/SpikedLeatherOverworld</overworldTextureName>
+		<type>Boots</type>
+		<value>1</value>
+		<minDmg>1</minDmg>
+		<maxDmg>2</maxDmg>
+		<speed>2</speed>
+	</item>
+
+	<item>
+		<name>Spiked Iron</name>
+		<textureName>Textures/Items/Boots/SpikedIron</textureName>
+    <overworldTextureName>Textures/Items/Boots/SpikedIronOverworld</overworldTextureName>
+		<type>Boots</type>
+		<value>2</value>
+		<minDmg>2</minDmg>
+		<maxDmg>4</maxDmg>
+		<speed>2</speed>
+	</item>
+
+	<item>
+		<name>Spiked Mithril</name>
+		<textureName>Textures/Items/Boots/SpikedMithril</textureName>
+    <overworldTextureName>Textures/Items/Boots/SpikedMithrilOverworld</overworldTextureName>
+		<type>Boots</type>
+		<value>3</value>
+		<minDmg>3</minDmg>
+		<maxDmg>6</maxDmg>
+		<speed>2</speed>
+	</item>
+  
+  <!-- Gold Items -->
+
+  <item>
+    <overworldTextureName>Textures/Items/Gold/minGold</overworldTextureName>
+    <type>Gold</type>
+    <value>0</value>
+    <minGold>5</minGold>
+    <maxGold>35</maxGold>
+  </item>
+  
+  <item>
+    <overworldTextureName>Textures/Items/Gold/medGold</overworldTextureName>
+    <type>Gold</type>
+    <value>1</value>
+    <minGold>20</minGold>
+    <maxGold>50</maxGold>
+  </item>
+  
+  <item>
+    <overworldTextureName>Textures/Items/Gold/maxGold</overworldTextureName>
+    <type>Gold</type>
+    <value>2</value>
+    <minGold>45</minGold>
+    <maxGold>70</maxGold>
+  </item>
+</items>

@@ -30,9 +30,6 @@ namespace The_Caves_of_Kardun
 
         #region Fields
 
-        private bool allowRightHand;
-        private bool allowLeftHand;
-
         private Random random;
 
         private Texture2D backgroundTexture;
@@ -41,14 +38,12 @@ namespace The_Caves_of_Kardun
 
         private Rectangle[] bounds;
 
-        private Texture2D bothHandsTexture;
-        private Texture2D leftHandTexture;
-        private Texture2D rightHandTexture;
+        private Texture2D menuTexture;
+        private Texture2D menuChoiceTexture;
         
         private Vector2 menuPosition;
         private Rectangle[] menuBounds;
         private int itemIndexClicked;
-
 
         private Item hover;
         private Player player;
@@ -85,11 +80,10 @@ namespace The_Caves_of_Kardun
         /// <param name="player">The player.</param>
         /// <param name="positionOffset">The position offset from the top left corner (0, 0).</param>
         /// <param name="backgroundTexture">The background texture.</param>
-        public Inventory(Player player, Vector2 positionOffset, Texture2D backgroundTexture, Texture2D bothHandsTexture, Texture2D leftHandTexture, Texture2D rightHandTexture)
+        public Inventory(Player player, Vector2 positionOffset, Texture2D backgroundTexture, Texture2D menuTexture, Texture2D menuChoiceTexture)
         {
-            this.bothHandsTexture = bothHandsTexture;
-            this.leftHandTexture = leftHandTexture;
-            this.rightHandTexture = rightHandTexture;
+            this.menuTexture = menuTexture;
+            this.menuChoiceTexture = menuChoiceTexture;
             this.itemIndexClicked = -1;
             this.player = player;
             this.random = new Random();
@@ -117,8 +111,8 @@ namespace The_Caves_of_Kardun
         {
             if (item.Type == ItemTypes.Gold)
             {
-                int minGold = Math.Min(item.MinGold, item.MaxGold);
-                int maxGold = Math.Max(item.MinGold, item.MaxGold);
+                int minGold = Math.Min(item.MinGold, item.MaxGold + 1);
+                int maxGold = Math.Max(item.MinGold, item.MaxGold + 1);
                 this.Gold += random.Next(minGold, maxGold);
 
                 return true;
@@ -156,14 +150,9 @@ namespace The_Caves_of_Kardun
                             if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                             {
                                 if (i == this.menuBounds.Length - 1)
-                                {
                                     this.items[this.itemIndexClicked] = null;
-                                }
                                 else
-                                {
-                                    bool rightHand = (this.allowLeftHand && this.allowRightHand && i == 2) || (this.allowRightHand && !this.allowLeftHand && i == 1);
-                                    this.items[this.itemIndexClicked] = this.player.EquipItem(this.items[this.itemIndexClicked], rightHand);
-                                }
+                                    this.items[this.itemIndexClicked] = this.player.EquipItem(this.items[this.itemIndexClicked], (i == 2));
 
                                 this.itemIndexClicked = -1;
                             }
@@ -190,38 +179,32 @@ namespace The_Caves_of_Kardun
                         if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             // Equips the item and moves the old item to the inventory.
-                            bool AllowTwoSwords = false;
+                            bool AllowTwoSwords = true;
 
-                            this.allowLeftHand = (this.player.Equipment.LeftHand == null || this.player.Equipment.LeftHand.Type == ItemTypes.Sword || this.player.Equipment.LeftHand.Type == ItemTypes.Shield) &&
-                                (this.player.Equipment.RightHand == null || this.player.Equipment.RightHand.Type == ItemTypes.Shield) || AllowTwoSwords;
-
-                            this.allowRightHand = (this.player.Equipment.LeftHand == null || this.player.Equipment.LeftHand.Type == ItemTypes.Shield) &&
-                                (this.player.Equipment.RightHand == null || this.player.Equipment.RightHand.Type == ItemTypes.Sword || this.player.Equipment.RightHand.Type == ItemTypes.Shield) || AllowTwoSwords;
-
-                            if (this.allowLeftHand && this.allowRightHand)
+                            if (AllowTwoSwords && this.hover.Type == ItemTypes.Sword)
                             {
                                 // Show both options.
                                 this.menuBounds = new Rectangle[4];
                                 this.menuPosition = new Vector2(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y);
-                                this.menuPosition.Y -= 38;
-                                this.menuPosition.X -= 51;
+                                this.menuPosition.Y -= 51;
+                                this.menuPosition.X -= 67;
 
-                                this.menuBounds[0] = new Rectangle((int)this.menuPosition.X, (int)this.menuPosition.Y, 103, 77);
-                                this.menuBounds[1] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 3, 97, 22);
-                                this.menuBounds[2] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 28, 97, 22);
-                                this.menuBounds[3] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 53, 97, 22);
+                                this.menuBounds[0] = new Rectangle((int)this.menuPosition.X, (int)this.menuPosition.Y, 135, 103);
+                                this.menuBounds[1] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 28, 129, 22);
+                                this.menuBounds[2] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 53, 129, 22);
+                                this.menuBounds[3] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 78, 129, 22);
                             }
                             else
                             {
-                                // Show only right hand.
+                                // Show only equip
                                 this.menuBounds = new Rectangle[3];
                                 this.menuPosition = new Vector2(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y);
                                 this.menuPosition.Y -= 26;
-                                this.menuPosition.X -= 51;
+                                this.menuPosition.X -= 67;
 
-                                this.menuBounds[0] = new Rectangle((int)this.menuPosition.X, (int)this.menuPosition.Y, 103, 52);
-                                this.menuBounds[1] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 3, 97, 22);
-                                this.menuBounds[2] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 28, 97, 22);
+                                this.menuBounds[0] = new Rectangle((int)this.menuPosition.X, (int)this.menuPosition.Y, 135, 53);
+                                this.menuBounds[1] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 3, 129, 22);
+                                this.menuBounds[2] = new Rectangle((int)this.menuPosition.X + 3, (int)this.menuPosition.Y + 28, 129, 22);
                             }
 
                             this.itemIndexClicked = i;
@@ -256,12 +239,10 @@ namespace The_Caves_of_Kardun
 
             if (this.itemIndexClicked >= 0)
             {
-                if (this.allowLeftHand && this.allowRightHand)
-                    spriteBatch.Draw(this.bothHandsTexture, this.menuPosition, Color.White);
-                else if (this.allowLeftHand && !this.allowRightHand)
-                    spriteBatch.Draw(this.leftHandTexture, this.menuPosition, Color.White);
-                else if (!this.allowLeftHand && this.allowRightHand)
-                    spriteBatch.Draw(this.rightHandTexture, this.menuPosition, Color.White);
+                if (this.menuBounds.Length == 4)
+                    spriteBatch.Draw(this.menuChoiceTexture, this.menuPosition, Color.White);
+                else
+                    spriteBatch.Draw(this.menuTexture, this.menuPosition, Color.White);
             }
 
             spriteBatch.End();

@@ -108,23 +108,37 @@ namespace The_Caves_of_Kardun
         /// <param name="content">The contentManager</param>
         public void LoadContent()
         {
-            this.floorTexture = this.contentManager.Load<Texture2D>("Textures/floor");
-            this.wallTexture = this.contentManager.Load<Texture2D>("Textures/wall");
+            this.floorTexture = this.contentManager.Load<Texture2D>("Textures/Tiles/floor");
+            this.wallTexture = this.contentManager.Load<Texture2D>("Textures/Tiles/wall");
+            
+            //Load Items
+            List<Item> items = this.contentManager.Load<List<Item>>("items");
 
-            // Load Gold Items
-            this.goldItems.Add(this.contentManager.Load<Item>("Items/Gold/minGold"));
-            this.goldItems.Add(this.contentManager.Load<Item>("Items/Gold/medGold"));
-            this.goldItems.Add(this.contentManager.Load<Item>("Items/Gold/maxGold"));
+            for (int i = 0; i < items.Count; i++)
+            {
+                switch (items[i].Type)
+                {
+                    case ItemTypes.Gold:
+                        this.goldItems.Add(items[i]);
+                        break;
 
-            // Temporary set textures.
-            this.goldItems[0].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Gold/gold");
-            this.goldItems[1].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Gold/gold");
-            this.goldItems[2].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Gold/gold");
+                    case ItemTypes.Sword:
+                        this.swordItems.Add(items[i]);
+                        break;
 
-            // Load Sword Items
-            this.swordItems.Add(this.contentManager.Load<Item>("Items/Swords/lightning"));
-            this.swordItems[0].Texture = this.contentManager.Load<Texture2D>("Textures/Items/Swords/lightning");
-            this.swordItems[0].OverworldTexture = this.contentManager.Load<Texture2D>("Textures/Items/Swords/lightningOverworld");
+                    case ItemTypes.Shield:
+                        this.shieldItems.Add(items[i]);
+                        break;
+
+                    case ItemTypes.Boots:
+                        this.bootsItems.Add(items[i]);
+                        break;
+
+                    case ItemTypes.Helmet:
+                        this.helmItems.Add(items[i]);
+                        break;
+                }
+            }
 
             MakeLevel(this.amountOfRooms, this.maxFails);
         }
@@ -374,8 +388,8 @@ namespace The_Caves_of_Kardun
 
             while (this.rooms.Count < amountOfRooms)
             {
-                int width = random.Next(8, 15);
-                int height = random.Next(8, 15);
+                int width = random.Next(8, 16);
+                int height = random.Next(8, 16);
 
                 Room room = new Room(
                     random.Next(0, mapDimensions.X - width),
@@ -395,10 +409,10 @@ namespace The_Caves_of_Kardun
             foreach (Room room in this.rooms)
                 MakeRoom(room);
 
-            this.RoomSpawnIndex = random.Next(0, this.rooms.Count - 1);
+            this.RoomSpawnIndex = random.Next(0, this.rooms.Count);
             OrderRoomsByDistanceToSpawn();
 
-            this.BossRoomIndex = random.Next(this.rooms.Count - 4, this.rooms.Count - 1);
+            this.BossRoomIndex = random.Next(this.rooms.Count - 3, this.rooms.Count);
 
             for (int i = 0; i < this.rooms.Count - 1; i++)
             {
@@ -477,10 +491,10 @@ namespace The_Caves_of_Kardun
                 int types = random.Next(0, 10);
                 if (types > 8)
                 {
-                    item = this.swordItems[random.Next(0, this.swordItems.Count - 1)];
+                    item = this.swordItems[random.Next(0, this.swordItems.Count)];
                 }
                 else
-                    item = this.goldItems[random.Next(0, 2)];
+                    item = this.goldItems[random.Next(0, this.goldItems.Count)];
 
                 int r = this.BossRoomIndex;
                 do

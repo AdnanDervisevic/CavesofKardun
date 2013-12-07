@@ -11,9 +11,9 @@ using System.Xml;
 using Microsoft.Xna.Framework.Content.Pipeline;
 #endregion
 
-namespace The_Caves_of_Kardun_ContentPipeline
+namespace The_Caves_of_Kardun
 {
-    [ContentImporter(".item", DisplayName = "Item Importer", DefaultProcessor = "Item Processor")]
+    [ContentImporter(".tcoki", DisplayName = "TCOK Items Importer", DefaultProcessor = "TCOK Items Processor")]
     public class ItemImporter : ContentImporter<XmlDocument>
     {
         public override XmlDocument Import(string filename, ContentImporterContext context)

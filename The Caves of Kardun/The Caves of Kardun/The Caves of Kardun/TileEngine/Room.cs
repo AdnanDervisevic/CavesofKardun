@@ -83,8 +83,8 @@ namespace The_Caves_of_Kardun
             get
             {
                 Point point = new Point();
-                point.X = random.Next((this.Left + 1), (this.Right - 1));
-                point.Y = random.Next((this.Top + 1), (this.Bottom - 1));
+                point.X = random.Next((this.Left + 1), this.Right);
+                point.Y = random.Next((this.Top + 1), this.Bottom);
 
                 return point;
             }
