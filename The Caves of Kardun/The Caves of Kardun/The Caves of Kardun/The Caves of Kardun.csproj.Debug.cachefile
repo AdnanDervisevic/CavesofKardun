@@ -1,12 +1,11 @@
+Content\Textures\Tiles\wall.xnb
 Content\Textures\Characters\player.xnb
 Content\Textures\Hover.xnb
+Content\Textures\Tiles\floor.xnb
 Content\Textures\Characters\spider.xnb
 Content\Textures\Characters\shade.xnb
-Content\Textures\Items\Swords\lightning.xnb
-Content\Textures\Items\Swords\lightningOverworld.xnb
+Content\Textures\Inventory\Background.xnb
 Content\Textures\Equipment.xnb
-Content\Fonts\combatFont.xnb
-Content\items.xnb
 Content\Textures\Items\Gold\minGold.xnb
 Content\Textures\Items\Gold\medGold.xnb
 Content\Textures\Items\Gold\maxGold.xnb
@@ -18,6 +17,8 @@ Content\Textures\Items\Swords\Iron.xnb
 Content\Textures\Items\Swords\IronOverworld.xnb
 Content\Textures\Items\Swords\Lava.xnb
 Content\Textures\Items\Swords\LavaOverworld.xnb
+Content\Textures\Items\Swords\Lightning.xnb
+Content\Textures\Items\Swords\LightningOverworld.xnb
 Content\Textures\Items\Swords\Mithril.xnb
 Content\Textures\Items\Swords\MithrilOverworld.xnb
 Content\Textures\Items\Swords\Wood.xnb
@@ -62,7 +63,6 @@ Content\Textures\Characters\floatingEye.xnb
 Content\Textures\Characters\flyingSacuer.xnb
 Content\Textures\Characters\theBlob.xnb
 Content\Textures\Inventory\EquipMenu.xnb
-Content\Textures\Inventory\Background.xnb
 Content\Textures\Inventory\EquipMenuChoice.xnb
-Content\Textures\Tiles\wall.xnb
-Content\Textures\Tiles\floor.xnb
+Content\Fonts\combatFont.xnb
+Content\items.xnb

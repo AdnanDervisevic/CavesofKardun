@@ -49,8 +49,19 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public bool Alive
         {
-            get { return Health > DamageTaken; }
+            get 
+            {
+                if (GodMode)
+                    return true;
+
+                return Health > DamageTaken; 
+            }
         }
+
+        /// <summary>
+        /// Gets or sets whether this character should be able to die.
+        /// </summary>
+        public bool GodMode { get; set; }
 
         /// <summary>
         /// Gets or sets he speed of the character.
@@ -65,8 +76,8 @@ namespace The_Caves_of_Kardun
             get
             {
                 return new Vector2(
-                    this.Position.X + texture.Width / 2,
-                    this.Position.Y + texture.Height / 2);
+                    this.Position.X + TheCavesOfKardun.TileWidth / 2,
+                    this.Position.Y + TheCavesOfKardun.TileHeight / 2);
             }
         }
 

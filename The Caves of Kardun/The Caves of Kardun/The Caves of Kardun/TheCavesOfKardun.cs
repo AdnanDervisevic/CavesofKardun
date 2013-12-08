@@ -31,8 +31,8 @@ namespace The_Caves_of_Kardun
     {
         #region Consts
 
-        public const int TileWidth = 96;
-        public const int TileHeight = 96;
+        //public const int TileWidth = 96;
+        //public const int TileHeight = 96;
 
         #endregion
 
@@ -48,6 +48,10 @@ namespace The_Caves_of_Kardun
         private Player player;
         private Level level;
 
+        private RenderTarget2D minimapRenderTarget;
+        private Texture2D minimapTexture;
+        private bool updateMiniMap;
+
         private static MouseState currentMouseState;
         private static MouseState previousMouseState;
 
@@ -57,6 +61,10 @@ namespace The_Caves_of_Kardun
         #endregion
 
         #region Properties
+
+        public static int TileWidth { get; set; }
+
+        public static int TileHeight { get; set; }
 
         /// <summary>
         /// Gets the current mouse state.
@@ -99,6 +107,9 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public TheCavesOfKardun()
         {
+            TheCavesOfKardun.TileWidth = 96;
+            TheCavesOfKardun.TileHeight = 96;
+
             this.graphicsDeviceManager = new GraphicsDeviceManager(this);
             graphicsDeviceManager.PreferredBackBufferWidth = 1280;
             graphicsDeviceManager.PreferredBackBufferHeight = 720;
@@ -124,7 +135,7 @@ namespace The_Caves_of_Kardun
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.level = new Level(this.Content, new Point(75, 75), null, 20, 100);
-
+            this.minimapRenderTarget = new RenderTarget2D(GraphicsDevice, 200, 200, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             base.Initialize();
         }
 
@@ -142,7 +153,7 @@ namespace The_Caves_of_Kardun
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
-
+            this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
         }
 
@@ -195,10 +206,11 @@ namespace The_Caves_of_Kardun
             if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Enter) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Enter))
             {
                 this.level.RecreateLevel();
-
                 this.player.Position = new Vector2(
                     this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                     this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
+
+                this.level.ResetMonstersSpawn();
             }
 
             if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Escape) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Escape))
@@ -207,9 +219,6 @@ namespace The_Caves_of_Kardun
             UpdateGameplay(gameTime);
 
             this.player.Update(gameTime);
-
-            this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
-            this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
 
             if (!this.player.Alive)
                 Exit();
@@ -226,8 +235,16 @@ namespace The_Caves_of_Kardun
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            if (updateMiniMap)
+            {
+                this.minimapTexture = DrawMiniMap(gameTime);
+                this.updateMiniMap = false;
+            }
 
+            this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
+            this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
+
+            GraphicsDevice.Clear(Color.Black);
             this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
             spriteBatch.Begin();
@@ -235,6 +252,10 @@ namespace The_Caves_of_Kardun
             spriteBatch.End();
 
             this.player.Draw(gameTime, spriteBatch, cameraPosition);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
@@ -244,13 +265,67 @@ namespace The_Caves_of_Kardun
         #region Private Methods
 
         /// <summary>
+        /// Helper for drawing the mini map.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <returns></returns>
+        private Texture2D DrawMiniMap(GameTime gameTime)
+        {
+            
+            Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(this.player.Center);
+            List<Point> monsterCoords = new List<Point>();
+            for (int i = 0; i < this.level.Monsters.Count; i++)
+                monsterCoords.Add(TheCavesOfKardun.ConvertPositionToCell(this.level.Monsters[i].Center));
+
+            TheCavesOfKardun.TileWidth = 8;
+            TheCavesOfKardun.TileHeight = 8;
+
+            this.player.Position = TheCavesOfKardun.ConvertCellToPosition(playerCoords);
+            for (int i = 0; i < this.level.Monsters.Count; i++)
+                this.level.Monsters[i].Position = TheCavesOfKardun.ConvertCellToPosition(monsterCoords[i]);
+            
+
+            TheCavesOfKardun.TileWidth = 8;
+            TheCavesOfKardun.TileHeight = 8;
+
+            GraphicsDevice.SetRenderTarget(this.minimapRenderTarget);
+
+            this.cameraPosition.X = this.player.Center.X - this.minimapRenderTarget.Width / 2;
+            this.cameraPosition.Y = this.player.Center.Y - this.minimapRenderTarget.Height / 2;
+
+            GraphicsDevice.Clear(Color.Transparent);
+            this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
+            this.player.Draw(gameTime, spriteBatch, cameraPosition);
+
+            GraphicsDevice.SetRenderTarget(null);
+            
+            TheCavesOfKardun.TileWidth = 96;
+            TheCavesOfKardun.TileHeight = 96;
+
+            this.player.Position = TheCavesOfKardun.ConvertCellToPosition(playerCoords);
+            for (int i = 0; i < this.level.Monsters.Count; i++)
+                this.level.Monsters[i].Position = TheCavesOfKardun.ConvertCellToPosition(monsterCoords[i]);            
+
+            return (Texture2D)this.minimapRenderTarget;
+        }
+
+        /// <summary>
         /// Handles movement for the player.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         private void UpdateGameplay(GameTime gameTime)
         {
+            bool updateMiniMap = true;
+
+            for (int i = 0; i < this.level.Monsters.Count; i++)
+                if (this.level.Monsters[i].UpdateMovement(gameTime))
+                    updateMiniMap = false;
+
             if (this.player.UpdateMovement(gameTime))
                 return;
+
+            if (updateMiniMap)
+                this.updateMiniMap = true;
 
             Point targetTile = Point.Zero;
 

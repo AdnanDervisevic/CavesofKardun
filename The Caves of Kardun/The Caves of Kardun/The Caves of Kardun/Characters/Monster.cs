@@ -25,6 +25,11 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public Dot Dot { get; set; }
 
+        /// <summary>
+        /// Gets the spawn tile of this monster.
+        /// </summary>
+        public Point SpawnTile {  get; private set; }
+
         #endregion
 
         #region Constructors
@@ -41,23 +46,25 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the monster.</param>
         /// <param name="position">The position of the monster.</param>
         /// <param name="speed">The speed of the monster.</param>
-        public Monster(Texture2D texture, Vector2 position, float speed, int baseHealth, int baseDamage, SpriteFont combatFont)
-            : base(texture, position, speed, baseHealth, combatFont) 
+        public Monster(Texture2D texture, Point spawnTile, float speed, int baseHealth, int baseDamage, SpriteFont combatFont)
+            : base(texture, TheCavesOfKardun.ConvertCellToPosition(spawnTile), speed, baseHealth, combatFont) 
         {
             this.Damage = baseDamage;
+            this.SpawnTile = spawnTile;
         }
 
         #endregion
 
         #region Public Methods
 
+        Vector2 motion = new Vector2(1, 0);
         /// <summary>
         /// Updates the AI of this monster.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="playerTile">The player position, as a tile.</param>
         /// <returns>Returns the damage to inflict to the player.</returns>
-        public int UpdateAI(GameTime gameTime, Player player)
+        public int UpdateAI(GameTime gameTime, Level level, Player player)
         {
             // If the monster is not alive, return zero.
             if (!this.Alive)
@@ -89,15 +96,30 @@ namespace The_Caves_of_Kardun
                 return this.Damage;
             else // If the monster is not close to the player, update the AI.
             {
-                // If the monster is between two tiles then return zero because we're not doing any damage to the player.
-                if (UpdateMovement(gameTime))
-                    return 0;
-                // Otherwise we're calculating the movement AI
+                // Compare playerTile and monsterTile to see how far away they're from each other,
+                // if they're close enough calculate the motion the monster should have and
+                // then call if (!level.CanWalk(monster, calculatedMotion, 1, out monster.TargetPosition))
+                // If this returns false something in the way and we need to re-calculate a new motion and try again.
 
-                // Compare playerTile and monsterTile to calculate the motion the monster should have.
-                // Then call if (CanWalk(monster, calculatedMotion, 1, out monster.TargetPosition))
-                // If this returns true just continue to the next iteration like we did @line 171
-                // Otherwise there're something in the way and we need to re-calculate a new motion and try again.
+
+                // TEST AI ! Går bara i sidled :!
+                // Denna kod körs på alla monsters, inte bara dom i rummet så man måste kolla
+                // om spelaren och monstret är tillräckligt nära varandra för att sätt en motion.
+                // Om spelaren och monstret är för långt ifrån varandra sätt motion = Vector2.Zero
+
+                if (motion == Vector2.Zero)
+                    motion = new Vector2(1, 0);
+
+                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                {
+                    motion *= -1;
+                    if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                    {
+                        motion = Vector2.Zero;
+                    }
+                }
+
+                this.Motion = motion;
             }
 
             return 0; // Returns zero because we're not doing any damage to the player.

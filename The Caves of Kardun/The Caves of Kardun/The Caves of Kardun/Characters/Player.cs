@@ -134,7 +134,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public override int AmountOfTilesToMove
         {
-            get { return 2; }
+            get { return (this.Equipment.Boots != null) ? 2 : 1;  }
         }
 
         /// <summary>
@@ -162,6 +162,12 @@ namespace The_Caves_of_Kardun
 
         #region Public Methods
 
+        /// <summary>
+        /// Loads content for the player.
+        /// </summary>
+        /// <param name="Content">The contentManager.</param>
+        /// <param name="inventoryPositionOffset">The inventory position offset from the upper left corner.</param>
+        /// <param name="equipmentPositionOffset">The equipment position offset from the upper left corner.</param>
         public void LoadContent(ContentManager Content, Vector2 inventoryPositionOffset, Vector2 equipmentPositionOffset)
         {          
             Texture2D inventoryBackgroundTexture = Content.Load<Texture2D>("Textures/Inventory/Background");

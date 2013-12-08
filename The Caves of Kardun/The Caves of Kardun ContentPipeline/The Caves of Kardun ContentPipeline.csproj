@@ -58,11 +58,11 @@
     <Compile Include="Items\ItemSpecials.cs" />
     <Compile Include="Items\ItemTypes.cs" />
     <Compile Include="Items\ItemWriter.cs" />
+    <Compile Include="Monsters\MonsterImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Gold\" />
-    <Folder Include="Monsters\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.ContentPipelineExtensions.targets" />

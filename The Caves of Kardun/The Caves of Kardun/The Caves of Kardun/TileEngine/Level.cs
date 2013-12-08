@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.ObjectModel;
 #endregion End of Using Statements
 
 namespace The_Caves_of_Kardun
@@ -58,14 +59,31 @@ namespace The_Caves_of_Kardun
             get { return this.mapData; }
         }
 
-        public List<Room> Rooms 
+        /// <summary>
+        /// Gets the list of rooms.
+        /// </summary>
+        public ReadOnlyCollection<Room> Rooms 
         { 
-            get { return this.rooms; }
+            get { return this.rooms.AsReadOnly(); }
         }
 
+        /// <summary>
+        /// Gets the player's spawn room index.
+        /// </summary>
         public int RoomSpawnIndex { get; private set; }
 
+        /// <summary>
+        /// Gets the boss room index.
+        /// </summary>
         public int BossRoomIndex { get; private set; }
+
+        /// <summary>
+        /// Gets the list of monster as a readonly collection.
+        /// </summary>
+        public ReadOnlyCollection<Monster> Monsters
+        {
+            get { return this.monsters.AsReadOnly(); }
+        }
 
         #endregion
 
@@ -152,6 +170,17 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
+        /// Resets every monster to their spawn tile.
+        /// </summary>
+        public void ResetMonstersSpawn()
+        {
+            for (int i = 0; i < this.monsters.Count; i++)
+            {
+                this.monsters[i].Position = TheCavesOfKardun.ConvertCellToPosition(this.monsters[i].SpawnTile);
+            }
+        }
+
+        /// <summary>
         /// Called every time monsters should either move or attack.
         /// </summary>
         /// <param name="player">The player.</param>
@@ -161,7 +190,7 @@ namespace The_Caves_of_Kardun
             int totalDamage = 0;
 
             foreach (Monster monster in this.monsters)
-                totalDamage += monster.UpdateAI(gameTime, player);
+                totalDamage += monster.UpdateAI(gameTime, this, player);
 
             // When we've moved/calculated damage for all monsters then inflict the combined damage to the player.
             if (totalDamage > 0)
@@ -286,11 +315,13 @@ namespace The_Caves_of_Kardun
             monster = null;
 
             for (int i = 0; i < this.monsters.Count; i++)
+            {
                 if (targetTile == TheCavesOfKardun.ConvertPositionToCell(this.monsters[i].Center) && this.monsters[i].Alive)
+                {
                     monster = this.monsters[i];
-
-            if (monster != null)
-                return true;
+                    return true;
+                }
+            }
 
             return false;
         }
@@ -362,7 +393,7 @@ namespace The_Caves_of_Kardun
                             Color.White);
                 }
             }
-
+            
             spriteBatch.End();
 
             for (int i = 0; i < this.monsters.Count; i++)
@@ -473,7 +504,7 @@ namespace The_Caves_of_Kardun
                 if (floorTile != Point.Zero)
                 {
                     // Skapa random(?) monster
-                    this.monsters.Add(new Monster(contentManager.Load<Texture2D>("Textures/Characters/spider"), TheCavesOfKardun.ConvertCellToPosition(floorTile), 500, 3, 1, 
+                    this.monsters.Add(new Monster(contentManager.Load<Texture2D>("Textures/Characters/spider"), floorTile, 500, 3, 1, 
                         contentManager.Load<SpriteFont>("Fonts/combatFont")));
                 }
             }
