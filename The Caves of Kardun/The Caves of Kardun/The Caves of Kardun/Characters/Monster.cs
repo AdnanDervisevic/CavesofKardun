@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace The_Caves_of_Kardun
 {
@@ -57,7 +58,7 @@ namespace The_Caves_of_Kardun
 
         #region Public Methods
 
-        Vector2 motion = new Vector2(1, 0);
+        Vector2 motion;
         /// <summary>
         /// Updates the AI of this monster.
         /// </summary>
@@ -100,30 +101,194 @@ namespace The_Caves_of_Kardun
                 // if they're close enough calculate the motion the monster should have and
                 // then call if (!level.CanWalk(monster, calculatedMotion, 1, out monster.TargetPosition))
                 // If this returns false something in the way and we need to re-calculate a new motion and try again.
+                // 0,-1 up, 0,1 = down, 1,0 = right, -1,0 = left
 
+                float xDelta = Math.Abs(this.Position.X - player.Position.X);
+                float yDelta = Math.Abs(this.Position.Y - player.Position.Y);
 
-                // TEST AI ! Går bara i sidled :!
-                // Denna kod körs på alla monsters, inte bara dom i rummet så man måste kolla
-                // om spelaren och monstret är tillräckligt nära varandra för att sätt en motion.
-                // Om spelaren och monstret är för långt ifrån varandra sätt motion = Vector2.Zero
+                // AI for the quadrants
+                // It basically checks where the monster is in relation to the player
+                // Finds the largest delta and moves in that direction within a subquadrant
+                // The quadrants are basically a quasi Cartesian coordinate system with the monster in origo
+                // Region titles refer to player position
 
-                if (motion == Vector2.Zero)
-                    motion = new Vector2(1, 0);
-
-                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                #region Top Right
+                if (xDelta <= 576 && yDelta <= 576)
                 {
-                    motion *= -1;
-                    if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                    if (this.Position.X <= player.Position.X && this.Position.Y >= player.Position.Y)
                     {
-                        motion = Vector2.Zero;
+                        if (xDelta > yDelta)
+                        {
+                            motion = new Vector2(1, 0);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+
+                                motion = new Vector2(0, -1);
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                {
+                                    motion *= -1;
+
+                                    if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                        motion = Vector2.Zero;
+                                }
+                            }
+                        }
+
+                        else
+                        {
+                            motion = new Vector2(0, -1);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion = new Vector2(1, 0);
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                {
+                                    motion *= -1;
+
+                                    if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                        motion = Vector2.Zero;
+                                }
+                            }
+                        }
+                    }
+                #endregion
+
+                #region Bottom Right
+                if (this.Position.X <= player.Position.X && this.Position.Y <= player.Position.Y)
+                {
+                    if (xDelta > yDelta)
+                    {
+                        motion = new Vector2(1, 0);
+
+                        if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                        {
+
+                            motion = new Vector2(0, 1);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion *= -1;
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                    motion = Vector2.Zero;
+                            }
+                        }
+                    }
+
+
+                    else
+                    {
+                        motion = new Vector2(0, 1);
+
+                        if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                        {
+                            motion = new Vector2(1, 0);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion *= -1;
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                    motion = Vector2.Zero;
+                            }
+                        }
                     }
                 }
+                #endregion
+
+                #region Top Left
+                if (this.Position.X >= player.Position.X && this.Position.Y >= player.Position.Y)
+                {
+                    if (xDelta > yDelta)
+                    {
+                        motion = new Vector2(-1, 0);
+
+                        if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                        {
+
+                            motion = new Vector2(0, -1);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion *= -1;
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                    motion = Vector2.Zero;
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        motion = new Vector2(0, -1);
+
+                        if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                        {
+                            motion = new Vector2(-1, 0);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion *= -1;
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                    motion = Vector2.Zero;
+                            }
+                        }
+                    }
+                }
+                #endregion
+
+                #region Bottom Left
+                if (this.Position.X >= player.Position.X && this.Position.Y <= player.Position.Y)
+                {
+                    if (xDelta > yDelta)
+                    {
+                        motion = new Vector2(-1, 0);
+
+                        if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                        {
+
+                            motion = new Vector2(0, 1);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion *= -1;
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                    motion = Vector2.Zero;
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        motion = new Vector2(0, 1);
+
+                        if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                        {
+                            motion = new Vector2(-1, 0);
+
+                            if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                            {
+                                motion *= -1;
+
+                                if (!level.CanWalk(this, motion, 1, out this.TargetPosition))
+                                    motion = Vector2.Zero;
+                            }
+                        }
+                    }
+                }
+            }
+        #endregion
 
                 this.Motion = motion;
             }
-
             return 0; // Returns zero because we're not doing any damage to the player.
         }
+
 
         #endregion
     }
