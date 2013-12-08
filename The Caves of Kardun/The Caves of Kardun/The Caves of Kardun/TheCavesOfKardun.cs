@@ -140,7 +140,8 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
-        /// LoadContent will be called once per game and is the place to load
+        /// LoadContent will be called once per 
+        /// and is the place to load
         /// all of your content.
         /// </summary>
         protected override void LoadContent()
