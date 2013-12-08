@@ -85,6 +85,11 @@ namespace The_Caves_of_Kardun
             get { return this.monsters.AsReadOnly(); }
         }
 
+        /// <summary>
+        /// Gets or sets the player on this level.
+        /// </summary>
+        public Player Player { get; set; }
+
         #endregion
 
         #region Constructors
@@ -228,7 +233,20 @@ namespace The_Caves_of_Kardun
                 if (i - 1 != 0)
                 {
                     targetPosition.X = character.Position.X + TheCavesOfKardun.TileWidth * (i - 1);
-                    return true;        
+
+                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    {
+                        targetPosition = character.Position;
+                        return true;
+                    }
+
+                    if (this.PredictMonsterPosition(character) > 1)
+                    {
+                        targetPosition = Vector2.Zero;
+                        return false;
+                    }
+
+                    return true;
                 }
             }
             else if (motion.X == -1 && motion.Y == 0)
@@ -251,6 +269,19 @@ namespace The_Caves_of_Kardun
                 if (i - 1 != 0)
                 {
                     targetPosition.X = character.Position.X - TheCavesOfKardun.TileWidth * (i - 1);
+
+                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    {
+                        targetPosition = character.Position;
+                        return true;
+                    }
+
+                    if (this.PredictMonsterPosition(character) > 1)
+                    {
+                        targetPosition = Vector2.Zero;
+                        return false;
+                    }
+
                     return true;
                 }
             }
@@ -274,6 +305,19 @@ namespace The_Caves_of_Kardun
                 if (i - 1 != 0)
                 {
                     targetPosition.Y = character.Position.Y + TheCavesOfKardun.TileHeight * (i - 1);
+
+                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    {
+                        targetPosition = character.Position;
+                        return true;
+                    }
+
+                    if (this.PredictMonsterPosition(character) > 1)
+                    {
+                        targetPosition = Vector2.Zero;
+                        return false;
+                    }
+
                     return true;
                 }
             }
@@ -297,6 +341,19 @@ namespace The_Caves_of_Kardun
                 if (i - 1 != 0)
                 {
                     targetPosition.Y = character.Position.Y - TheCavesOfKardun.TileHeight * (i - 1);
+
+                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    {
+                        targetPosition = character.Position;
+                        return true;
+                    }
+
+                    if (this.PredictMonsterPosition(character) > 1)
+                    {
+                        targetPosition = Vector2.Zero;
+                        return false;
+                    }
+
                     return true;
                 }
             }
@@ -460,14 +517,14 @@ namespace The_Caves_of_Kardun
         /// </summary>
         private void SpawnMonsters()
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 2; i++)
             {
                 int r = this.BossRoomIndex;
                 do
                 {
                     r = random.Next(1, this.rooms.Count);
                 } while (r == this.BossRoomIndex);
-
+                r = 2;
                 Room room = this.rooms[r];
 
                 Point floorTile = Point.Zero;
@@ -683,6 +740,67 @@ namespace The_Caves_of_Kardun
                     return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Predicts how many monsters will have the same target position.
+        /// </summary>
+        /// <param name="character">The character to compare with.</param>
+        /// <returns>Returns the amount of monsters with the same target position.</returns>
+        private int PredictMonsterPosition(Character character)
+        {
+            Vector2 characterTargetPos = character.Position;
+
+            if (character.TargetPosition == Vector2.Zero)
+                return 0;
+
+            if (character.TargetPosition.X == 0)
+                characterTargetPos.Y = character.TargetPosition.Y;
+            else
+                characterTargetPos.X = character.TargetPosition.X;
+
+            int counter = 0;
+            for (int i = 0; i < this.monsters.Count; i++)
+            {
+                Vector2 monsterTargetPos = monsters[i].Position;
+
+                if (monsters[i].TargetPosition.X == 0)
+                    monsterTargetPos.Y = monsters[i].TargetPosition.Y;
+                else
+                    monsterTargetPos.X = monsters[i].TargetPosition.X;
+
+                if (characterTargetPos == monsterTargetPos)
+                    counter++;
+            }
+
+            return counter;
+        }
+
+        /// <summary>
+        /// Predicts the players position and compares it with the given character.
+        /// </summary>
+        /// <param name="character">The character to compare with.</param>
+        /// <returns>Returns true if the player's target position equals to the characters target position.</returns>
+        private bool PredictPlayerPosition(Character character)
+        {
+            Vector2 characterTargetPos = character.Position;
+
+            if (character.TargetPosition == Vector2.Zero)
+                return false;
+
+            if (character.TargetPosition.X == 0)
+                characterTargetPos.Y = character.TargetPosition.Y;
+            else
+                characterTargetPos.X = character.TargetPosition.X;
+
+
+            Vector2 playerTargetPos = this.Player.Position;
+            if (this.Player.TargetPosition.X == 0)
+                playerTargetPos.Y = this.Player.TargetPosition.Y;
+            else
+                playerTargetPos.X = this.Player.TargetPosition.X;
+
+            return characterTargetPos == playerTargetPos;
         }
 
         #endregion

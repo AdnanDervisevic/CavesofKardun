@@ -134,7 +134,6 @@ namespace The_Caves_of_Kardun
             this.Content.RootDirectory = "Content";
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.level = new Level(this.Content, new Point(75, 75), null, 20, 100);
             this.minimapRenderTarget = new RenderTarget2D(GraphicsDevice, 200, 200, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             base.Initialize();
         }
@@ -146,6 +145,8 @@ namespace The_Caves_of_Kardun
         /// </summary>
         protected override void LoadContent()
         {
+
+            this.level = new Level(this.Content, new Point(75, 75), null, 20, 100);
             this.level.LoadContent();
 
             this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
@@ -156,6 +157,7 @@ namespace The_Caves_of_Kardun
                 Content.Load<SpriteFont>("Fonts/combatFont"));
             this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
+            this.level.Player = this.player;
         }
 
         /// <summary>
