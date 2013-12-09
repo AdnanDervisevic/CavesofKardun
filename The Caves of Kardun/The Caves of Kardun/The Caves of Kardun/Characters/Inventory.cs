@@ -179,7 +179,7 @@ namespace The_Caves_of_Kardun
                         if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             // Equips the item and moves the old item to the inventory.
-                            bool AllowTwoSwords = true;
+                            bool AllowTwoSwords = false;
 
                             if (AllowTwoSwords && this.hover.Type == ItemTypes.Sword)
                             {
@@ -228,7 +228,6 @@ namespace The_Caves_of_Kardun
             if (!this.Visible)
                 return;
 
-            spriteBatch.Begin();
             spriteBatch.Draw(this.backgroundTexture, this.positionOffset, Color.White);
 
             // Draw Items.
@@ -244,8 +243,6 @@ namespace The_Caves_of_Kardun
                 else
                     spriteBatch.Draw(this.menuTexture, this.menuPosition, Color.White);
             }
-
-            spriteBatch.End();
         }
 
         #endregion

@@ -16,7 +16,7 @@ namespace The_Caves_of_Kardun
         None,
         Minimap,
         Colour,
-        Precog,
+        HelmetOfLife,
         Sight
     }
 }

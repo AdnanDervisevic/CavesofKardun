@@ -35,7 +35,11 @@ namespace The_Caves_of_Kardun
             {
                 int bonusHealth = 0;
                 if (this.Equipment.Helmet != null)
+                {
                     bonusHealth += this.Equipment.Helmet.Health;
+                    if (this.Equipment.Helmet.Special == ItemSpecials.HelmetOfLife)
+                        bonusHealth += 15;
+                }
 
                 if (this.Equipment.LeftHand != null)
                     bonusHealth += this.Equipment.LeftHand.Health;
@@ -142,6 +146,16 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public Monster Attacks { get; set; }
 
+        /// <summary>
+        /// Positive traits.
+        /// </summary>
+        public PositiveTraits PositiveTraits { get; private set; }
+
+        /// <summary>
+        /// Negative traits.
+        /// </summary>
+        public NegativeTraits NegativeTraits { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -156,6 +170,8 @@ namespace The_Caves_of_Kardun
             : base(texture, position, speed, health, combatFont) 
         {
             this.random = new Random();
+            this.PositiveTraits = PositiveTraits.SuperStrength | The_Caves_of_Kardun.PositiveTraits.SuperLife | PositiveTraits.Ambidextrous | PositiveTraits.TwentyTwentyVision | PositiveTraits.ElvenSpeed;
+            this.NegativeTraits = NegativeTraits.ColourBlind | NegativeTraits.MissingAnEye | NegativeTraits.MissingAnArm | NegativeTraits.NearSighted | NegativeTraits.SenseOfDirection;
         }
 
         #endregion

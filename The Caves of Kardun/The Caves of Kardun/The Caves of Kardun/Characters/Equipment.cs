@@ -121,7 +121,6 @@ namespace The_Caves_of_Kardun
         /// <param name="spriteBatch">The spritebatch used to draw.</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
             spriteBatch.Draw(this.backgroundTexture, this.positionOffset, Color.White);
 
             if (this.Helmet != null)
@@ -135,8 +134,6 @@ namespace The_Caves_of_Kardun
 
             if (this.Boots != null)
                 spriteBatch.Draw(this.Boots.Texture, this.bounds[3], Color.White);
-
-            spriteBatch.End();
         }
 
         #endregion

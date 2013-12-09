@@ -147,8 +147,6 @@ namespace The_Caves_of_Kardun
         /// <param name="cameraPosition">The camera position.</param>
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
         {
-            spriteBatch.Begin();
-
             // If we're alive then draw our texture.
             if (this.Alive)
             {
@@ -182,8 +180,6 @@ namespace The_Caves_of_Kardun
                     this.CombatText = string.Empty;
                 }
             }
-
-            spriteBatch.End();
         }
 
         /// <summary>

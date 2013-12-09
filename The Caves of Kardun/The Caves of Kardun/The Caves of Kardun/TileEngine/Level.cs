@@ -421,7 +421,6 @@ namespace The_Caves_of_Kardun
             max.X = Math.Min(max.X, mapDimensions.X);
             max.Y = Math.Min(max.Y, mapDimensions.Y);
 
-            spriteBatch.Begin();
             for (int x = min.X; x < max.X; x++)
             {
                 for (int y = min.Y; y < max.Y; y++)
@@ -450,11 +449,6 @@ namespace The_Caves_of_Kardun
                             Color.White);
                 }
             }
-            
-            spriteBatch.End();
-
-            for (int i = 0; i < this.monsters.Count; i++)
-                this.monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
         }
 
         #endregion

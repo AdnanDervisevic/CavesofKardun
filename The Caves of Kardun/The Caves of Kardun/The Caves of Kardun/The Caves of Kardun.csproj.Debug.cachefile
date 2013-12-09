@@ -66,3 +66,5 @@ Content\Textures\Inventory\EquipMenu.xnb
 Content\Textures\Inventory\EquipMenuChoice.xnb
 Content\Fonts\combatFont.xnb
 Content\items.xnb
+Content\Shaders\Grayscale.xnb
+Content\Shaders\Blur.xnb

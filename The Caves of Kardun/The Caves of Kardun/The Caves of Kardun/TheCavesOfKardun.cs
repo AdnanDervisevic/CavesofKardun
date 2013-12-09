@@ -48,6 +48,8 @@ namespace The_Caves_of_Kardun
         private Player player;
         private Level level;
 
+        private Effect grayscaleEffect;
+
         private RenderTarget2D minimapRenderTarget;
         private Texture2D minimapTexture;
         private bool updateMiniMap;
@@ -158,6 +160,8 @@ namespace The_Caves_of_Kardun
             this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
+
+            this.grayscaleEffect = Content.Load<Effect>("Shaders/Grayscale");
         }
 
         /// <summary>
@@ -248,15 +252,28 @@ namespace The_Caves_of_Kardun
             this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
 
             GraphicsDevice.Clear(Color.Black);
+
+            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind)
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
+            else
+                spriteBatch.Begin();
+
             this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
+            for (int i = 0; i < this.level.Monsters.Count; i++)
+                this.level.Monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
+
+            spriteBatch.End();
             spriteBatch.Begin();
             spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
             spriteBatch.End();
 
-            this.player.Draw(gameTime, spriteBatch, cameraPosition);
+            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind)
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
+            else
+                spriteBatch.Begin();
 
-            spriteBatch.Begin();
+            this.player.Draw(gameTime, spriteBatch, cameraPosition);
             spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
             spriteBatch.End();
 
@@ -274,7 +291,6 @@ namespace The_Caves_of_Kardun
         /// <returns></returns>
         private Texture2D DrawMiniMap(GameTime gameTime)
         {
-            
             Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(this.player.Center);
             List<Point> monsterCoords = new List<Point>();
             for (int i = 0; i < this.level.Monsters.Count; i++)
@@ -286,7 +302,6 @@ namespace The_Caves_of_Kardun
             this.player.Position = TheCavesOfKardun.ConvertCellToPosition(playerCoords);
             for (int i = 0; i < this.level.Monsters.Count; i++)
                 this.level.Monsters[i].Position = TheCavesOfKardun.ConvertCellToPosition(monsterCoords[i]);
-            
 
             TheCavesOfKardun.TileWidth = 8;
             TheCavesOfKardun.TileHeight = 8;
@@ -297,8 +312,15 @@ namespace The_Caves_of_Kardun
             this.cameraPosition.Y = this.player.Center.Y - this.minimapRenderTarget.Height / 2;
 
             GraphicsDevice.Clear(Color.Transparent);
+
+            spriteBatch.Begin();
             this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
+            
+            for (int i = 0; i < this.level.Monsters.Count; i++)
+                this.level.Monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
+
             this.player.Draw(gameTime, spriteBatch, cameraPosition);
+            spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
             
