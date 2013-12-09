@@ -42,6 +42,9 @@ namespace The_Caves_of_Kardun
         private GraphicsDeviceManager graphicsDeviceManager;
         private SpriteBatch spriteBatch;
 
+        private bool gameStarted;
+
+        private Texture2D startScreenTexture;
         private Texture2D hoverTexture;
 
         private Vector2 cameraPosition;
@@ -154,11 +157,12 @@ namespace The_Caves_of_Kardun
             this.level = new Level(this.Content, new Point(75, 75), null, 20, 100);
             this.level.LoadContent();
 
+            this.startScreenTexture = Content.Load<Texture2D>("titleScreen");
             this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
 
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
-                this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
             this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
@@ -214,23 +218,24 @@ namespace The_Caves_of_Kardun
             TheCavesOfKardun.currentKeyboardState = Keyboard.GetState();
             TheCavesOfKardun.currentMouseState = Mouse.GetState();
 
-            if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Enter) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Enter))
-            {
-                this.level.RecreateLevel();
-                this.player.Position = new Vector2(
-                    this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                    this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
-            }
-
+            // Escape to exit.
             if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Escape) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Escape))
                 Exit();
 
-            UpdateGameplay(gameTime);
+            if (!this.gameStarted)
+            {
+                if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Enter) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Enter))
+                    this.gameStarted = true;
+            }
+            else
+            {
+                UpdateGameplay(gameTime);
+                this.player.Update(gameTime);
 
-            this.player.Update(gameTime);
-
-            if (!this.player.Alive)
-                Exit();
+                // Om spelaren dör, vad händer?
+                if (!this.player.Alive)
+                    Exit();
+            }
 
             TheCavesOfKardun.previousKeyboardState = TheCavesOfKardun.currentKeyboardState;
             TheCavesOfKardun.previousMouseState = TheCavesOfKardun.currentMouseState;
@@ -244,68 +249,77 @@ namespace The_Caves_of_Kardun
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (updateMiniMap)
-            {
-                this.minimapTexture = DrawMiniMap(gameTime);
-                this.updateMiniMap = false;
-            }
-
-            this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
-            this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
-
-            GraphicsDevice.SetRenderTarget(this.defaultRenderTarget);
-            GraphicsDevice.Clear(Color.Black);
-
-            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind && 
-                (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
-            else 
-                spriteBatch.Begin();
-
-            this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
-
-            for (int i = 0; i < this.level.Monsters.Count; i++)
-                this.level.Monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
-
-            spriteBatch.End();
-
-            // Om spelaren inte har synproblem eller saknar ett öga samt har optics, rita inte ut hover.
-            if (((this.player.NegativeTraits & NegativeTraits.NearSighted) != NegativeTraits.NearSighted) && 
-                ((this.player.NegativeTraits & NegativeTraits.MissingAnEye) != NegativeTraits.MissingAnEye) && 
-                (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Sight))
-            {
-
-            }
-            else
+            if (!this.gameStarted)
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
+                spriteBatch.Draw(this.startScreenTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                 spriteBatch.End();
             }
-
-            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind &&
-                (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
             else
-                spriteBatch.Begin();
+            {
+                if (updateMiniMap)
+                {
+                    this.minimapTexture = DrawMiniMap(gameTime);
+                    this.updateMiniMap = false;
+                }
 
-            this.player.Draw(gameTime, spriteBatch, cameraPosition);
+                this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
+                this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
 
-            if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
-                spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
+                GraphicsDevice.SetRenderTarget(this.defaultRenderTarget);
+                GraphicsDevice.Clear(Color.Black);
 
-            spriteBatch.End();
+                if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind &&
+                    (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
+                else
+                    spriteBatch.Begin();
 
-            GraphicsDevice.SetRenderTarget(null);
+                this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
 
-            if ((this.player.NegativeTraits & NegativeTraits.NearSighted) == NegativeTraits.NearSighted && 
-                (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Sight))
-                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, blurEffect);
-            else
-                spriteBatch.Begin();
+                for (int i = 0; i < this.level.Monsters.Count; i++)
+                    this.level.Monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
 
-            spriteBatch.Draw((Texture2D)this.defaultRenderTarget, Vector2.Zero, Color.White);
-            spriteBatch.End();
+                spriteBatch.End();
+
+                // Om spelaren inte har synproblem eller saknar ett öga samt har optics, rita inte ut hover.
+                if (((this.player.NegativeTraits & NegativeTraits.NearSighted) != NegativeTraits.NearSighted) &&
+                    ((this.player.NegativeTraits & NegativeTraits.MissingAnEye) != NegativeTraits.MissingAnEye) &&
+                    (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Sight))
+                {
+
+                }
+                else
+                {
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
+                    spriteBatch.End();
+                }
+
+                if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind &&
+                    (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
+                else
+                    spriteBatch.Begin();
+
+                this.player.Draw(gameTime, spriteBatch, cameraPosition);
+
+                if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
+                    spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
+
+                spriteBatch.End();
+
+                GraphicsDevice.SetRenderTarget(null);
+
+                if ((this.player.NegativeTraits & NegativeTraits.NearSighted) == NegativeTraits.NearSighted &&
+                    (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Sight))
+                    spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, blurEffect);
+                else
+                    spriteBatch.Begin();
+
+                spriteBatch.Draw((Texture2D)this.defaultRenderTarget, Vector2.Zero, Color.White);
+                spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
