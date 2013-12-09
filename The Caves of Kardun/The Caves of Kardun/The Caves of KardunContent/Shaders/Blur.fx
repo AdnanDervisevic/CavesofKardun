@@ -1,53 +1,32 @@
-float4x4 World;
-float4x4 View;
-float4x4 Projection;
+// The blur amount( how far away from our texel will we look up neighbour texels? )
+float BlurDistance = 0.004f;
 
-// TODO: add effect parameters here.
+// This will use the texture bound to the object( like from the sprite batch ).
+sampler ColorMapSampler : register(s0);
 
-struct VertexShaderInput
+float4 PixelShaderFunction(float2 Tex: TEXCOORD0) : COLOR
 {
-    float4 Position : POSITION0;
+	float4 Color;
 
-    // TODO: add input channels such as texture
-    // coordinates and vertex colors here.
-};
+	// Get the texel from ColorMapSampler using a modified texture coordinate. This
+	// gets the texels at the neighbour texels and adds it to Color.
+	Color = tex2D(ColorMapSampler, float2(Tex.x + BlurDistance, Tex.y + BlurDistance));
+	Color += tex2D(ColorMapSampler, float2(Tex.x - BlurDistance, Tex.y - BlurDistance));
+	Color += tex2D(ColorMapSampler, float2(Tex.x + BlurDistance, Tex.y - BlurDistance));
+	Color += tex2D(ColorMapSampler, float2(Tex.x - BlurDistance, Tex.y + BlurDistance));
+	// We need to devide the color with the amount of times we added
+	// a color to it, in this case 4, to get the avg. color
+	Color = Color / 4;
 
-struct VertexShaderOutput
-{
-    float4 Position : POSITION0;
-
-    // TODO: add vertex shader outputs such as colors and texture
-    // coordinates here. These values will automatically be interpolated
-    // over the triangle, and provided as input to your pixel shader.
-};
-
-VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
-{
-    VertexShaderOutput output;
-
-    float4 worldPosition = mul(input.Position, World);
-    float4 viewPosition = mul(worldPosition, View);
-    output.Position = mul(viewPosition, Projection);
-
-    // TODO: add your vertex shader code here.
-
-    return output;
+	// returned the blurred color
+	return Color;
 }
 
-float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
+technique PostProcess
 {
-    // TODO: add your pixel shader code here.
-
-    return float4(1, 0, 0, 1);
-}
-
-technique Technique1
-{
-    pass Pass1
-    {
-        // TODO: set renderstates here.
-
-        VertexShader = compile vs_2_0 VertexShaderFunction();
-        PixelShader = compile ps_2_0 PixelShaderFunction();
-    }
+	pass P0
+	{
+		// A post process shader only needs a pixel shader.
+		PixelShader = compile ps_2_0 PixelShaderFunction();
+	}
 }

@@ -123,7 +123,7 @@ namespace The_Caves_of_Kardun
         {
             spriteBatch.Draw(this.backgroundTexture, this.positionOffset, Color.White);
 
-            if (this.Helmet != null)
+            if (this.Helmet != null && this.Helmet.Texture != null)
                 spriteBatch.Draw(this.Helmet.Texture, this.bounds[0], Color.White);
 
             if (this.LeftHand != null)

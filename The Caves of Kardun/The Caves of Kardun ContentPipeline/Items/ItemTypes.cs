@@ -18,6 +18,7 @@ namespace The_Caves_of_Kardun
         Sword,
         Shield,
         Helmet,
-        Boots
+        Boots,
+        Ladder
     }
 }

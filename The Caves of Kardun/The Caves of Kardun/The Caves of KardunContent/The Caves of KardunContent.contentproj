@@ -105,9 +105,11 @@
       <Importer>ItemImporter</Importer>
       <Processor>ItemProcessor</Processor>
     </Compile>
-    <None Include="monsters.tcokm">
+    <Compile Include="monsters.tcokm">
       <Name>monsters</Name>
-    </None>
+      <Importer>MonsterImporter</Importer>
+      <Processor>MonsterProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Textures\Items\Gold\minGold.png">
@@ -413,8 +415,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Characters\cat.png">
-      <Name>cat</Name>
+    <Compile Include="Textures\Characters\tiger.png">
+      <Name>tiger</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -423,13 +425,13 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Characters\floatingEye.png">
-      <Name>floatingEye</Name>
+    <Compile Include="Textures\Characters\flyingEyee.png">
+      <Name>flyingEyee</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Textures\Characters\flyingSacuer.png">
-      <Name>flyingSacuer</Name>
+    <Compile Include="Textures\Characters\flyingSaucer.png">
+      <Name>flyingSaucer</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -463,6 +465,13 @@
       <Name>Blur</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Textures\Items\Ladder.png">
+      <Name>Ladder</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

@@ -26,6 +26,7 @@ namespace The_Caves_of_Kardun
         private int? randomSeed;
         private int amountOfRooms;
         private int maxFails;
+        private int itemsSpawned;
 
         private int[,] mapData;
         private Item[,] itemsData;
@@ -37,6 +38,10 @@ namespace The_Caves_of_Kardun
         private Texture2D floorTexture;
         private Texture2D wallTexture;
 
+        private MonsterData boss;
+        private List<MonsterData> monsterData = new List<MonsterData>();
+
+        private Item ladder;
         private List<Item> goldItems = new List<Item>();
         private List<Item> swordItems = new List<Item>();
         private List<Item> shieldItems = new List<Item>();
@@ -160,7 +165,20 @@ namespace The_Caves_of_Kardun
                     case ItemTypes.Helmet:
                         this.helmItems.Add(items[i]);
                         break;
+
+                    case ItemTypes.Ladder:
+                        this.ladder = items[i];
+                        break;
                 }
+            }
+
+            List<MonsterData> monsterData = this.contentManager.Load<List<MonsterData>>("monsters");
+            for (int i = 0; i < monsterData.Count; i++)
+            {
+                if (monsterData[i].Boss)
+                    this.boss = monsterData[i];
+                else
+                    this.monsterData.Add(monsterData[i]);
             }
 
             MakeLevel(this.amountOfRooms, this.maxFails);
@@ -175,14 +193,40 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
-        /// Resets every monster to their spawn tile.
+        /// Called when we should drop boss loot and spawn the ladder to the next level.
         /// </summary>
-        public void ResetMonstersSpawn()
+        public void DropBossLoot()
         {
-            for (int i = 0; i < this.monsters.Count; i++)
+            Point centerPos = this.rooms[this.BossRoomIndex].Center;
+            Point playerPos = TheCavesOfKardun.ConvertPositionToCell(this.Player.Center);
+
+            // 20% chance to spawn a helmet.
+
+            int itemSpawnPosIndex = -1;
+            if (random.Next(0, 10) > 0)
+                itemSpawnPosIndex = random.Next(0, 8);
+
+            Point[] lootSpawns = new Point[8];
+            lootSpawns[0] = new Point(centerPos.X, centerPos.Y - 2);
+            lootSpawns[1] = new Point(centerPos.X + 1, centerPos.Y - 1);
+            lootSpawns[2] = new Point(centerPos.X + 2, centerPos.Y);
+            lootSpawns[3] = new Point(centerPos.X + 1, centerPos.Y + 1);
+            lootSpawns[4] = new Point(centerPos.X, centerPos.Y + 2);
+            lootSpawns[5] = new Point(centerPos.X - 1, centerPos.Y + 1);
+            lootSpawns[6] = new Point(centerPos.X - 2, centerPos.Y);
+            lootSpawns[7] = new Point(centerPos.X - 1, centerPos.Y - 1);
+
+            for (int i = 0; i < lootSpawns.Length; i++)
             {
-                this.monsters[i].Position = TheCavesOfKardun.ConvertCellToPosition(this.monsters[i].SpawnTile);
+                if (i == itemSpawnPosIndex)
+                {
+                    this.itemsData[lootSpawns[i].X, lootSpawns[i].Y] = this.helmItems[random.Next(0, this.helmItems.Count)];
+                }
+                else
+                    this.itemsData[lootSpawns[i].X, lootSpawns[i].Y] = this.goldItems[random.Next(0, this.goldItems.Count)];
             }
+
+            this.itemsData[centerPos.X, centerPos.Y] = this.ladder;
         }
 
         /// <summary>
@@ -463,6 +507,7 @@ namespace The_Caves_of_Kardun
         /// <param name="maxFails"></param>
         private void MakeLevel(int amountOfRooms, int maxFails)
         {
+            this.itemsSpawned = 0;
             this.monsters.Clear();
             this.rooms.Clear();
             this.mapData = new int[mapDimensions.X, mapDimensions.Y];
@@ -504,6 +549,21 @@ namespace The_Caves_of_Kardun
             MakeWalls();
             SpawnObjects();
             SpawnMonsters();
+
+            SpawnBoss();
+        }
+
+        /// <summary>
+        /// Spawns the boss on the map.
+        /// </summary>
+        private void SpawnBoss()
+        {
+            Room bossRoom = this.rooms[this.BossRoomIndex];
+            Point centerTile = bossRoom.Center;
+
+            this.monsters.Add(new Monster(this.boss.Texture, centerTile, 0, this.boss.Health, this.boss.MinDamage, this.boss.MaxDamage, 
+                contentManager.Load<SpriteFont>("Fonts/combatFont")));
+            this.monsters[this.monsters.Count - 1].Boss = true;
         }
 
         /// <summary>
@@ -511,14 +571,13 @@ namespace The_Caves_of_Kardun
         /// </summary>
         private void SpawnMonsters()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 30; i++)
             {
                 int r = this.BossRoomIndex;
                 do
                 {
                     r = random.Next(1, this.rooms.Count);
                 } while (r == this.BossRoomIndex);
-                r = 2;
                 Room room = this.rooms[r];
 
                 Point floorTile = Point.Zero;
@@ -555,8 +614,10 @@ namespace The_Caves_of_Kardun
                 if (floorTile != Point.Zero)
                 {
                     // Skapa random(?) monster
-                    this.monsters.Add(new Monster(contentManager.Load<Texture2D>("Textures/Characters/spider"), floorTile, 500, 3, 1, 
-                        contentManager.Load<SpriteFont>("Fonts/combatFont")));
+                    int monsterDataIndex = random.Next(0, this.monsterData.Count);
+                    this.monsters.Add(new Monster(
+                        this.monsterData[monsterDataIndex].Texture, floorTile, 500, this.monsterData[monsterDataIndex].Health, 
+                        this.monsterData[monsterDataIndex].MinDamage, this.monsterData[monsterDataIndex].MaxDamage, contentManager.Load<SpriteFont>("Fonts/combatFont")));
                 }
             }
         }
@@ -568,12 +629,29 @@ namespace The_Caves_of_Kardun
         {
             for (int i = 0; i < 100; i++)
             {
-                Item item;
+                Item item = null;
 
                 int types = random.Next(0, 10);
-                if (types > 8)
+                if (types > 8 && this.itemsSpawned < 2)
                 {
-                    item = this.swordItems[random.Next(0, this.swordItems.Count)];
+                    int itemType = random.Next(0, 3);
+
+                    switch (itemType)
+                    {
+                        case 0:
+                            item = this.swordItems[random.Next(0, this.swordItems.Count)];
+                            break;
+
+                        case 1:
+                            item = this.shieldItems[random.Next(0, this.shieldItems.Count)];
+                            break;
+                        
+                        case 2:
+                            item = this.bootsItems[random.Next(0, this.bootsItems.Count)];
+                            break;
+                    }
+
+                    this.itemsSpawned++;
                 }
                 else
                     item = this.goldItems[random.Next(0, this.goldItems.Count)];

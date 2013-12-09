@@ -6,6 +6,7 @@
 		<hp>3</hp>
 		<minDmg>1</minDmg>
 		<maxDmg>1</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -15,6 +16,7 @@
 		<hp>3</hp>
 		<minDmg>1</minDmg>
 		<maxDmg>2</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -24,6 +26,7 @@
 		<hp>3</hp>
 		<minDmg>2</minDmg>
 		<maxDmg>3</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -33,6 +36,7 @@
 		<hp>2</hp>
 		<minDmg>3</minDmg>
 		<maxDmg>5</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -42,6 +46,7 @@
 		<hp>1</hp>
 		<minDmg>5</minDmg>
 		<maxDmg>10</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -51,6 +56,7 @@
 		<hp>10</hp>
 		<minDmg>8</minDmg>
 		<maxDmg>10</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -60,6 +66,7 @@
 		<hp>10</hp>
 		<minDmg>10</minDmg>
 		<maxDmg>15</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -69,6 +76,7 @@
 		<hp>15</hp>
 		<minDmg>12</minDmg>
 		<maxDmg>15</maxDmg>
+    <boss>false</boss>
 	</monster>
 
 	<monster>
@@ -78,5 +86,6 @@
 		<hp>50</hp>
 		<minDmg>9</minDmg>
 		<maxDmg>10</maxDmg>
+    <boss>true</boss>
 	</monster>	
 </monsters>

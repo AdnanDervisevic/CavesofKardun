@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Characters\MonsterData.cs" />
     <Compile Include="Items\ItemImporter.cs" />
     <Compile Include="Items\ItemProcessor.cs" />
     <Compile Include="Items\Item.cs" />
@@ -59,6 +60,8 @@
     <Compile Include="Items\ItemTypes.cs" />
     <Compile Include="Items\ItemWriter.cs" />
     <Compile Include="Monsters\MonsterImporter.cs" />
+    <Compile Include="Monsters\MonsterProcessor.cs" />
+    <Compile Include="Monsters\MonsterWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

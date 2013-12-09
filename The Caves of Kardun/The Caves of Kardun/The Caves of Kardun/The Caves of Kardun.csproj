@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\Data\MonsterData.cs" />
     <Compile Include="Characters\Equipment.cs" />
     <Compile Include="Characters\Inventory.cs" />
     <Compile Include="Characters\Monster.cs" />

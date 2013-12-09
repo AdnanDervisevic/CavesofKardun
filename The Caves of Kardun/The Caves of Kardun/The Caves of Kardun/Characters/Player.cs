@@ -171,7 +171,7 @@ namespace The_Caves_of_Kardun
         {
             this.random = new Random();
             this.PositiveTraits = PositiveTraits.SuperStrength | The_Caves_of_Kardun.PositiveTraits.SuperLife | PositiveTraits.Ambidextrous | PositiveTraits.TwentyTwentyVision | PositiveTraits.ElvenSpeed;
-            this.NegativeTraits = NegativeTraits.ColourBlind | NegativeTraits.MissingAnEye | NegativeTraits.MissingAnArm | NegativeTraits.NearSighted | NegativeTraits.SenseOfDirection;
+            //this.NegativeTraits = NegativeTraits.ColourBlind | NegativeTraits.MissingAnEye | NegativeTraits.MissingAnArm | NegativeTraits.NearSighted | NegativeTraits.SenseOfDirection;
         }
 
         #endregion

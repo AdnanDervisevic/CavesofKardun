@@ -109,6 +109,9 @@ namespace The_Caves_of_Kardun
         /// <returns>Returns true if the item was added; otherwise false.</returns>
         public bool TryAddItem(Item item)
         {
+            if (item.Type == ItemTypes.Ladder)
+                return false;
+
             if (item.Type == ItemTypes.Gold)
             {
                 int minGold = Math.Min(item.MinGold, item.MaxGold + 1);

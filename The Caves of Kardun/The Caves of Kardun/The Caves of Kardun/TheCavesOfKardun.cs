@@ -48,8 +48,10 @@ namespace The_Caves_of_Kardun
         private Player player;
         private Level level;
 
+        private Effect blurEffect;
         private Effect grayscaleEffect;
 
+        private RenderTarget2D defaultRenderTarget;
         private RenderTarget2D minimapRenderTarget;
         private Texture2D minimapTexture;
         private bool updateMiniMap;
@@ -137,6 +139,7 @@ namespace The_Caves_of_Kardun
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.minimapRenderTarget = new RenderTarget2D(GraphicsDevice, 200, 200, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            this.defaultRenderTarget = new RenderTarget2D(GraphicsDevice, 1280, 720, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             base.Initialize();
         }
 
@@ -154,14 +157,15 @@ namespace The_Caves_of_Kardun
             this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
 
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
+                this.level.Rooms[this.level.BossRoomIndex].Center.X * TheCavesOfKardun.TileWidth,
+                this.level.Rooms[this.level.BossRoomIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
             this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
 
             this.grayscaleEffect = Content.Load<Effect>("Shaders/Grayscale");
+            this.blurEffect = Content.Load<Effect>("Shaders/Blur");
         }
 
         /// <summary>
@@ -216,8 +220,6 @@ namespace The_Caves_of_Kardun
                 this.player.Position = new Vector2(
                     this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                     this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
-
-                this.level.ResetMonstersSpawn();
             }
 
             if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Escape) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Escape))
@@ -251,11 +253,13 @@ namespace The_Caves_of_Kardun
             this.cameraPosition.X = this.player.Center.X - GraphicsDevice.Viewport.Width / 2;
             this.cameraPosition.Y = this.player.Center.Y - GraphicsDevice.Viewport.Height / 2;
 
+            GraphicsDevice.SetRenderTarget(this.defaultRenderTarget);
             GraphicsDevice.Clear(Color.Black);
 
-            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind)
+            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind && 
+                (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
-            else
+            else 
                 spriteBatch.Begin();
 
             this.level.Draw(gameTime, spriteBatch, cameraPosition, this.player.Position, TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition), TheCavesOfKardun.ConvertPositionToCell(this.cameraPosition + new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height) + new Vector2(TheCavesOfKardun.TileWidth)));
@@ -264,17 +268,43 @@ namespace The_Caves_of_Kardun
                 this.level.Monsters[i].Draw(gameTime, spriteBatch, cameraPosition);
 
             spriteBatch.End();
-            spriteBatch.Begin();
-            spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
-            spriteBatch.End();
 
-            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind)
+            // Om spelaren inte har synproblem eller saknar ett öga samt har optics, rita inte ut hover.
+            if (((this.player.NegativeTraits & NegativeTraits.NearSighted) != NegativeTraits.NearSighted) && 
+                ((this.player.NegativeTraits & NegativeTraits.MissingAnEye) != NegativeTraits.MissingAnEye) && 
+                (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Sight))
+            {
+
+            }
+            else
+            {
+                spriteBatch.Begin();
+                spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
+                spriteBatch.End();
+            }
+
+            if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind &&
+                (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
                 spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, grayscaleEffect);
             else
                 spriteBatch.Begin();
 
             this.player.Draw(gameTime, spriteBatch, cameraPosition);
-            spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
+
+            if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
+                spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
+
+            spriteBatch.End();
+
+            GraphicsDevice.SetRenderTarget(null);
+
+            if ((this.player.NegativeTraits & NegativeTraits.NearSighted) == NegativeTraits.NearSighted && 
+                (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Sight))
+                spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, blurEffect);
+            else
+                spriteBatch.Begin();
+
+            spriteBatch.Draw((Texture2D)this.defaultRenderTarget, Vector2.Zero, Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -427,12 +457,23 @@ namespace The_Caves_of_Kardun
                         this.player.Attacks = monster;
                         this.level.UpdateMonstersAI(gameTime, this.player);
                         this.player.Attack(gameTime, monster);
+                        
+                        if (monster.Boss == true && !monster.Alive)
+                            this.level.DropBossLoot();
+
                         this.player.Attacks = null;
                     }
                 }
                 else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterItem(targetTile, out item)) // Check if we clicked on an item.
                 {
-                    if (this.player.PickUp(item))
+                    if (item.Type == ItemTypes.Ladder)
+                    {
+                        this.level.RecreateLevel();
+                        this.player.Position = new Vector2(
+                            this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
+                            this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
+                    }
+                    else if (this.player.PickUp(item))
                     {
                         this.level.RemoveItemFromTile(targetTile);
                         this.level.UpdateMonstersAI(gameTime, this.player);

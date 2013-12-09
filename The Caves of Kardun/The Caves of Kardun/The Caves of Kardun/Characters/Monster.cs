@@ -6,12 +6,27 @@ namespace The_Caves_of_Kardun
 {
     public sealed class Monster : Character
     {
+        #region Fields
+
+        private Random random;
+
+        private int minDamage;
+        private int maxDamage;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
         /// Gets the damage that the monster should take on his enemy.
         /// </summary>
-        public int Damage { get; private set; }
+        public int Damage
+        {
+            get
+            {
+                return random.Next(minDamage, maxDamage + 1);
+            }
+        }
 
         /// <summary>
         /// Gets the amount of tiles to move.
@@ -31,6 +46,11 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public Point SpawnTile {  get; private set; }
 
+        /// <summary>
+        /// Gets or sets whether this monster is a boss.
+        /// </summary>
+        public bool Boss { get; set; }
+
         #endregion
 
         #region Constructors
@@ -47,10 +67,12 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the monster.</param>
         /// <param name="position">The position of the monster.</param>
         /// <param name="speed">The speed of the monster.</param>
-        public Monster(Texture2D texture, Point spawnTile, float speed, int baseHealth, int baseDamage, SpriteFont combatFont)
+        public Monster(Texture2D texture, Point spawnTile, float speed, int baseHealth, int minDamage, int maxDamage, SpriteFont combatFont)
             : base(texture, TheCavesOfKardun.ConvertCellToPosition(spawnTile), speed, baseHealth, combatFont) 
         {
-            this.Damage = baseDamage;
+            this.random = new Random();
+            this.minDamage = minDamage;
+            this.maxDamage = maxDamage;
             this.SpawnTile = spawnTile;
         }
 
@@ -97,6 +119,9 @@ namespace The_Caves_of_Kardun
                 return this.Damage;
             else // If the monster is not close to the player, update the AI.
             {
+                if (Boss)
+                    return 0;
+
                 // Compare playerTile and monsterTile to see how far away they're from each other,
                 // if they're close enough calculate the motion the monster should have and
                 // then call if (!level.CanWalk(monster, calculatedMotion, 1, out monster.TargetPosition))
@@ -288,7 +313,6 @@ namespace The_Caves_of_Kardun
             }
             return 0; // Returns zero because we're not doing any damage to the player.
         }
-
 
         #endregion
     }

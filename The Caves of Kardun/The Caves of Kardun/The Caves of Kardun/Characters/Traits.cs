@@ -8,11 +8,11 @@ namespace The_Caves_of_Kardun
     [Flags]
     public enum PositiveTraits
     {
-        SuperStrength,
-        SuperLife,
-        ElvenSpeed,
-        TwentyTwentyVision,
-        Ambidextrous,
+        SuperStrength       = 1,
+        SuperLife           = 2,
+        ElvenSpeed          = 4,
+        TwentyTwentyVision  = 8,
+        Ambidextrous        = 16,
     }
 
     /// <summary>
@@ -21,10 +21,10 @@ namespace The_Caves_of_Kardun
     [Flags]
     public enum NegativeTraits
     {
-        ColourBlind,
-        MissingAnEye,
-        MissingAnArm,
-        NearSighted,
-        SenseOfDirection,
+        ColourBlind         = 1,
+        MissingAnEye        = 2,
+        MissingAnArm        = 4,
+        NearSighted         = 8,
+        SenseOfDirection    = 16,
     }
 }

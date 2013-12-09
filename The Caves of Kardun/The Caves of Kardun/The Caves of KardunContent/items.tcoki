@@ -282,4 +282,9 @@
     <minGold>45</minGold>
     <maxGold>70</maxGold>
   </item>
+
+  <item>
+    <overworldTextureName>Textures/Items/Ladder</overworldTextureName>
+    <type>Ladder</type>
+  </item>
 </items>
