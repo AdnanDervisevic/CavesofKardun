@@ -19,7 +19,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 #endregion End of Using Statements
 
 namespace The_Caves_of_Kardun
@@ -65,6 +64,13 @@ namespace The_Caves_of_Kardun
         private static KeyboardState currentKeyboardState;
         private static KeyboardState previousKeyboardState;
 
+        private SoundEffectInstance instancebackgroundMusic;
+        private SoundEffect soundBackgroundMusic;
+        private SoundEffect soundCoinPickup;
+        private SoundEffect soundItemPickup;
+        private SoundEffect soundSwordAttack;
+        private static SoundEffect soundMonsterAttack;
+
         #endregion
 
         #region Properties
@@ -103,6 +109,14 @@ namespace The_Caves_of_Kardun
         public static KeyboardState PreviousKeyboardState
         {
             get { return previousKeyboardState; }
+        }
+
+        /// <summary>
+        /// Monster sound to play, not used right now because of timing issue
+        /// </summary>
+        public static SoundEffect monsterSound
+        {
+            get { return soundMonsterAttack; }
         }
 
         #endregion
@@ -147,7 +161,7 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
-        /// LoadContent will be called once per 
+        /// LoadContent will be called once per game
         /// and is the place to load
         /// all of your content.
         /// </summary>
@@ -167,6 +181,17 @@ namespace The_Caves_of_Kardun
             this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
+
+            this.soundBackgroundMusic = Content.Load<SoundEffect>("Audio\\music");
+            this.soundCoinPickup = Content.Load<SoundEffect>("Audio\\coinPickup");
+            this.soundItemPickup = Content.Load<SoundEffect>("Audio\\itemPickUp");
+            this.soundSwordAttack = Content.Load<SoundEffect>("Audio\\swordAttack");
+            soundMonsterAttack = Content.Load<SoundEffect>("Audio\\monsterAttack");
+
+            instancebackgroundMusic = soundBackgroundMusic.CreateInstance();
+            instancebackgroundMusic.Volume = 0.1f;
+            instancebackgroundMusic.IsLooped = true;
+            instancebackgroundMusic.Play();
 
             this.grayscaleEffect = Content.Load<Effect>("Shaders/Grayscale");
             this.blurEffect = Content.Load<Effect>("Shaders/Blur");
@@ -207,7 +232,6 @@ namespace The_Caves_of_Kardun
         #endregion
 
         #region Public Methods
-
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -471,6 +495,8 @@ namespace The_Caves_of_Kardun
                         this.player.Attacks = monster;
                         this.level.UpdateMonstersAI(gameTime, this.player);
                         this.player.Attack(gameTime, monster);
+
+                        this.soundSwordAttack.Play();
                         
                         if (monster.Boss == true && !monster.Alive)
                             this.level.DropBossLoot();
@@ -490,6 +516,11 @@ namespace The_Caves_of_Kardun
                     else if (this.player.PickUp(item))
                     {
                         this.level.RemoveItemFromTile(targetTile);
+                        if (item.Type == ItemTypes.Gold)
+                            this.soundCoinPickup.Play();
+                        else
+                            this.soundItemPickup.Play();
+
                         this.level.UpdateMonstersAI(gameTime, this.player);
                     }
                 }
