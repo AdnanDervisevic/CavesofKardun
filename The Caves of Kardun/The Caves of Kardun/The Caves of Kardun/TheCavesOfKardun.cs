@@ -165,7 +165,7 @@ namespace The_Caves_of_Kardun
             this.defaultRenderTarget = new RenderTarget2D(GraphicsDevice, 1280, 720, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
             this.deathScreenScorePosition = new Vector2(600, GraphicsDevice.Viewport.Height - 280);
-
+            this.updateMiniMap = true;
             base.Initialize();
         }
 
@@ -192,7 +192,7 @@ namespace The_Caves_of_Kardun
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
-            //this.player.GodMode = true;
+            this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
 
@@ -371,7 +371,7 @@ namespace The_Caves_of_Kardun
 
                 this.player.Draw(gameTime, spriteBatch, cameraPosition);
 
-                if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
+                //if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
                     spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
 
                 spriteBatch.End();
@@ -525,12 +525,7 @@ namespace The_Caves_of_Kardun
                 Monster monster;
                 Item item;
                 
-                if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Check if we can walk.
-                {
-                    this.player.Motion = motion;
-                    this.level.UpdateMonstersAI(gameTime, this.player);
-                }
-                else if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
+                if (targetTile != Point.Zero && amountOfTiles == 1 && this.level.EncounterMonster(targetTile, out monster)) // Check if we've clicked on a monster.
                 {
                     // We can't spam kill him, wait for the combat text to fade out.
                     if (string.IsNullOrWhiteSpace(this.player.CombatText))
@@ -566,6 +561,11 @@ namespace The_Caves_of_Kardun
 
                         this.level.UpdateMonstersAI(gameTime, this.player);
                     }
+                }
+                else if (this.level.CanWalk(this.player, motion, amountOfTiles, out this.player.TargetPosition)) // Check if we can walk.
+                {
+                    this.player.Motion = motion;
+                    this.level.UpdateMonstersAI(gameTime, this.player);
                 }
             }
         }

@@ -199,9 +199,29 @@ namespace The_Caves_of_Kardun
             : base(texture, position, speed, health, combatFont) 
         {
             this.random = new Random();
+            int[] table = new int[] { 1, 2, 4, 8, 16 };
 
-            this.PositiveTraits = PositiveTraits.SuperStrength | The_Caves_of_Kardun.PositiveTraits.SuperLife | PositiveTraits.Ambidextrous | PositiveTraits.TwentyTwentyVision | PositiveTraits.ElvenSpeed;
-            this.NegativeTraits = NegativeTraits.ColourBlind | NegativeTraits.MissingAnEye | NegativeTraits.MissingAnArm | NegativeTraits.NearSighted | NegativeTraits.SenseOfDirection;
+            int traits = 0;
+            do
+            {
+                PositiveTraits trait = (PositiveTraits)table[random.Next(0, 6)];
+                if ((this.PositiveTraits & trait) != trait)
+                {
+                    traits++;
+                    this.PositiveTraits |= trait;
+                }
+            } while (traits < 2);
+
+            traits = 0;
+            do
+            {
+                NegativeTraits trait = (NegativeTraits)table[random.Next(0, 6)];
+                if ((this.NegativeTraits & trait) != trait)
+                {
+                    traits++;
+                    this.NegativeTraits |= trait;
+                }
+            } while (traits < 2);
         }
 
         #endregion

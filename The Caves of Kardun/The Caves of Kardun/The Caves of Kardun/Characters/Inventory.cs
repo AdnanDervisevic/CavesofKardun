@@ -182,9 +182,7 @@ namespace The_Caves_of_Kardun
                         if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
                             // Equips the item and moves the old item to the inventory.
-                            bool AllowTwoSwords = false;
-
-                            AllowTwoSwords = ((this.player.PositiveTraits & PositiveTraits.Ambidextrous) == this.player.PositiveTraits) ? true : false;
+                            bool AllowTwoSwords = AllowTwoSwords = (((this.player.PositiveTraits & PositiveTraits.Ambidextrous) == PositiveTraits.Ambidextrous) && ((this.player.NegativeTraits & NegativeTraits.MissingAnArm) != NegativeTraits.MissingAnArm)) ? true : false;
 
                             if (AllowTwoSwords && this.hover.Type == ItemTypes.Sword)
                             {

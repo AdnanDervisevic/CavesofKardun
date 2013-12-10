@@ -7,7 +7,7 @@ namespace The_Caves_of_Kardun
     /// </summary>
     [Flags]
     public enum PositiveTraits
-    {
+    { 
         SuperStrength       = 1,
         SuperLife           = 2,
         ElvenSpeed          = 4,

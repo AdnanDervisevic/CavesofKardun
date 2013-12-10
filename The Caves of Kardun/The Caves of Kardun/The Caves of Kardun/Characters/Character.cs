@@ -62,11 +62,6 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
-        /// Gets or sets the direction.
-        /// </summary>
-        public Direction Direction { get; set; }
-
-        /// <summary>
         /// Gets or sets whether this character should be able to die.
         /// </summary>
         public bool GodMode { get; set; }
@@ -157,8 +152,7 @@ namespace The_Caves_of_Kardun
             // If we're alive then draw our texture.
             if (this.Alive)
             {
-                spriteBatch.Draw(this.texture,
-                new Rectangle(
+                spriteBatch.Draw(this.texture, new Rectangle(
                     (int)(this.Position.X - cameraPosition.X),
                     (int)(this.Position.Y - cameraPosition.Y),
                     TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight), Color.White);

@@ -23,7 +23,7 @@ namespace The_Caves_of_Kardun
     {
         #region Fields
 
-        private static int levelCount = 3;
+        private static int levelCount = 1;
 
         private int? randomSeed;
 
@@ -59,6 +59,11 @@ namespace The_Caves_of_Kardun
         #endregion
 
         #region Properties
+        
+        /// <summary>
+        /// Gets the level count.
+        /// </summary>
+        public static int LevelCount { get { return Level.levelCount; } }
 
         /// <summary>
         /// Gets the map data.
@@ -271,16 +276,19 @@ namespace The_Caves_of_Kardun
             Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(character.Center);
             targetPosition = Vector2.Zero;
 
-            if ((this.Player.NegativeTraits & NegativeTraits.SenseOfDirection) == NegativeTraits.SenseOfDirection)
+            if (character is Player)
             {
-                if (motion.X == 1)
-                    motion.X = -1;
-                else if (motion.X == -1)
-                    motion.X = 1;
-                else if (motion.Y == 1)
-                    motion.Y = -1;
-                else if (motion.Y == -1)
-                    motion.Y = 1;
+                if ((this.Player.NegativeTraits & NegativeTraits.SenseOfDirection) == NegativeTraits.SenseOfDirection)
+                {
+                    if (motion.X == 1)
+                        motion.X = -1;
+                    else if (motion.X == -1)
+                        motion.X = 1;
+                    else if (motion.Y == 1)
+                        motion.Y = -1;
+                    else if (motion.Y == -1)
+                        motion.Y = 1;
+                }
             }
 
             if (motion.X == 1 && motion.Y == 0)

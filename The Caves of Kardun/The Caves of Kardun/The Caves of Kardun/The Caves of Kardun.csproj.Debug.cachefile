@@ -78,3 +78,6 @@ Content\Audio\swordAttack.xnb
 Content\deathScreen.xnb
 Content\Fonts\deathScreenFont.xnb
 Content\Textures\Characters\player.xnb
+Content\Textures\HoverLeft.xnb
+Content\Textures\HoverRight.xnb
+Content\Textures\OneArmEquipment.xnb
