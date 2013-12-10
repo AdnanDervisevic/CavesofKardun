@@ -204,7 +204,7 @@ namespace The_Caves_of_Kardun
             int traits = 0;
             do
             {
-                PositiveTraits trait = (PositiveTraits)table[random.Next(0, 6)];
+                PositiveTraits trait = (PositiveTraits)table[random.Next(0, 5)];
                 if ((this.PositiveTraits & trait) != trait)
                 {
                     traits++;
@@ -215,7 +215,7 @@ namespace The_Caves_of_Kardun
             traits = 0;
             do
             {
-                NegativeTraits trait = (NegativeTraits)table[random.Next(0, 6)];
+                NegativeTraits trait = (NegativeTraits)table[random.Next(0, 5)];
                 if ((this.NegativeTraits & trait) != trait)
                 {
                     traits++;

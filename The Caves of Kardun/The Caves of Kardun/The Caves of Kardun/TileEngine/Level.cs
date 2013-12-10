@@ -210,7 +210,8 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public void NextLevel()
         {
-            levelCount++;
+            Level.levelCount++;
+            this.Player.DamageTaken = 0;
             MakeLevel(this.amountOfRooms, this.maxFails);
         }
 
@@ -469,6 +470,9 @@ namespace The_Caves_of_Kardun
         /// <returns>Returns true if the player clicked on an item; otherwise false.</returns>
         public bool EncounterItem(Point targetTile, out Item item)
         {
+            item = this.shieldItems[3];
+            return true;
+
             item = this.itemsData[targetTile.X, targetTile.Y];
             
             if (item != null)

@@ -57,14 +57,15 @@ namespace The_Caves_of_Kardun
         public Equipment(Player player, Vector2 positionOffset, Texture2D backgroundTexture)
         {
             this.player = player;
-            this.bounds = new Rectangle[4];
+            this.bounds = new Rectangle[5];
             this.positionOffset = positionOffset;
             this.backgroundTexture = backgroundTexture;
 
-            this.bounds[0] = new Rectangle((int)positionOffset.X + 44, (int)positionOffset.Y + 2, 80, 80);
-            this.bounds[1] = new Rectangle((int)positionOffset.X + 2, (int)positionOffset.Y + 84, 80, 80);
-            this.bounds[2] = new Rectangle((int)positionOffset.X + 82, (int)positionOffset.Y + 84, 80, 80);
-            this.bounds[3] = new Rectangle((int)positionOffset.X + 44, (int)positionOffset.Y + 166, 80, 80);
+            this.bounds[0] = new Rectangle((int)positionOffset.X, (int)positionOffset.Y, 162, 246);
+            this.bounds[1] = new Rectangle((int)positionOffset.X + 44, (int)positionOffset.Y + 2, 80, 80);
+            this.bounds[2] = new Rectangle((int)positionOffset.X + 2, (int)positionOffset.Y + 84, 80, 80);
+            this.bounds[3] = new Rectangle((int)positionOffset.X + 82, (int)positionOffset.Y + 84, 80, 80);
+            this.bounds[4] = new Rectangle((int)positionOffset.X + 44, (int)positionOffset.Y + 166, 80, 80);
         }
 
         #endregion
@@ -77,40 +78,53 @@ namespace The_Caves_of_Kardun
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Update(GameTime gameTime)
         {
-            for (int i = 0; i < this.bounds.Length; i++)
+            bool hoverNothing = true;
+
+            if (this.bounds[0].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
             {
-                if (this.bounds[i].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
+                for (int i = 1; i < this.bounds.Length; i++)
                 {
-                    Item item = IndexToItem(i);
-                    this.hover = item;
-
-                    if (this.hover == null)
-                        return;
-
-                    if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
+                    if (this.bounds[i].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
                     {
-                        // Unequip the item amd move it to the inventory, if full do nothing.
-                        if (this.player.UnequipItem(item))
+                        Item item = IndexToItem(i);
+                        this.hover = item;
+
+                        if (this.hover == null)
                         {
-                            if (i == 0)
-                                this.Helmet = null;
-                            else if (i == 1)
-                                this.LeftHand = null;
-                            else if (i == 2)
-                                this.RightHand = null;
-                            else if (i == 3)
-                                this.Boots = null;
+                            Tooltip.Hide();
+                            return;
                         }
-                        else
+
+                        Tooltip.Show(this.hover);
+                        hoverNothing = false;
+
+                        if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
-                            // Error our bag is full :!
-                            throw new Exception("Bag is full.!");
+                            // Unequip the item amd move it to the inventory, if full do nothing.
+                            if (this.player.UnequipItem(item))
+                            {
+                                if (i == 1)
+                                    this.Helmet = null;
+                                else if (i == 2)
+                                    this.LeftHand = null;
+                                else if (i == 3)
+                                    this.RightHand = null;
+                                else if (i == 4)
+                                    this.Boots = null;
+                            }
+                            else
+                            {
+                                // Error our bag is full :!
+                                throw new Exception("Bag is full.!");
+                            }
                         }
                     }
                 }
-                else
+
+                if (hoverNothing)
                 {
                     this.hover = null;
+                    Tooltip.Hide();
                 }
             }
         }
@@ -123,17 +137,17 @@ namespace The_Caves_of_Kardun
         {
             spriteBatch.Draw(this.backgroundTexture, this.positionOffset, Color.White);
 
-            if (this.Helmet != null && this.Helmet.Texture != null)
-                spriteBatch.Draw(this.Helmet.Texture, this.bounds[0], Color.White);
+            if (this.Helmet != null)
+                spriteBatch.Draw(this.Helmet.Texture, this.bounds[1], Color.White);
 
             if (this.LeftHand != null)
-                spriteBatch.Draw(this.LeftHand.Texture, this.bounds[1], Color.White);
+                spriteBatch.Draw(this.LeftHand.Texture, this.bounds[2], Color.White);
 
             if (this.RightHand != null)
-                spriteBatch.Draw(this.RightHand.Texture, this.bounds[2], Color.White);
+                spriteBatch.Draw(this.RightHand.Texture, this.bounds[3], Color.White);
 
             if (this.Boots != null)
-                spriteBatch.Draw(this.Boots.Texture, this.bounds[3], Color.White);
+                spriteBatch.Draw(this.Boots.Texture, this.bounds[4], Color.White);
         }
 
         #endregion
@@ -149,13 +163,13 @@ namespace The_Caves_of_Kardun
         {
             switch (index)
             {
-                case 0:
-                    return this.Helmet;
                 case 1:
-                    return this.LeftHand;
+                    return this.Helmet;
                 case 2:
-                    return this.RightHand;
+                    return this.LeftHand;
                 case 3:
+                    return this.RightHand;
+                case 4:
                     return this.Boots;
 
                 default:

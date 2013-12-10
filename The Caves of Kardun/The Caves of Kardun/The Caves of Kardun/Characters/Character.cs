@@ -45,7 +45,7 @@ namespace The_Caves_of_Kardun
         /// <summary>
         /// Gets the total damage taken to this character.
         /// </summary>
-        public int DamageTaken { get; protected set; }
+        public int DamageTaken { get; set; }
 
         /// <summary>
         /// Determines if the character is alive.

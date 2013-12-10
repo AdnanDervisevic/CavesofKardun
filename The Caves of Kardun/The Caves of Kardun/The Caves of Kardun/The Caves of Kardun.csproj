@@ -101,6 +101,7 @@
     <Compile Include="TheCavesOfKardun.cs" />
     <Compile Include="TileEngine\Level.cs" />
     <Compile Include="TileEngine\Room.cs" />
+    <Compile Include="Tooltip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

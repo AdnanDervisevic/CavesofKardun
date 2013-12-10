@@ -81,3 +81,6 @@ Content\Textures\Characters\player.xnb
 Content\Textures\HoverLeft.xnb
 Content\Textures\HoverRight.xnb
 Content\Textures\OneArmEquipment.xnb
+Content\Fonts\titleFont.xnb
+Content\Fonts\textFont.xnb
+Content\Textures\traits.xnb

@@ -144,6 +144,9 @@ namespace The_Caves_of_Kardun
 
             if (this.itemIndexClicked >= 0)
             {
+                this.hover = null;
+                Tooltip.Hide();
+
                 if (this.menuBounds[0].Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
                 {
                     for (int i = 1; i < this.menuBounds.Length; i++)
@@ -169,6 +172,8 @@ namespace The_Caves_of_Kardun
             }
             else
             {
+                bool hoverNothing = true;
+
                 for (int i = 0; i < Inventory.MaxSlots; i++)
                 {
                     // Check if we intersects with any item slot.
@@ -177,7 +182,12 @@ namespace The_Caves_of_Kardun
                         this.hover = this.items[i];
 
                         if (this.hover == null)
+                        {
+                            Tooltip.Hide();
                             return;
+                        }
+                        hoverNothing = false;
+                        Tooltip.Show(this.hover);
 
                         if (TheCavesOfKardun.CurrentMouseState.LeftButton == ButtonState.Pressed && TheCavesOfKardun.PreviousMouseState.LeftButton == ButtonState.Released)
                         {
@@ -213,10 +223,12 @@ namespace The_Caves_of_Kardun
                             this.itemIndexClicked = i;
                         }
                     }
-                    else
-                    {
-                        this.hover = null;
-                    }
+                }
+
+                if (hoverNothing)
+                {
+                    this.hover = null;
+                    Tooltip.Hide();
                 }
             }
         }

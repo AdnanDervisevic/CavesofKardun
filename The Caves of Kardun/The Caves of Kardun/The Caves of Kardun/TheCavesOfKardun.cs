@@ -1,10 +1,10 @@
 ﻿#region File Description
-//----------------------------------------------------------------------------
-// Game1.cs
-//
-// Copyright (C) . All rights reserved.
-//----------------------------------------------------------------------------
-#endregion End of File Description
+    //////////////////////////////////////////////////////////////////////////
+   // TheCavesOfKardun                                                     //
+  //                                                                      //
+ // Copyright (C) Untitled. All Rights reserved.                         //
+//////////////////////////////////////////////////////////////////////////
+#endregion
 
 #region Using Statements
 // System
@@ -30,8 +30,9 @@ namespace The_Caves_of_Kardun
     {
         #region Consts
 
-        //public const int TileWidth = 96;
-        //public const int TileHeight = 96;
+        public const int SCREENWIDTH = 1280;
+        public const int SCREENHEIGHT = 720;
+        public const bool FULLSCREEN = false;
 
         #endregion
 
@@ -55,6 +56,9 @@ namespace The_Caves_of_Kardun
         private Vector2 cameraPosition;
         public Player player;
         private Level level;
+
+        private Texture2D traitsTexture;
+        private Rectangle traitsPosition;
 
         private Effect blurEffect;
         private Effect grayscaleEffect;
@@ -139,16 +143,16 @@ namespace The_Caves_of_Kardun
             TheCavesOfKardun.TileHeight = 96;
 
             this.graphicsDeviceManager = new GraphicsDeviceManager(this);
-            graphicsDeviceManager.PreferredBackBufferWidth = 1280;
-            graphicsDeviceManager.PreferredBackBufferHeight = 720;
-            //graphicsDeviceManager.IsFullScreen = true;
+            graphicsDeviceManager.PreferredBackBufferWidth = TheCavesOfKardun.SCREENWIDTH;
+            graphicsDeviceManager.PreferredBackBufferHeight = TheCavesOfKardun.SCREENHEIGHT;
+            graphicsDeviceManager.IsFullScreen = TheCavesOfKardun.FULLSCREEN;
             graphicsDeviceManager.ApplyChanges();
             IsMouseVisible = true;
         }
 
         #endregion
 
-        #region Methods
+        #region Public Methods
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -162,10 +166,11 @@ namespace The_Caves_of_Kardun
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             this.minimapRenderTarget = new RenderTarget2D(GraphicsDevice, 200, 200, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
-            this.defaultRenderTarget = new RenderTarget2D(GraphicsDevice, 1280, 720, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            this.defaultRenderTarget = new RenderTarget2D(GraphicsDevice, TheCavesOfKardun.SCREENWIDTH, TheCavesOfKardun.SCREENHEIGHT, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
             this.deathScreenScorePosition = new Vector2(600, GraphicsDevice.Viewport.Height - 280);
             this.updateMiniMap = true;
+            this.traitsPosition = new Rectangle(150, GraphicsDevice.Viewport.Height - 80, 167, 76);
             base.Initialize();
         }
 
@@ -176,7 +181,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         protected override void LoadContent()
         {
-
+            Tooltip.Initialize(GraphicsDevice, Content.Load<SpriteFont>("Fonts/titleFont"), Content.Load<SpriteFont>("Fonts/textFont"));
             this.level = new Level(this.Content, new Point(75, 75), null, 20, 4, 100);
             this.level.LoadContent();
 
@@ -185,6 +190,7 @@ namespace The_Caves_of_Kardun
             this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
             this.leftEyeTexture = Content.Load<Texture2D>("Textures/HoverLeft");
             this.rightEyeTexture = Content.Load<Texture2D>("Textures/HoverRight");
+            this.traitsTexture = Content.Load<Texture2D>("Textures/traits");
 
             this.deathScreenFont = Content.Load<SpriteFont>("Fonts/deathScreenFont");
 
@@ -242,9 +248,6 @@ namespace The_Caves_of_Kardun
                 cell.Y * TheCavesOfKardun.TileHeight);
         }
 
-        #endregion
-
-        #region Public Methods
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -281,6 +284,17 @@ namespace The_Caves_of_Kardun
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
                 }
+            }
+            bool showOnce = false;
+            if (this.traitsPosition.Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
+            {
+                Tooltip.Show(this.player.PositiveTraits, this.player.NegativeTraits);
+                showOnce = true;
+            }
+            else
+            {
+                if (showOnce)
+                    Tooltip.Hide();
             }
 
             TheCavesOfKardun.previousKeyboardState = TheCavesOfKardun.currentKeyboardState;
@@ -371,8 +385,11 @@ namespace The_Caves_of_Kardun
 
                 this.player.Draw(gameTime, spriteBatch, cameraPosition);
 
-                //if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
+                if (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Minimap)
                     spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
+
+                spriteBatch.Draw(this.traitsTexture, traitsPosition, Color.White);
+                Tooltip.Draw(spriteBatch);
 
                 spriteBatch.End();
 

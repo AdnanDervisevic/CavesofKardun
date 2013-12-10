@@ -1,10 +1,10 @@
 ﻿#region File Description
-//----------------------------------------------------------------------------
-// Program.cs
-//
-// Copyright (C) . All rights reserved.
-//----------------------------------------------------------------------------
-#endregion End of File Description
+    //////////////////////////////////////////////////////////////////////////
+   // Program                                                              //
+  //                                                                      //
+ // Copyright (C) Untitled. All Rights reserved.                         //
+//////////////////////////////////////////////////////////////////////////
+#endregion
 
 #region Using Statements
 // System
