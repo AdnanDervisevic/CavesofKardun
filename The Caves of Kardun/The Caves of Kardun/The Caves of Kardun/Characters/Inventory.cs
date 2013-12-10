@@ -155,7 +155,7 @@ namespace The_Caves_of_Kardun
                                 if (i == this.menuBounds.Length - 1)
                                     this.items[this.itemIndexClicked] = null;
                                 else
-                                    this.items[this.itemIndexClicked] = this.player.EquipItem(this.items[this.itemIndexClicked], (i == 2));
+                                    this.items[this.itemIndexClicked] = this.player.EquipItem(this.items[this.itemIndexClicked], ((i == 2) || (this.player.NegativeTraits & NegativeTraits.MissingAnArm) == NegativeTraits.MissingAnArm));
 
                                 this.itemIndexClicked = -1;
                             }
@@ -183,6 +183,8 @@ namespace The_Caves_of_Kardun
                         {
                             // Equips the item and moves the old item to the inventory.
                             bool AllowTwoSwords = false;
+
+                            AllowTwoSwords = ((this.player.PositiveTraits & PositiveTraits.Ambidextrous) == this.player.PositiveTraits) ? true : false;
 
                             if (AllowTwoSwords && this.hover.Type == ItemTypes.Sword)
                             {

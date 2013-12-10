@@ -28,7 +28,6 @@ namespace The_Caves_of_Kardun
         private float fadeDelay = .020f;
         private Vector2 combatTextPosition;
         private SpriteFont combatFont;
-
         private int baseHealth;
 
         #endregion

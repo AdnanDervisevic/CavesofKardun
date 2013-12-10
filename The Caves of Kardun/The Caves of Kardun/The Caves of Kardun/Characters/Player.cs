@@ -50,7 +50,10 @@ namespace The_Caves_of_Kardun
                 if (this.Equipment.Boots != null)
                     bonusHealth += this.Equipment.Boots.Health;
 
-                return base.Health + bonusHealth;
+                if ((this.PositiveTraits & PositiveTraits.SuperLife) == PositiveTraits.SuperLife)
+                    return (base.Health + bonusHealth) * 2;
+                else
+                    return base.Health + bonusHealth;
             }
         }
 
@@ -117,8 +120,10 @@ namespace The_Caves_of_Kardun
                     minDamage += this.Equipment.Boots.MinDamage;
                     maxDamage += this.Equipment.Boots.MaxDamage;
                 }
-
-                return random.Next(minDamage, maxDamage + 1);
+                if ((this.PositiveTraits & PositiveTraits.SuperStrength) == PositiveTraits.SuperStrength)
+                    return random.Next(minDamage * 2, maxDamage * 2 + 1);
+                else
+                    return random.Next(minDamage, maxDamage + 1);
             }
         }
 
@@ -162,7 +167,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public override int AmountOfTilesToMove
         {
-            get { return (this.Equipment.Boots != null) ? 2 : 1;  }
+            get { return (this.Equipment.Boots != null || (this.PositiveTraits & PositiveTraits.ElvenSpeed) == PositiveTraits.ElvenSpeed) ? 2 : 1;  }
         }
 
         /// <summary>
@@ -194,8 +199,9 @@ namespace The_Caves_of_Kardun
             : base(texture, position, speed, health, combatFont) 
         {
             this.random = new Random();
+
             this.PositiveTraits = PositiveTraits.SuperStrength | The_Caves_of_Kardun.PositiveTraits.SuperLife | PositiveTraits.Ambidextrous | PositiveTraits.TwentyTwentyVision | PositiveTraits.ElvenSpeed;
-            //this.NegativeTraits = NegativeTraits.ColourBlind | NegativeTraits.MissingAnEye | NegativeTraits.MissingAnArm | NegativeTraits.NearSighted | NegativeTraits.SenseOfDirection;
+            this.NegativeTraits = NegativeTraits.ColourBlind | NegativeTraits.MissingAnEye | NegativeTraits.MissingAnArm | NegativeTraits.NearSighted | NegativeTraits.SenseOfDirection;
         }
 
         #endregion
@@ -214,9 +220,13 @@ namespace The_Caves_of_Kardun
             Texture2D inventoryEquipMenuTexture = Content.Load<Texture2D>("Textures/Inventory/EquipMenu");
             Texture2D inventoryEquipMenuChoiceTexture = Content.Load<Texture2D>("Textures/Inventory/EquipMenuChoice");
             Texture2D equipmentBackgroundTexture = Content.Load<Texture2D>("Textures/Equipment");
+            Texture2D equipmentOneArmBackgroundTexture = Content.Load<Texture2D>("Textures/OneArmEquipment");
 
             this.Inventory = new Inventory(this, inventoryPositionOffset, inventoryBackgroundTexture, inventoryEquipMenuTexture, inventoryEquipMenuChoiceTexture);
-            this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentBackgroundTexture);
+            if ((this.NegativeTraits & NegativeTraits.MissingAnArm) != NegativeTraits.MissingAnArm)
+                this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentBackgroundTexture);
+            else
+                this.Equipment = new Equipment(this, equipmentPositionOffset, equipmentOneArmBackgroundTexture);
         }
 
         /// <summary>

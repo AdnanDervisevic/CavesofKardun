@@ -47,11 +47,13 @@ namespace The_Caves_of_Kardun
         private Texture2D startScreenTexture;
         private Texture2D deathScreenTexture;
         private Texture2D hoverTexture;
+        private Texture2D leftEyeTexture;
+        private Texture2D rightEyeTexture;
 
         private Vector2 deathScreenScorePosition;
 
         private Vector2 cameraPosition;
-        private Player player;
+        public Player player;
         private Level level;
 
         private Effect blurEffect;
@@ -73,7 +75,8 @@ namespace The_Caves_of_Kardun
         private SoundEffect soundCoinPickup;
         private SoundEffect soundItemPickup;
         private SoundEffect soundSwordAttack;
-        private static SoundEffect soundMonsterAttack;
+
+        private Random random = new Random();
 
         #endregion
 
@@ -116,11 +119,11 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
-        /// Monster sound to play, not used right now because of timing issue
+        /// player returned for traits purposes
         /// </summary>
-        public static SoundEffect monsterSound
+        public Player pC
         {
-            get { return soundMonsterAttack; }
+            get { return player; }
         }
 
         #endregion
@@ -180,6 +183,8 @@ namespace The_Caves_of_Kardun
             this.startScreenTexture = Content.Load<Texture2D>("titleScreen");
             this.deathScreenTexture = Content.Load<Texture2D>("deathScreen");
             this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
+            this.leftEyeTexture = Content.Load<Texture2D>("Textures/HoverLeft");
+            this.rightEyeTexture = Content.Load<Texture2D>("Textures/HoverRight");
 
             this.deathScreenFont = Content.Load<SpriteFont>("Fonts/deathScreenFont");
 
@@ -195,7 +200,6 @@ namespace The_Caves_of_Kardun
             this.soundCoinPickup = Content.Load<SoundEffect>("Audio\\coinPickup");
             this.soundItemPickup = Content.Load<SoundEffect>("Audio\\itemPickUp");
             this.soundSwordAttack = Content.Load<SoundEffect>("Audio\\swordAttack");
-            soundMonsterAttack = Content.Load<SoundEffect>("Audio\\monsterAttack");
 
             instancebackgroundMusic = soundBackgroundMusic.CreateInstance();
             instancebackgroundMusic.Volume = 0.1f;
@@ -335,7 +339,8 @@ namespace The_Caves_of_Kardun
                 // Om spelaren inte har synproblem eller saknar ett öga samt har optics, rita inte ut hover.
                 if (((this.player.NegativeTraits & NegativeTraits.NearSighted) != NegativeTraits.NearSighted) &&
                     ((this.player.NegativeTraits & NegativeTraits.MissingAnEye) != NegativeTraits.MissingAnEye) &&
-                    (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Sight))
+                    (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Sight) || 
+                    ((this.player.PositiveTraits & PositiveTraits.TwentyTwentyVision) == PositiveTraits.TwentyTwentyVision))
                 {
 
                 }
@@ -343,7 +348,19 @@ namespace The_Caves_of_Kardun
                 {
                     spriteBatch.Begin();
                     spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
-                    spriteBatch.End();
+
+
+                    int eyeSide = random.Next(0, 1);
+
+                    if ((this.player.NegativeTraits & NegativeTraits.MissingAnEye) == NegativeTraits.MissingAnEye)
+                    {
+                        if (eyeSide == 0)
+                            spriteBatch.Draw(this.leftEyeTexture, Vector2.Zero, Color.White);
+                        else
+                            spriteBatch.Draw(this.leftEyeTexture, Vector2.Zero, Color.White);
+                    }
+
+                   spriteBatch.End();
                 }
 
                 if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind &&

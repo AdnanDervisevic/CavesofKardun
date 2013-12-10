@@ -271,6 +271,18 @@ namespace The_Caves_of_Kardun
             Point playerCoords = TheCavesOfKardun.ConvertPositionToCell(character.Center);
             targetPosition = Vector2.Zero;
 
+            if ((this.Player.NegativeTraits & NegativeTraits.SenseOfDirection) == NegativeTraits.SenseOfDirection)
+            {
+                if (motion.X == 1)
+                    motion.X = -1;
+                else if (motion.X == -1)
+                    motion.X = 1;
+                else if (motion.Y == 1)
+                    motion.Y = -1;
+                else if (motion.Y == -1)
+                    motion.Y = 1;
+            }
+
             if (motion.X == 1 && motion.Y == 0)
             {
                 int i = 0;
