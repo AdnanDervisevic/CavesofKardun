@@ -83,6 +83,8 @@
 		<type>Shield</type>
 		<value>0</value>
 		<hp>1</hp>
+    <minDmg>1</minDmg>
+    <maxDmg>1</maxDmg>
 	</item>
 
 	<item>
@@ -93,8 +95,8 @@
 		<value>1</value>
 		<hp>1</hp>
 		<block>1</block>
-		<minDmg>1</minDmg>
-		<maxDmg>1</maxDmg>
+		<minDmg>2</minDmg>
+		<maxDmg>2</maxDmg>
 	</item>
 
 	<item>
@@ -105,8 +107,8 @@
 		<value>2</value>
 		<hp>4</hp>
 		<block>5</block>
-		<minDmg>2</minDmg>
-		<maxDmg>2</maxDmg>
+		<minDmg>3</minDmg>
+		<maxDmg>3</maxDmg>
 	</item>
 
 	<item>
@@ -117,8 +119,8 @@
 		<value>3</value>
 		<hp>8</hp>
 		<block>3</block>
-		<minDmg>3</minDmg>
-		<maxDmg>3</maxDmg>
+		<minDmg>4</minDmg>
+		<maxDmg>4</maxDmg>
 		<miss>50</miss>
 	</item>
 

@@ -37,14 +37,18 @@ namespace The_Caves_of_Kardun
 
         #region Fields
 
-        private Random random;
         private GraphicsDeviceManager graphicsDeviceManager;
         private SpriteBatch spriteBatch;
 
         private bool gameStarted;
 
+        private SpriteFont deathScreenFont;
+
         private Texture2D startScreenTexture;
+        private Texture2D deathScreenTexture;
         private Texture2D hoverTexture;
+
+        private Vector2 deathScreenScorePosition;
 
         private Vector2 cameraPosition;
         private Player player;
@@ -137,7 +141,6 @@ namespace The_Caves_of_Kardun
             //graphicsDeviceManager.IsFullScreen = true;
             graphicsDeviceManager.ApplyChanges();
             IsMouseVisible = true;
-            this.random = new Random();
         }
 
         #endregion
@@ -157,6 +160,9 @@ namespace The_Caves_of_Kardun
 
             this.minimapRenderTarget = new RenderTarget2D(GraphicsDevice, 200, 200, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             this.defaultRenderTarget = new RenderTarget2D(GraphicsDevice, 1280, 720, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+
+            this.deathScreenScorePosition = new Vector2(600, GraphicsDevice.Viewport.Height - 280);
+
             base.Initialize();
         }
 
@@ -168,17 +174,20 @@ namespace The_Caves_of_Kardun
         protected override void LoadContent()
         {
 
-            this.level = new Level(this.Content, new Point(75, 75), null, 20, 100);
+            this.level = new Level(this.Content, new Point(75, 75), null, 20, 4, 100);
             this.level.LoadContent();
 
             this.startScreenTexture = Content.Load<Texture2D>("titleScreen");
+            this.deathScreenTexture = Content.Load<Texture2D>("deathScreen");
             this.hoverTexture = Content.Load<Texture2D>("Textures/Hover");
+
+            this.deathScreenFont = Content.Load<SpriteFont>("Fonts/deathScreenFont");
 
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
-            this.player.GodMode = true;
+            //this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
 
@@ -249,7 +258,10 @@ namespace The_Caves_of_Kardun
             if (!this.gameStarted)
             {
                 if (TheCavesOfKardun.CurrentKeyboardState.IsKeyDown(Keys.Enter) && TheCavesOfKardun.PreviousKeyboardState.IsKeyUp(Keys.Enter))
+                {
+                    this.player.Reset();
                     this.gameStarted = true;
+                }
             }
             else
             {
@@ -258,7 +270,13 @@ namespace The_Caves_of_Kardun
 
                 // Om spelaren dör, vad händer?
                 if (!this.player.Alive)
-                    Exit();
+                {
+                    this.gameStarted = false;
+                    this.level.ResetGame();
+                    this.player.Position = new Vector2(
+                            this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
+                            this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
+                }
             }
 
             TheCavesOfKardun.previousKeyboardState = TheCavesOfKardun.currentKeyboardState;
@@ -276,7 +294,15 @@ namespace The_Caves_of_Kardun
             if (!this.gameStarted)
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(this.startScreenTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+                if (this.player.Alive)
+                    spriteBatch.Draw(this.startScreenTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                else
+                {
+                    spriteBatch.Draw(this.deathScreenTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    spriteBatch.DrawString(this.deathScreenFont, this.player.Inventory.Gold.ToString(), deathScreenScorePosition, Color.White);
+                }
+
                 spriteBatch.End();
             }
             else
@@ -508,7 +534,7 @@ namespace The_Caves_of_Kardun
                 {
                     if (item.Type == ItemTypes.Ladder)
                     {
-                        this.level.RecreateLevel();
+                        this.level.NextLevel();
                         this.player.Position = new Vector2(
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);

@@ -55,6 +55,30 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
+        /// Gets the health of the player.
+        /// </summary>
+        public int Block
+        {
+            get
+            {
+                int blonusBlock = 0;
+                if (this.Equipment.Helmet != null)
+                    blonusBlock += this.Equipment.Helmet.Block;
+
+                if (this.Equipment.LeftHand != null)
+                    blonusBlock += this.Equipment.LeftHand.Block;
+
+                if (this.Equipment.RightHand != null)
+                    blonusBlock += this.Equipment.RightHand.Block;
+
+                if (this.Equipment.Boots != null)
+                    blonusBlock += this.Equipment.Boots.Block;
+
+                return blonusBlock;
+            }
+        }
+
+        /// <summary>
         /// Gets the damage that the player should take on his enemy.
         /// </summary>
         public int Damage
@@ -196,6 +220,23 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
+        /// Resets the player, resets the gold, inventory and the equipment.
+        /// </summary>
+        public void Reset()
+        {
+            this.Inventory.Gold = 0;
+            for (int i = 0; i < this.Inventory.Items.GetLength(0); i++)
+                this.Inventory.Items[i] = null;
+
+            this.Equipment.Helmet = null;
+            this.Equipment.RightHand = null;
+            this.Equipment.LeftHand = null;
+            this.Equipment.Boots = null;
+
+            this.DamageTaken = 0;
+        }
+
+        /// <summary>
         /// Attack a monster.
         /// </summary>
         /// <param name="monster">The monster to attack.</param>
@@ -295,7 +336,16 @@ namespace The_Caves_of_Kardun
         /// <param name="cameraPosition">The cameras position.</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
         {
-            base.Draw(gameTime, spriteBatch, cameraPosition);
+            if (this.Alive)
+            {
+                spriteBatch.Draw(this.texture,
+                new Rectangle(
+                    (int)(this.Position.X - cameraPosition.X),
+                    (int)(this.Position.Y - cameraPosition.Y),
+                    TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight), Color.White);
+            }
+
+            UpdateCombatText(gameTime, spriteBatch, cameraPosition);
 
             this.Inventory.Draw(spriteBatch);
             this.Equipment.Draw(spriteBatch);

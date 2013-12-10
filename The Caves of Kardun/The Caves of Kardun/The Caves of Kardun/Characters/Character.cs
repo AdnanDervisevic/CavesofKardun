@@ -1,9 +1,15 @@
-﻿using Microsoft.Xna.Framework;
+﻿#region File Description
+    //////////////////////////////////////////////////////////////////////////
+   // Character                                                            //
+  //                                                                      //
+ // Copyright (C) Untitled. All Rights reserved.                         //
+//////////////////////////////////////////////////////////////////////////
+#endregion
+
+#region Using Statements
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+#endregion End of Using Statements
 
 namespace The_Caves_of_Kardun
 {
@@ -25,8 +31,6 @@ namespace The_Caves_of_Kardun
 
         private int baseHealth;
 
-        private Random random;
-
         #endregion
 
         #region Properties
@@ -42,7 +46,7 @@ namespace The_Caves_of_Kardun
         /// <summary>
         /// Gets the total damage taken to this character.
         /// </summary>
-        public int DamageTaken { get; private set; }
+        public int DamageTaken { get; protected set; }
 
         /// <summary>
         /// Determines if the character is alive.
@@ -57,6 +61,11 @@ namespace The_Caves_of_Kardun
                 return Health > DamageTaken; 
             }
         }
+
+        /// <summary>
+        /// Gets or sets the direction.
+        /// </summary>
+        public Direction Direction { get; set; }
 
         /// <summary>
         /// Gets or sets whether this character should be able to die.
@@ -117,7 +126,6 @@ namespace The_Caves_of_Kardun
         /// <param name="speed">The speed of the character.</param>
         public Character(Texture2D texture, Vector2 position, float speed, int baseHealth, SpriteFont combatFont)
         {
-            this.random = new Random();
             this.texture = texture;
             this.Position = position;
             this.Speed = speed;
@@ -155,8 +163,19 @@ namespace The_Caves_of_Kardun
                     (int)(this.Position.X - cameraPosition.X),
                     (int)(this.Position.Y - cameraPosition.Y),
                     TheCavesOfKardun.TileWidth, TheCavesOfKardun.TileHeight), Color.White);
-            }            
+            }
 
+            UpdateCombatText(gameTime, spriteBatch, cameraPosition);
+        }
+
+        /// <summary>
+        /// Updates the combat text and draws it.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="spriteBatch">The spritebatch used to draw.</param>
+        /// <param name="cameraPosition">The position of the camera.</param>
+        protected void UpdateCombatText(GameTime gameTime, SpriteBatch spriteBatch, Vector2 cameraPosition)
+        {
             // If combatText is not set to empty or whitespaces only draw it.
             if (!string.IsNullOrWhiteSpace(this.CombatText))
             {

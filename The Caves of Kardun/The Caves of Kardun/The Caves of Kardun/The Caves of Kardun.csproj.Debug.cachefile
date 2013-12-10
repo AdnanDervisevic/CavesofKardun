@@ -1,5 +1,4 @@
 Content\Textures\Tiles\wall.xnb
-Content\Textures\Characters\player.xnb
 Content\Textures\Hover.xnb
 Content\Textures\Tiles\floor.xnb
 Content\Textures\Characters\spider.xnb
@@ -71,3 +70,11 @@ Content\Textures\Characters\tiger.xnb
 Content\Textures\Characters\flyingSaucer.xnb
 Content\Textures\Characters\flyingEyee.xnb
 Content\titleScreen.xnb
+Content\Audio\music.xnb
+Content\Audio\coinPickup.xnb
+Content\Audio\itemPickUp.xnb
+Content\Audio\monsterAttack.xnb
+Content\Audio\swordAttack.xnb
+Content\deathScreen.xnb
+Content\Fonts\deathScreenFont.xnb
+Content\Textures\Characters\player.xnb

@@ -90,9 +90,10 @@ namespace The_Caves_of_Kardun
             }
         }
 
-        public int[,] MapData { get; set; }
-
-        public bool IsConnect { get; set; }
+        /// <summary>
+        /// Gets or sets the amount of monsters in this room.
+        /// </summary>
+        public int MonsterInRoom { get; set; }
 
         #endregion
 
@@ -105,16 +106,20 @@ namespace The_Caves_of_Kardun
         /// <param name="top">Tiles between the top corner and to the start of the room.</param>
         /// <param name="width">The width of the room.</param>
         /// <param name="height">The height of the room.</param>
-        public Room(int left, int top, int width, int height)
+        public Room(int? randomSeed, int left, int top, int width, int height)
         {
             this.Left = left;
             this.Top = top;
             this.Width = width;
             this.Height = height;
 
+            this.MonsterInRoom = 0;
             this.DistanceToSpawn = 0;
-            this.MapData = new int[width, height];
-            this.random = new Random();
+            
+            if (randomSeed.HasValue)
+                this.random = new Random(randomSeed.Value);
+            else
+                this.random = new Random();
         }
 
         #endregion
