@@ -470,9 +470,6 @@ namespace The_Caves_of_Kardun
         /// <returns>Returns true if the player clicked on an item; otherwise false.</returns>
         public bool EncounterItem(Point targetTile, out Item item)
         {
-            item = this.shieldItems[3];
-            return true;
-
             item = this.itemsData[targetTile.X, targetTile.Y];
             
             if (item != null)
@@ -584,7 +581,7 @@ namespace The_Caves_of_Kardun
             MakeWalls();
             SpawnMonsters(30);
             SpawnItems();
-            SpawnGold(60);
+            SpawnGold(80);
 
             SpawnBoss();
         }
@@ -619,7 +616,11 @@ namespace The_Caves_of_Kardun
 
                 if (floorTile != Point.Zero)
                 {
-                    int index = random.Next(0, this.monsterData.Count);
+                    int maxValue = Math.Min((int)Math.Floor(Math.Sqrt(Level.levelCount * Math.Pow(5, 2)) / 2), this.monsterData.Count);
+
+
+                    int index = random.Next(0, maxValue);
+
                     this.monsters.Add(new Monster(
                         this.monsterData[index].Texture, floorTile, 500, this.monsterData[index].Health, 
                         this.monsterData[index].MinDamage, this.monsterData[index].MaxDamage, contentManager.Load<SpriteFont>("Fonts/combatFont")));
