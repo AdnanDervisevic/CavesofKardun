@@ -196,8 +196,9 @@ namespace The_Caves_of_Kardun
         /// <param name="position">The position of the player.</param>
         /// <param name="speed">The movement speed of the player.</param>
         public Player(Texture2D texture, Vector2 position, float speed, int health, SpriteFont combatFont)
-            : base(texture, position, speed, health, combatFont) 
+            : base("Player", texture, position, speed, health, combatFont) 
         {
+            
             this.random = new Random();
             int[] table = new int[] { 1, 2, 4, 8, 16 };
 
@@ -333,6 +334,12 @@ namespace The_Caves_of_Kardun
             {
                 rItem = this.Equipment.RightHand;
                 this.Equipment.RightHand = item;
+            }
+            else if (item.Type == ItemTypes.Potion)
+            {
+                this.DamageTaken -= item.Health;
+                if (this.DamageTaken < 0)
+                    this.DamageTaken = 0;
             }
 
             return rItem;

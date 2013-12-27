@@ -286,6 +286,33 @@
   </item>
 
   <item>
+    <name>Health Potion</name>
+    <textureName>Textures/Items/healthPotion</textureName>
+    <overworldTextureName>Textures/Items/healthPotion</overworldTextureName>
+    <type>Potion</type>
+    <value>0</value>
+    <hp>10</hp>
+  </item>
+
+  <item>
+    <name>Greater Health Potion</name>
+    <textureName>Textures/Items/healthPotion</textureName>
+    <overworldTextureName>Textures/Items/healthPotion</overworldTextureName>
+    <type>Potion</type>
+    <value>1</value>
+    <hp>30</hp>
+  </item>
+
+  <item>
+    <name>Super Health Potion</name>
+    <textureName>Textures/Items/healthPotion</textureName>
+    <overworldTextureName>Textures/Items/healthPotion</overworldTextureName>
+    <type>Potion</type>
+    <value>2</value>
+    <hp>60</hp>
+  </item>
+
+  <item>
     <overworldTextureName>Textures/Items/Ladder</overworldTextureName>
     <type>Ladder</type>
   </item>

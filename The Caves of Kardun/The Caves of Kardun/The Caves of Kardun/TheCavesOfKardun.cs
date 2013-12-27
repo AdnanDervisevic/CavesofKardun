@@ -82,6 +82,9 @@ namespace The_Caves_of_Kardun
 
         private Random random = new Random();
 
+        private HealthBar playerHealthBar;
+        private HealthBar enemyHealthBar;
+
         #endregion
 
         #region Properties
@@ -164,7 +167,7 @@ namespace The_Caves_of_Kardun
         {
             this.Content.RootDirectory = "Content";
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            
             this.minimapRenderTarget = new RenderTarget2D(GraphicsDevice, 200, 200, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             this.defaultRenderTarget = new RenderTarget2D(GraphicsDevice, TheCavesOfKardun.SCREENWIDTH, TheCavesOfKardun.SCREENHEIGHT, true, GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
@@ -196,11 +199,17 @@ namespace The_Caves_of_Kardun
 
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 5,
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 10,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
-            this.player.GodMode = true;
+            //this.player.GodMode = true;
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
+
+            this.playerHealthBar = new HealthBar(this.player, new Vector2(10, 10), true);
+            this.playerHealthBar.LoadContent(Content);
+
+            this.enemyHealthBar = new HealthBar(null, new Vector2(GraphicsDevice.Viewport.Width, 10), false);
+            this.enemyHealthBar.LoadContent(Content);
 
             this.soundBackgroundMusic = Content.Load<SoundEffect>("Audio\\music");
             this.soundCoinPickup = Content.Load<SoundEffect>("Audio\\coinPickup");
@@ -275,7 +284,16 @@ namespace The_Caves_of_Kardun
                 UpdateGameplay(gameTime);
                 this.player.Update(gameTime);
 
-                // Om spelaren dör, vad händer?
+                Rectangle mousePos = new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1);
+                for (int i = 0; i < this.level.Monsters.Count; i++)
+                {
+                    if (mousePos.Intersects(this.level.Monsters[i].GetMonsterBounds(this.cameraPosition)))
+                    {
+                        this.enemyHealthBar.Character = this.level.Monsters[i];
+                        break;
+                    }
+                }
+
                 if (!this.player.Alive)
                 {
                     this.gameStarted = false;
@@ -284,17 +302,18 @@ namespace The_Caves_of_Kardun
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
                 }
-            }
-            bool showOnce = false;
-            if (this.traitsPosition.Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
-            {
-                Tooltip.Show(this.player.PositiveTraits, this.player.NegativeTraits);
-                showOnce = true;
-            }
-            else
-            {
-                if (showOnce)
-                    Tooltip.Hide();
+
+                bool showOnce = false;
+                if (this.traitsPosition.Intersects(new Rectangle(TheCavesOfKardun.CurrentMouseState.X, TheCavesOfKardun.CurrentMouseState.Y, 1, 1)))
+                {
+                    Tooltip.Show(this.player.PositiveTraits, this.player.NegativeTraits);
+                    showOnce = true;
+                }
+                else
+                {
+                    if (showOnce)
+                        Tooltip.Hide();
+                }
             }
 
             TheCavesOfKardun.previousKeyboardState = TheCavesOfKardun.currentKeyboardState;
@@ -355,14 +374,11 @@ namespace The_Caves_of_Kardun
                     ((this.player.NegativeTraits & NegativeTraits.MissingAnEye) != NegativeTraits.MissingAnEye) &&
                     (this.player.Equipment.Helmet != null && this.player.Equipment.Helmet.Special == ItemSpecials.Sight) || 
                     ((this.player.PositiveTraits & PositiveTraits.TwentyTwentyVision) == PositiveTraits.TwentyTwentyVision))
-                {
-
-                }
+                { }
                 else
                 {
                     spriteBatch.Begin();
                     spriteBatch.Draw(this.hoverTexture, Vector2.Zero, Color.White);
-
 
                     int eyeSide = random.Next(0, 1);
 
@@ -389,9 +405,21 @@ namespace The_Caves_of_Kardun
                     spriteBatch.Draw(this.minimapTexture, Vector2.Zero, Color.White * 0.5f);
 
                 spriteBatch.Draw(this.traitsTexture, traitsPosition, Color.White);
-                Tooltip.Draw(spriteBatch);
 
+                Tooltip.Draw(spriteBatch);
                 spriteBatch.End();
+
+                if ((this.player.NegativeTraits & NegativeTraits.ColourBlind) == NegativeTraits.ColourBlind &&
+                    (this.player.Equipment.Helmet == null || this.player.Equipment.Helmet.Special != ItemSpecials.Colour))
+                {
+                    playerHealthBar.Draw(spriteBatch, grayscaleEffect);
+                    enemyHealthBar.Draw(spriteBatch, grayscaleEffect);
+                }
+                else
+                {
+                    playerHealthBar.Draw(spriteBatch, null);
+                    enemyHealthBar.Draw(spriteBatch, null);
+                }
 
                 GraphicsDevice.SetRenderTarget(null);
 

@@ -70,7 +70,7 @@ namespace The_Caves_of_Kardun
         /// Creates an empty monster object.
         /// </summary>
         public Monster()
-            : base(null, Vector2.Zero, 0, 0, null) { }
+            : base(string.Empty, null, Vector2.Zero, 0, 0, null) { }
 
         /// <summary>
         /// Creates a new monster.
@@ -78,8 +78,8 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The texture of the monster.</param>
         /// <param name="position">The position of the monster.</param>
         /// <param name="speed">The speed of the monster.</param>
-        public Monster(Texture2D texture, Point spawnTile, float speed, int baseHealth, int minDamage, int maxDamage, SpriteFont combatFont)
-            : base(texture, TheCavesOfKardun.ConvertCellToPosition(spawnTile), speed, baseHealth, combatFont) 
+        public Monster(string name, Texture2D texture, Point spawnTile, float speed, int baseHealth, int minDamage, int maxDamage, SpriteFont combatFont)
+            : base(name, texture, TheCavesOfKardun.ConvertCellToPosition(spawnTile), speed, baseHealth, combatFont) 
         {
             this.random = new Random();
             this.minDamage = minDamage;
@@ -90,6 +90,20 @@ namespace The_Caves_of_Kardun
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Gets the monster bounds in pixels.
+        /// </summary>
+        public Rectangle GetMonsterBounds(Vector2 cameraPosition)
+        {
+            Rectangle rect = new Rectangle();
+            Vector2 vect = TheCavesOfKardun.ConvertCellToPosition(TheCavesOfKardun.ConvertPositionToCell(this.Center));
+            rect.X = (int)(vect.X - cameraPosition.X);
+            rect.Y = (int)(vect.Y - cameraPosition.Y);
+            rect.Width = TheCavesOfKardun.TileWidth;
+            rect.Height = TheCavesOfKardun.TileHeight;
+            return rect;
+        }
 
         Vector2 motion;
         /// <summary>

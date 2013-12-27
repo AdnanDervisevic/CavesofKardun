@@ -48,6 +48,7 @@ namespace The_Caves_of_Kardun
         private List<Item> shieldItems = new List<Item>();
         private List<Item> helmItems = new List<Item>();
         private List<Item> bootsItems = new List<Item>();
+        private List<Item> potionItems = new List<Item>();
 
         private List<Room> rooms = new List<Room>();
         private List<Monster> monsters = new List<Monster>();
@@ -176,6 +177,10 @@ namespace The_Caves_of_Kardun
 
                     case ItemTypes.Helmet:
                         this.helmItems.Add(items[i]);
+                        break;
+
+                    case ItemTypes.Potion:
+                        this.potionItems.Add(items[i]);
                         break;
 
                     case ItemTypes.Ladder:
@@ -313,7 +318,7 @@ namespace The_Caves_of_Kardun
                 {
                     targetPosition.X = character.Position.X + TheCavesOfKardun.TileWidth * (i - 1);
 
-                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    if (character != this.Player && (this.PredictPositions(character) || this.PredictPlayerPosition(character, true)))
                     {
                         targetPosition = character.Position;
                         return true;
@@ -349,7 +354,7 @@ namespace The_Caves_of_Kardun
                 {
                     targetPosition.X = character.Position.X - TheCavesOfKardun.TileWidth * (i - 1);
 
-                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    if (character != this.Player && (this.PredictPositions(character) || this.PredictPlayerPosition(character, true)))
                     {
                         targetPosition = character.Position;
                         return true;
@@ -385,7 +390,7 @@ namespace The_Caves_of_Kardun
                 {
                     targetPosition.Y = character.Position.Y + TheCavesOfKardun.TileHeight * (i - 1);
 
-                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    if (character != this.Player && (this.PredictPositions(character) || this.PredictPlayerPosition(character, false)))
                     {
                         targetPosition = character.Position;
                         return true;
@@ -421,7 +426,7 @@ namespace The_Caves_of_Kardun
                 {
                     targetPosition.Y = character.Position.Y - TheCavesOfKardun.TileHeight * (i - 1);
 
-                    if (character != this.Player && this.PredictPlayerPosition(character))
+                    if (character != this.Player && (this.PredictPositions(character) || this.PredictPlayerPosition(character, false)))
                     {
                         targetPosition = character.Position;
                         return true;
@@ -581,6 +586,7 @@ namespace The_Caves_of_Kardun
             MakeWalls();
             SpawnMonsters(30);
             SpawnItems();
+            SpawnPotions(4);
             SpawnGold(80);
 
             SpawnBoss();
@@ -594,7 +600,7 @@ namespace The_Caves_of_Kardun
             Room bossRoom = this.rooms[this.BossRoomIndex];
             Point centerTile = bossRoom.Center;
 
-            this.monsters.Add(new Monster(this.boss.Texture, centerTile, 0, this.boss.Health, this.boss.MinDamage, this.boss.MaxDamage, 
+            this.monsters.Add(new Monster(this.boss.Name, this.boss.Texture, centerTile, 0, this.boss.Health, this.boss.MinDamage, this.boss.MaxDamage, 
                 contentManager.Load<SpriteFont>("Fonts/combatFont")));
             this.monsters[this.monsters.Count - 1].Boss = true;
         }
@@ -621,7 +627,7 @@ namespace The_Caves_of_Kardun
 
                     int index = random.Next(0, maxValue);
 
-                    this.monsters.Add(new Monster(
+                    this.monsters.Add(new Monster(this.monsterData[index].Name,
                         this.monsterData[index].Texture, floorTile, 500, this.monsterData[index].Health, 
                         this.monsterData[index].MinDamage, this.monsterData[index].MaxDamage, contentManager.Load<SpriteFont>("Fonts/combatFont")));
 
@@ -885,6 +891,21 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
+        /// Spawns potions on the map.
+        /// </summary>
+        /// <param name="maxAmount"></param>
+        private void SpawnPotions(int maxAmount)
+        {
+            for (int i = 0; i < maxAmount; i++)
+            {
+                Point floorTile = FreeRandomFloorTile(RandomRoom(), 30);
+
+                if (floorTile != Point.Zero)
+                    this.itemsData[floorTile.X, floorTile.Y] = this.potionItems[random.Next(0, this.potionItems.Count)];
+            }
+        }
+
+        /// <summary>
         /// Gets a random room that's not the boss room or the player spawn room.
         /// </summary>
         /// <returns>Returns a random room.</returns>
@@ -1097,7 +1118,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         /// <param name="character">The character to compare with.</param>
         /// <returns>Returns true if the player's target position equals to the characters target position.</returns>
-        private bool PredictPlayerPosition(Character character)
+        private bool PredictPositions(Character character)
         {
             Vector2 characterTargetPos = character.Position;
 
@@ -1116,6 +1137,27 @@ namespace The_Caves_of_Kardun
                 playerTargetPos.X = this.Player.TargetPosition.X;
 
             return characterTargetPos == playerTargetPos;
+        }
+
+        /// <summary>
+        /// Predicts the players position and compares it with the given character's current position.
+        /// </summary>
+        /// <param name="character">The character to compare with.</param>
+        /// <returns>Returns true if the players target position is equally to the character's current position.</returns>
+        private bool PredictPlayerPosition(Character character, bool xaxis)
+        {
+            Vector2 playerTargetPos = this.Player.Position;
+            if (this.Player.TargetPosition.X == 0)
+                playerTargetPos.Y = this.Player.TargetPosition.Y;
+            else
+                playerTargetPos.X = this.Player.TargetPosition.X;
+
+            if (xaxis && playerTargetPos.X == character.Position.X)
+                return true;
+            else if (!xaxis && playerTargetPos.Y == character.Position.Y)
+                return true;
+
+            return false;
         }
 
         #endregion

@@ -19,6 +19,7 @@ namespace The_Caves_of_Kardun
         Shield,
         Helmet,
         Boots,
-        Ladder
+        Ladder,
+        Potion
     }
 }

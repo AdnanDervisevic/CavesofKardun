@@ -35,11 +35,24 @@ namespace The_Caves_of_Kardun
         #region Properties
 
         /// <summary>
+        /// Gets the name of this character.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
         /// Gets or sets the health of the character.
         /// </summary>
         public virtual int Health
         {
             get { return this.baseHealth; }
+        }
+
+        /// <summary>
+        /// Gets the current health of the character.
+        /// </summary>
+        public int CurrentHealth
+        {
+            get { return Health - DamageTaken; }
         }
 
         /// <summary>
@@ -118,8 +131,9 @@ namespace The_Caves_of_Kardun
         /// <param name="texture">The character texture.</param>
         /// <param name="position">The character position.</param>
         /// <param name="speed">The speed of the character.</param>
-        public Character(Texture2D texture, Vector2 position, float speed, int baseHealth, SpriteFont combatFont)
+        public Character(string name, Texture2D texture, Vector2 position, float speed, int baseHealth, SpriteFont combatFont)
         {
+            this.Name = name;
             this.texture = texture;
             this.Position = position;
             this.Speed = speed;

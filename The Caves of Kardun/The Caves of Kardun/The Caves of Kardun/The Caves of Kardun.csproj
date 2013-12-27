@@ -92,6 +92,7 @@
     <Compile Include="Characters\Monster.cs" />
     <Compile Include="Characters\Traits.cs" />
     <Compile Include="Dot.cs" />
+    <Compile Include="HealthBar.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Characters\Player.cs" />
     <Compile Include="Items\ItemSpecials.cs" />
