@@ -296,8 +296,8 @@
 
   <item>
     <name>Greater Health Potion</name>
-    <textureName>Textures/Items/healthPotion</textureName>
-    <overworldTextureName>Textures/Items/healthPotion</overworldTextureName>
+    <textureName>Textures/Items/greaterPotion</textureName>
+    <overworldTextureName>Textures/Items/greaterPotion</overworldTextureName>
     <type>Potion</type>
     <value>1</value>
     <hp>30</hp>
@@ -305,8 +305,8 @@
 
   <item>
     <name>Super Health Potion</name>
-    <textureName>Textures/Items/healthPotion</textureName>
-    <overworldTextureName>Textures/Items/healthPotion</overworldTextureName>
+    <textureName>Textures/Items/superPotion</textureName>
+    <overworldTextureName>Textures/Items/superPotion</overworldTextureName>
     <type>Potion</type>
     <value>2</value>
     <hp>60</hp>

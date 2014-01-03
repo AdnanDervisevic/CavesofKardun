@@ -51,9 +51,9 @@ namespace The_Caves_of_Kardun
                     bonusHealth += this.Equipment.Boots.Health;
 
                 if ((this.PositiveTraits & PositiveTraits.SuperLife) == PositiveTraits.SuperLife)
-                    return (base.Health + bonusHealth) * 2;
+                    return ((base.Health + bonusHealth) * 2) * Level.LevelCount;
                 else
-                    return base.Health + bonusHealth;
+                    return (base.Health + bonusHealth) * Level.LevelCount;
             }
         }
 
@@ -77,7 +77,7 @@ namespace The_Caves_of_Kardun
                 if (this.Equipment.Boots != null)
                     blonusBlock += this.Equipment.Boots.Block;
 
-                return blonusBlock;
+                return blonusBlock * Level.LevelCount;
             }
         }
 
@@ -121,9 +121,9 @@ namespace The_Caves_of_Kardun
                     maxDamage += this.Equipment.Boots.MaxDamage;
                 }
                 if ((this.PositiveTraits & PositiveTraits.SuperStrength) == PositiveTraits.SuperStrength)
-                    return random.Next(minDamage * 2, maxDamage * 2 + 1);
+                    return random.Next(minDamage * 2, maxDamage * 2 + 1) * Level.LevelCount;
                 else
-                    return random.Next(minDamage, maxDamage + 1);
+                    return random.Next(minDamage, maxDamage + 1) * Level.LevelCount;
             }
         }
 
@@ -147,6 +147,8 @@ namespace The_Caves_of_Kardun
                     dot.Damage += this.Equipment.LeftHand.DotDamage;
                     dot.DotDuration += this.Equipment.LeftHand.DotDuration;
                 }
+
+                dot.Damage *= Level.LevelCount;
 
                 return dot;
             }

@@ -3,7 +3,7 @@
 		<name>Bunny</name>
 		<textureName>Textures/Characters/bunny</textureName>
 		<value>1</value>
-		<hp>3</hp>
+		<hp>2</hp>
 		<minDmg>1</minDmg>
 		<maxDmg>1</maxDmg>
     <boss>false</boss>
@@ -23,7 +23,7 @@
 		<name>Spider</name>
 		<textureName>Textures/Characters/spider</textureName>
 		<value>3</value>
-		<hp>3</hp>
+		<hp>4</hp>
 		<minDmg>2</minDmg>
 		<maxDmg>3</maxDmg>
     <boss>false</boss>
@@ -33,7 +33,7 @@
 		<name>Tiger</name>
 		<textureName>Textures/Characters/tiger</textureName>
 		<value>4</value>
-		<hp>2</hp>
+		<hp>4</hp>
 		<minDmg>3</minDmg>
 		<maxDmg>5</maxDmg>
     <boss>false</boss>
@@ -43,9 +43,9 @@
 		<name>Flying Saucer</name>
 		<textureName>Textures/Characters/flyingSaucer</textureName>
 		<value>5</value>
-		<hp>1</hp>
-		<minDmg>5</minDmg>
-		<maxDmg>10</maxDmg>
+		<hp>5</hp>
+		<minDmg>4</minDmg>
+		<maxDmg>6</maxDmg>
     <boss>false</boss>
 	</monster>
 
@@ -53,9 +53,9 @@
 		<name>The Blob</name>
 		<textureName>Textures/Characters/theBlob</textureName>
 		<value>6</value>
-		<hp>10</hp>
-		<minDmg>8</minDmg>
-		<maxDmg>10</maxDmg>
+		<hp>5</hp>
+		<minDmg>6</minDmg>
+		<maxDmg>8</maxDmg>
     <boss>false</boss>
 	</monster>
 
@@ -63,9 +63,9 @@
 		<name>Flying Eye</name>
 		<textureName>Textures/Characters/flyingEyee</textureName>
 		<value>7</value>
-		<hp>10</hp>
-		<minDmg>10</minDmg>
-		<maxDmg>15</maxDmg>
+		<hp>7</hp>
+		<minDmg>8</minDmg>
+		<maxDmg>11</maxDmg>
     <boss>false</boss>
 	</monster>
 
@@ -73,9 +73,9 @@
 		<name>Shade</name>
 		<textureName>Textures/Characters/shade</textureName>
 		<value>8</value>
-		<hp>15</hp>
-		<minDmg>12</minDmg>
-		<maxDmg>15</maxDmg>
+		<hp>10</hp>
+		<minDmg>10</minDmg>
+		<maxDmg>13</maxDmg>
     <boss>false</boss>
 	</monster>
 
@@ -83,9 +83,9 @@
 		<name>The Boss</name>
 		<textureName>Textures/Characters/boss</textureName>
 		<value>9</value>
-		<hp>50</hp>
-		<minDmg>9</minDmg>
-		<maxDmg>10</maxDmg>
+		<hp>8</hp>
+		<minDmg>3</minDmg>
+		<maxDmg>5</maxDmg>
     <boss>true</boss>
 	</monster>	
 </monsters>
