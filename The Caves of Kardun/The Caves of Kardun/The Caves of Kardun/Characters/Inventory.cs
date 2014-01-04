@@ -186,6 +186,10 @@ namespace The_Caves_of_Kardun
                             Tooltip.Hide();
                             return;
                         }
+
+                        if (Tooltip.SelectedItem != this.hover)
+                            Tooltip.Hide();
+
                         hoverNothing = false;
                         Tooltip.Show(this.hover);
 

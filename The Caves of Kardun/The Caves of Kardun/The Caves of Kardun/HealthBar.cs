@@ -140,6 +140,7 @@ namespace The_Caves_of_Kardun
 
             spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
         }
+
         #endregion
     }
 }

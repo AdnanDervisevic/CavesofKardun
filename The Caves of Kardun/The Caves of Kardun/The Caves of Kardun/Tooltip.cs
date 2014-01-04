@@ -31,6 +31,15 @@ namespace The_Caves_of_Kardun
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the selected item.
+        /// </summary>
+        public static Item SelectedItem { get; private set; }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -70,8 +79,9 @@ namespace The_Caves_of_Kardun
                 throw new Exception("Error, tooltip is not initialized.");
 
             if (draw)
-                return;             
+                return;
 
+            Tooltip.SelectedItem = item;
             Tooltip.stringBuilder = new StringBuilder(item.Name + "|");
 
             /*

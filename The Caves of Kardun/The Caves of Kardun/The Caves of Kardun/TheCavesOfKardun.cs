@@ -199,7 +199,7 @@ namespace The_Caves_of_Kardun
 
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 30,
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 10,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
@@ -297,9 +297,11 @@ namespace The_Caves_of_Kardun
                 {
                     this.gameStarted = false;
                     this.level.ResetGame();
+                    this.enemyHealthBar.Character = null;
                     this.player.Position = new Vector2(
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
+                    this.player.RandomTraits();
                 }
 
                 bool showOnce = false;
@@ -591,6 +593,7 @@ namespace The_Caves_of_Kardun
                     if (item.Type == ItemTypes.Ladder)
                     {
                         this.level.NextLevel();
+                        this.enemyHealthBar.Character = null;
                         this.player.Position = new Vector2(
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);

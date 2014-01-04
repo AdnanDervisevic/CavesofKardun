@@ -24,7 +24,7 @@ namespace The_Caves_of_Kardun
         {
             get
             {
-                return base.Health * Level.LevelCount;
+                return (int)(base.Health * Math.Max(((float)Level.LevelCount / 2), 1));
             }
         }
 
@@ -35,7 +35,7 @@ namespace The_Caves_of_Kardun
         {
             get
             {
-                return random.Next(minDamage, maxDamage + 1) * Level.LevelCount;
+                return (int)(random.Next(minDamage, maxDamage + 1) * Math.Max(((float)Level.LevelCount / 2), 1));
             }
         }
 

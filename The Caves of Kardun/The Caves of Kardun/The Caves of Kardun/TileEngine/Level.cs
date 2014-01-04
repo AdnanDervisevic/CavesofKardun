@@ -207,6 +207,7 @@ namespace The_Caves_of_Kardun
         public void ResetGame()
         {
             Level.levelCount = 1;
+            Tooltip.Hide();
             MakeLevel(this.amountOfRooms, this.maxFails);
         }
 
@@ -217,6 +218,7 @@ namespace The_Caves_of_Kardun
         {
             Level.levelCount++;
             this.Player.DamageTaken = 0;
+            Tooltip.Hide();
             MakeLevel(this.amountOfRooms, this.maxFails);
         }
 
@@ -230,7 +232,7 @@ namespace The_Caves_of_Kardun
 
             // 15% chance to spawn a helmet.
             int itemSpawnPosIndex = -1;
-            if (random.Next(0, 100) >= 85)
+            if (random.Next(0, 100) >= 65)
                 itemSpawnPosIndex = random.Next(0, 8);
 
             Point[] lootSpawns = new Point[8];

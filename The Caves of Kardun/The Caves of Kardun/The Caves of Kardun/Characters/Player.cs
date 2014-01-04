@@ -51,9 +51,9 @@ namespace The_Caves_of_Kardun
                     bonusHealth += this.Equipment.Boots.Health;
 
                 if ((this.PositiveTraits & PositiveTraits.SuperLife) == PositiveTraits.SuperLife)
-                    return ((base.Health + bonusHealth) * 2) * Level.LevelCount;
+                    return (int)(((base.Health + bonusHealth) * 2) * Math.Max(((float)Level.LevelCount / 2), 1));
                 else
-                    return (base.Health + bonusHealth) * Level.LevelCount;
+                    return (int)((base.Health + bonusHealth) * Math.Max(((float)Level.LevelCount / 2), 1));
             }
         }
 
@@ -77,7 +77,7 @@ namespace The_Caves_of_Kardun
                 if (this.Equipment.Boots != null)
                     blonusBlock += this.Equipment.Boots.Block;
 
-                return blonusBlock * Level.LevelCount;
+                return (int)(blonusBlock * Math.Max(((float)Level.LevelCount / 2), 1));
             }
         }
 
@@ -121,9 +121,9 @@ namespace The_Caves_of_Kardun
                     maxDamage += this.Equipment.Boots.MaxDamage;
                 }
                 if ((this.PositiveTraits & PositiveTraits.SuperStrength) == PositiveTraits.SuperStrength)
-                    return random.Next(minDamage * 2, maxDamage * 2 + 1) * Level.LevelCount;
+                    return (int)(random.Next(minDamage * 2, maxDamage * 2 + 1) * Math.Max(((float)Level.LevelCount / 2), 1));
                 else
-                    return random.Next(minDamage, maxDamage + 1) * Level.LevelCount;
+                    return (int)(random.Next(minDamage, maxDamage + 1) * Math.Max(((float)Level.LevelCount / 2), 1));
             }
         }
 
@@ -148,7 +148,7 @@ namespace The_Caves_of_Kardun
                     dot.DotDuration += this.Equipment.LeftHand.DotDuration;
                 }
 
-                dot.Damage *= Level.LevelCount;
+                dot.Damage *= (int)Math.Max(((float)Level.LevelCount / 2), 1);
 
                 return dot;
             }
@@ -202,6 +202,21 @@ namespace The_Caves_of_Kardun
         {
             
             this.random = new Random();
+            RandomTraits();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Generate random traits for the player.
+        /// </summary>
+        public void RandomTraits()
+        {
+            this.PositiveTraits = 0;
+            this.NegativeTraits = 0;
+
             int[] table = new int[] { 1, 2, 4, 8, 16 };
 
             int traits = 0;
@@ -226,10 +241,6 @@ namespace The_Caves_of_Kardun
                 }
             } while (traits < 2);
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Loads content for the player.

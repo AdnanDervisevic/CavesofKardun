@@ -153,6 +153,10 @@ namespace The_Caves_of_Kardun
         public void InflictDamage(int damage)
         {
             this.DamageTaken += damage;
+
+            if (this.DamageTaken > this.Health)
+                this.DamageTaken = this.Health;
+
             this.CombatText = "-" + damage + " Damage";
         }
 

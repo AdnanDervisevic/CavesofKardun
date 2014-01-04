@@ -8,6 +8,7 @@ namespace The_Caves_of_Kardun
     [Flags]
     public enum PositiveTraits
     { 
+        None                = 0,
         SuperStrength       = 1,
         SuperLife           = 2,
         ElvenSpeed          = 4,
@@ -21,6 +22,7 @@ namespace The_Caves_of_Kardun
     [Flags]
     public enum NegativeTraits
     {
+        None                = 0,
         ColourBlind         = 1,
         MissingAnEye        = 2,
         MissingAnArm        = 4,
