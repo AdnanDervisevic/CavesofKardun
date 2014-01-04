@@ -105,6 +105,14 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public Player Player { get; set; }
 
+        /// <summary>
+        /// Gets the list of gold items as read only.
+        /// </summary>
+        public ReadOnlyCollection<Item> GoldItems
+        {
+            get { return this.goldItems.AsReadOnly(); }
+        }
+
         #endregion
 
         #region Constructors

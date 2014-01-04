@@ -1,5 +1,5 @@
 // The blur amount( how far away from our texel will we look up neighbour texels? )
-float BlurDistance = 0.004f;
+float BlurDistance = 0.002f;
 
 // This will use the texture bound to the object( like from the sprite batch ).
 sampler ColorMapSampler : register(s0);

@@ -164,6 +164,24 @@ namespace The_Caves_of_Kardun
         }
 
         /// <summary>
+        /// Show a tooltip for a specific item.
+        /// </summary>
+        /// <param name="item">The item to show the tooltip for.</param>
+        public static void Show(int gold)
+        {
+            if (!initialized)
+                throw new Exception("Error, tooltip is not initialized.");
+
+            if (draw)
+                return;
+
+            Tooltip.SelectedItem = null;
+            Tooltip.stringBuilder = new StringBuilder("Gold|Amount: " + gold);
+
+            draw = true;
+        }
+
+        /// <summary>
         /// Shows a tooltip for the traits.
         /// </summary>
         /// <param name="positiveTraits">The positive traits.</param>

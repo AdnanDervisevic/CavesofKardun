@@ -269,13 +269,16 @@ namespace The_Caves_of_Kardun
         public void Reset()
         {
             this.Inventory.Gold = 0;
-            for (int i = 0; i < this.Inventory.Items.GetLength(0); i++)
+            for (int i = 0; i < this.Inventory.Items.GetLength(0) - 1; i++)
                 this.Inventory.Items[i] = null;
 
             this.Equipment.Helmet = null;
             this.Equipment.RightHand = null;
             this.Equipment.LeftHand = null;
             this.Equipment.Boots = null;
+
+            this.Motion = Vector2.Zero;
+            this.TargetPosition = Vector2.Zero;
 
             this.DamageTaken = 0;
         }

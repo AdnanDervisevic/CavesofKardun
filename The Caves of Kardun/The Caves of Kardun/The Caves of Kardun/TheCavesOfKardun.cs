@@ -85,6 +85,8 @@ namespace The_Caves_of_Kardun
         private HealthBar playerHealthBar;
         private HealthBar enemyHealthBar;
 
+        private bool playerDead;
+
         #endregion
 
         #region Properties
@@ -199,10 +201,12 @@ namespace The_Caves_of_Kardun
 
             this.player = new Player(Content.Load<Texture2D>("Textures/Characters/player"), new Vector2(
                 this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
-                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 10,
+                this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight), 500, 30,
                 Content.Load<SpriteFont>("Fonts/combatFont"));
             this.player.LoadContent(Content, new Vector2(GraphicsDevice.Viewport.Width - 248, GraphicsDevice.Viewport.Height - 248), new Vector2(0, GraphicsDevice.Viewport.Height - 248));
             this.level.Player = this.player;
+
+            this.player.Inventory.SetItem(8, this.level.GoldItems[0]);
 
             this.playerHealthBar = new HealthBar(this.player, new Vector2(10, 10), true);
             this.playerHealthBar.LoadContent(Content);
@@ -276,6 +280,7 @@ namespace The_Caves_of_Kardun
                 {
                     this.player.Reset();
                     this.gameStarted = true;
+                    this.playerDead = false;
                 }
             }
             else
@@ -302,6 +307,8 @@ namespace The_Caves_of_Kardun
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.X * TheCavesOfKardun.TileWidth,
                             this.level.Rooms[this.level.RoomSpawnIndex].Center.Y * TheCavesOfKardun.TileHeight);
                     this.player.RandomTraits();
+
+                    this.playerDead = true;
                 }
 
                 bool showOnce = false;
@@ -333,7 +340,7 @@ namespace The_Caves_of_Kardun
             {
                 spriteBatch.Begin();
 
-                if (this.player.Alive)
+                if (!this.playerDead)
                     spriteBatch.Draw(this.startScreenTexture, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                 else
                 {
