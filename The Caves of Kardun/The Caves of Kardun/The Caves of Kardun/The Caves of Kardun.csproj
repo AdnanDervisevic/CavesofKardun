@@ -112,11 +112,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\The Caves of KardunContent\The Caves of KardunContent.contentproj">
-      <Name>The_Caves_of_KardunContent</Name>
+      <Name>The Caves of KardunContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{5607F99E-D227-4751-ADFB-BCDBFF4B27F0}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="The Caves of Kardun_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

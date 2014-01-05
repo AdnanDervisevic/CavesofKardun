@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="The_Caves_of_Kardun.Character" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AghACAAASAAAAgAgAAAAAAQFAIBgggQQAAAAAAAIQDA=</HashCode>
+      <FileName>Characters\Character.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.MonsterData">
+    <Position X="5.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAgAAAAAAAQAAAAAQAAAACAAAAAAIgAAgAAAA=</HashCode>
+      <FileName>Characters\Data\MonsterData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.MonsterReader">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Characters\Data\MonsterData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Equipment">
+    <Position X="8.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQQAAAAAAAAAgAAAAAAAACAAQABAFABAAACAAAAAAI=</HashCode>
+      <FileName>Characters\Equipment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Inventory">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQgQAgAgAAADoEAAAgAAAAAAAABBREJAAQCIAAAAAE=</HashCode>
+      <FileName>Characters\Inventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Monster">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <InheritanceLine Type="The_Caves_of_Kardun.Character" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="1.062" />
+        <Point X="7.75" Y="1.375" />
+        <Point X="6.5" Y="1.375" />
+        <Point X="6.5" Y="1.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAEACACAAAAAAIAAQAAAAGIACIgAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Characters\Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Player">
+    <Position X="8.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BASECCCAAAAAhgAAAQABAAQAAIAQAAACAAQAAgAEAAQ=</HashCode>
+      <FileName>Characters\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Dot">
+    <Position X="4" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAACEAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Dot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.HealthBar">
+    <Position X="5.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABEAAAAAAgAAAAAAIAAAAAAIACAAIAAAAAAQCAw=</HashCode>
+      <FileName>HealthBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Items">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Items\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Item">
+    <Position X="10.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAECCAAgABCAAAAAQAAAAQBAAASAAAAEQIgAgwAAAA=</HashCode>
+      <FileName>Items\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.ItemReader">
+    <Position X="12" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Items\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Program">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.TheCavesOfKardun">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICQAkEAkQAIQwwBABAABQWBCBBUABRJDAIwQAYIQCAQ=</HashCode>
+      <FileName>TheCavesOfKardun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Level">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QcBJUggUQgCBFgEAAGIogFACkBSTAgBAAoRCQQBIgCQ=</HashCode>
+      <FileName>TileEngine\Level.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Room">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAQBEAQAAAIAAQACASBAAAIAAA=</HashCode>
+      <FileName>TileEngine\Room.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="The_Caves_of_Kardun.Tooltip">
+    <Position X="4" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABACABAAAwAAEAIAAAAAAAAEACAAABAAgAAAAAg=</HashCode>
+      <FileName>Tooltip.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="The_Caves_of_Kardun.PositiveTraits">
+    <Position X="12" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAEAQAAAAAAAgAAAAAAAAAAEAgAA=</HashCode>
+      <FileName>Characters\Traits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="The_Caves_of_Kardun.NegativeTraits">
+    <Position X="12" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAABAAAAAAAAAAAAAAAAAAAABAAAABAAAAEAAAA=</HashCode>
+      <FileName>Characters\Traits.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="The_Caves_of_Kardun.ItemSpecials">
+    <Position X="12" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAABEAQAA=</HashCode>
+      <FileName>Items\ItemSpecials.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="The_Caves_of_Kardun.ItemTypes">
+    <Position X="12" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAEAAAQAAAAAAABAAQAAAAAAAAAAAAEAAAM=</HashCode>
+      <FileName>Items\ItemTypes.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
