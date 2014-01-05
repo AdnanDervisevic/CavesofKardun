@@ -6,8 +6,8 @@
     <overworldTextureName>Textures/Items/Swords/WoodOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>0</value>
-		<minDmg>1</minDmg>
-		<maxDmg>2</maxDmg>
+		<minDmg>4</minDmg>
+		<maxDmg>5</maxDmg>
 	</item>
 
 	<item>
@@ -16,8 +16,8 @@
     <overworldTextureName>Textures/Items/Swords/CopparOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>1</value>
-		<minDmg>2</minDmg>
-		<maxDmg>3</maxDmg>
+		<minDmg>4</minDmg>
+		<maxDmg>6</maxDmg>
 	</item>
 
 	<item>
@@ -26,8 +26,8 @@
     <overworldTextureName>Textures/Items/Swords/IronOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>2</value>
-		<minDmg>2</minDmg>
-		<maxDmg>5</maxDmg>
+		<minDmg>5</minDmg>
+		<maxDmg>8</maxDmg>
 	</item>
 
 	<item>
@@ -36,8 +36,8 @@
     <overworldTextureName>Textures/Items/Swords/LightningOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>3</value>
-		<minDmg>5</minDmg>
-		<maxDmg>5</maxDmg>
+		<minDmg>8</minDmg>
+		<maxDmg>8</maxDmg>
 	</item>
 
 	<item>
@@ -46,8 +46,8 @@
     <overworldTextureName>Textures/Items/Swords/MithrilOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>4</value>
-		<minDmg>3</minDmg>
-		<maxDmg>6</maxDmg>
+		<minDmg>8</minDmg>
+		<maxDmg>10</maxDmg>
 	</item>
 
 	<item>
@@ -56,10 +56,10 @@
     <overworldTextureName>Textures/Items/Swords/LavaOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>5</value>
-		<minDmg>2</minDmg>
-		<maxDmg>2</maxDmg>
-		<dotDmg>12</dotDmg>
-		<dotDuration>4</dotDuration>
+		<minDmg>7</minDmg>
+		<maxDmg>7</maxDmg>
+		<dotDmg>8</dotDmg>
+		<dotDuration>2</dotDuration>
 	</item>
 
 	<item>
@@ -68,9 +68,9 @@
     <overworldTextureName>Textures/Items/Swords/FireOverworld</overworldTextureName>
 		<type>Sword</type>
 		<value>6</value>
-		<minDmg>3</minDmg>
-		<maxDmg>7</maxDmg>
-		<dotDmg>3</dotDmg>
+		<minDmg>8</minDmg>
+		<maxDmg>12</maxDmg>
+		<dotDmg>12</dotDmg>
 		<dotDuration>3</dotDuration>
 	</item>
 
@@ -82,9 +82,9 @@
     <overworldTextureName>Textures/Items/Shields/BucklerOverworld</overworldTextureName>
 		<type>Shield</type>
 		<value>0</value>
-		<hp>1</hp>
-    <minDmg>1</minDmg>
-    <maxDmg>1</maxDmg>
+		<hp>5</hp>
+    <minDmg>2</minDmg>
+    <maxDmg>2</maxDmg>
 	</item>
 
 	<item>
@@ -93,10 +93,10 @@
     <overworldTextureName>Textures/Items/Shields/SpikedBucklerOverworld</overworldTextureName>
 		<type>Shield</type>
 		<value>1</value>
-		<hp>1</hp>
-		<block>1</block>
-		<minDmg>2</minDmg>
-		<maxDmg>2</maxDmg>
+		<hp>8</hp>
+		<block>4</block>
+		<minDmg>3</minDmg>
+		<maxDmg>3</maxDmg>
 	</item>
 
 	<item>
@@ -105,10 +105,10 @@
     <overworldTextureName>Textures/Items/Shields/HeaterOverworld</overworldTextureName>
 		<type>Shield</type>
 		<value>2</value>
-		<hp>4</hp>
-		<block>5</block>
-		<minDmg>3</minDmg>
-		<maxDmg>3</maxDmg>
+		<hp>10</hp>
+		<block>8</block>
+		<minDmg>4</minDmg>
+		<maxDmg>4</maxDmg>
 	</item>
 
 	<item>
@@ -117,10 +117,10 @@
     <overworldTextureName>Textures/Items/Shields/MirrorOverworld</overworldTextureName>
 		<type>Shield</type>
 		<value>3</value>
-		<hp>8</hp>
-		<block>3</block>
-		<minDmg>4</minDmg>
-		<maxDmg>4</maxDmg>
+		<hp>10</hp>
+		<block>8</block>
+		<minDmg>6</minDmg>
+		<maxDmg>9</maxDmg>
 		<miss>50</miss>
 	</item>
 
@@ -130,8 +130,8 @@
     <overworldTextureName>Textures/Items/Shields/RedWoundOverworld</overworldTextureName>
 		<type>Shield</type>
 		<value>4</value>
-		<hp>10</hp>
-		<block>2</block>
+		<hp>14</hp>
+		<block>10</block>
 		<minDmg>10</minDmg>
 		<maxDmg>10</maxDmg>
 	</item>
@@ -143,9 +143,9 @@
 		<type>Shield</type>
 		<value>5</value>
 		<hp>8</hp>
-		<block>8</block>
-		<minDmg>5</minDmg>
-		<maxDmg>5</maxDmg>
+		<block>15</block>
+		<minDmg>8</minDmg>
+		<maxDmg>8</maxDmg>
 	</item>
 
 	<item>
@@ -154,10 +154,10 @@
     <overworldTextureName>Textures/Items/Shields/RedWallOverworld</overworldTextureName>
 		<type>Shield</type>
 		<value>6</value>
-		<hp>10</hp>
-		<block>10</block>
-		<minDmg>2</minDmg>
-		<maxDmg>2</maxDmg>
+		<hp>12</hp>
+		<block>15</block>
+		<minDmg>10</minDmg>
+		<maxDmg>10</maxDmg>
 	</item>
 
 	<item>
@@ -167,9 +167,9 @@
 		<type>Shield</type>
 		<value>7</value>
 		<hp>20</hp>
-		<block>10</block>
-		<minDmg>5</minDmg>
-		<maxDmg>5</maxDmg>
+		<block>14</block>
+		<minDmg>8</minDmg>
+		<maxDmg>12</maxDmg>
 	</item>
 
 	<!-- Helmet Items -->
@@ -180,7 +180,7 @@
     <overworldTextureName>Textures/Items/Helmets/OpticsOverworld</overworldTextureName>
 		<type>Helmet</type>
 		<value>0</value>
-		<hp>1</hp>
+		<hp>5</hp>
 		<special>Sight</special>
 	</item>
 
@@ -190,7 +190,7 @@
     <overworldTextureName>Textures/Items/Helmets/GizmoOverworld</overworldTextureName>
 		<type>Helmet</type>
 		<value>1</value>
-		<hp>5</hp>
+		<hp>8</hp>
 		<special>Colour</special>
 	</item>
 
@@ -200,7 +200,7 @@
     <overworldTextureName>Textures/Items/Helmets/LifeOverworld</overworldTextureName>
 		<type>Helmet</type>
 		<value>2</value>
-		<hp>15</hp>
+		<hp>30</hp>
 	</item>
 
 	<item>
@@ -209,7 +209,7 @@
     <overworldTextureName>Textures/Items/Helmets/MaphackOverworld</overworldTextureName>
 		<type>Helmet</type>
 		<value>3</value>
-		<hp>10</hp>
+		<hp>15</hp>
 		<special>Minimap</special>
 	</item>
 
@@ -221,8 +221,8 @@
     <overworldTextureName>Textures/Items/Boots/LeatherOverworld</overworldTextureName>
 		<type>Boots</type>
 		<value>0</value>
-		<minDmg>1</minDmg>
-		<maxDmg>1</maxDmg>
+		<minDmg>2</minDmg>
+		<maxDmg>2</maxDmg>
 		<speed>2</speed>
 	</item>
 
@@ -233,7 +233,7 @@
 		<type>Boots</type>
 		<value>1</value>
 		<minDmg>1</minDmg>
-		<maxDmg>2</maxDmg>
+		<maxDmg>3</maxDmg>
 		<speed>2</speed>
 	</item>
 
@@ -243,8 +243,8 @@
     <overworldTextureName>Textures/Items/Boots/SpikedIronOverworld</overworldTextureName>
 		<type>Boots</type>
 		<value>2</value>
-		<minDmg>2</minDmg>
-		<maxDmg>4</maxDmg>
+		<minDmg>3</minDmg>
+		<maxDmg>6</maxDmg>
 		<speed>2</speed>
 	</item>
 
@@ -254,8 +254,8 @@
     <overworldTextureName>Textures/Items/Boots/SpikedMithrilOverworld</overworldTextureName>
 		<type>Boots</type>
 		<value>3</value>
-		<minDmg>3</minDmg>
-		<maxDmg>6</maxDmg>
+		<minDmg>6</minDmg>
+		<maxDmg>10</maxDmg>
 		<speed>2</speed>
 	</item>
   
@@ -267,7 +267,7 @@
     <type>Gold</type>
     <value>0</value>
     <minGold>5</minGold>
-    <maxGold>35</maxGold>
+    <maxGold>20</maxGold>
   </item>
   
   <item>
@@ -275,8 +275,8 @@
     <overworldTextureName>Textures/Items/Gold/medGold</overworldTextureName>
     <type>Gold</type>
     <value>1</value>
-    <minGold>20</minGold>
-    <maxGold>50</maxGold>
+    <minGold>15</minGold>
+    <maxGold>30</maxGold>
   </item>
   
   <item>
@@ -284,8 +284,8 @@
     <overworldTextureName>Textures/Items/Gold/maxGold</overworldTextureName>
     <type>Gold</type>
     <value>2</value>
-    <minGold>45</minGold>
-    <maxGold>70</maxGold>
+    <minGold>25</minGold>
+    <maxGold>40</maxGold>
   </item>
 
   <item>
@@ -294,7 +294,7 @@
     <overworldTextureName>Textures/Items/healthPotion</overworldTextureName>
     <type>Potion</type>
     <value>0</value>
-    <hp>10</hp>
+    <hp>15</hp>
   </item>
 
   <item>

@@ -274,7 +274,10 @@ namespace The_Caves_of_Kardun
             int totalDamage = 0;
 
             foreach (Monster monster in this.monsters)
-                totalDamage += monster.UpdateAI(gameTime, this, player);
+            {
+                if (this.Player.MissChance == 0 || random.Next(0, 100) >= this.Player.MissChance)
+                    totalDamage += monster.UpdateAI(gameTime, this, player);
+            }
 
             // When we've moved/calculated damage for all monsters then inflict the combined damage to the player.
             if (totalDamage > 0)

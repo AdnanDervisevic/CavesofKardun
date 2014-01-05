@@ -93,8 +93,8 @@ namespace The_Caves_of_Kardun
                     (this.Equipment.LeftHand != null && this.Equipment.LeftHand.Type == ItemTypes.Sword);
 
                 // If we're not holding a shield or sword set the default damage to 1.
-                int minDamage = swordOrShield ? 0 : 1;
-                int maxDamage = swordOrShield ? 0 : 1;
+                int minDamage = swordOrShield ? 0 : 3;
+                int maxDamage = swordOrShield ? 0 : 3;
 
                 // Add the min&max damage of all the gear.
                 if (this.Equipment.Helmet != null)
@@ -120,6 +120,7 @@ namespace The_Caves_of_Kardun
                     minDamage += this.Equipment.Boots.MinDamage;
                     maxDamage += this.Equipment.Boots.MaxDamage;
                 }
+
                 if ((this.PositiveTraits & PositiveTraits.SuperStrength) == PositiveTraits.SuperStrength)
                     return (int)(random.Next(minDamage * 2, maxDamage * 2 + 1) * Math.Max(((float)Level.LevelCount / 2), 1));
                 else
@@ -151,6 +152,31 @@ namespace The_Caves_of_Kardun
                 dot.Damage *= (int)Math.Max(((float)Level.LevelCount / 2), 1);
 
                 return dot;
+            }
+        }
+
+        /// <summary>
+        /// Gets the miss chance.
+        /// </summary>
+        public int MissChance
+        {
+            get
+            {
+                int value = 0;
+
+                if (this.Equipment.Helmet != null)
+                    value += this.Equipment.Helmet.MissChance;
+
+                if (this.Equipment.LeftHand != null)
+                    value += this.Equipment.LeftHand.MissChance;
+
+                if (this.Equipment.RightHand != null)
+                    value += this.Equipment.RightHand.MissChance;
+
+                if (this.Equipment.Boots != null)
+                    value += this.Equipment.Boots.MissChance;
+
+                return value;
             }
         }
 
@@ -214,6 +240,7 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public void RandomTraits()
         {
+            /*
             this.PositiveTraits = 0;
             this.NegativeTraits = 0;
 
@@ -239,7 +266,7 @@ namespace The_Caves_of_Kardun
                     traits++;
                     this.NegativeTraits |= trait;
                 }
-            } while (traits < 2);
+            } while (traits < 2); */
         }
 
         /// <summary>
