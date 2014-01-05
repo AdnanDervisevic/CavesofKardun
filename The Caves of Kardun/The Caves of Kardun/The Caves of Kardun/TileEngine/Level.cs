@@ -594,9 +594,9 @@ namespace The_Caves_of_Kardun
                 MakeCorridor(this.rooms[i], this.rooms[i + 1]);
 
             MakeWalls();
-            SpawnMonsters(30);
+            SpawnMonsters(20);
             SpawnItems();
-            SpawnPotions(4);
+            SpawnPotions(3);
             SpawnGold(80);
 
             SpawnBoss();
@@ -633,7 +633,6 @@ namespace The_Caves_of_Kardun
                 if (floorTile != Point.Zero)
                 {
                     int maxValue = Math.Min((int)Math.Floor(Math.Sqrt(Level.levelCount * Math.Pow(5, 2)) / 2), this.monsterData.Count);
-
 
                     int index = random.Next(0, maxValue);
 

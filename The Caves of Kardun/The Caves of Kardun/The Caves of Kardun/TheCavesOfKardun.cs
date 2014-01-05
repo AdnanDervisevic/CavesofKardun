@@ -187,7 +187,7 @@ namespace The_Caves_of_Kardun
         protected override void LoadContent()
         {
             Tooltip.Initialize(GraphicsDevice, Content.Load<SpriteFont>("Fonts/titleFont"), Content.Load<SpriteFont>("Fonts/textFont"));
-            this.level = new Level(this.Content, new Point(75, 75), null, 20, 5, 100);
+            this.level = new Level(this.Content, new Point(75, 75), null, 20, 3, 100);
             this.level.LoadContent();
 
             this.startScreenTexture = Content.Load<Texture2D>("titleScreen");
