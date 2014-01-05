@@ -67,12 +67,6 @@ namespace The_Caves_of_Kardun
         #region Constructors
 
         /// <summary>
-        /// Creates an empty monster object.
-        /// </summary>
-        public Monster()
-            : base(string.Empty, null, Vector2.Zero, 0, 0, null) { }
-
-        /// <summary>
         /// Creates a new monster.
         /// </summary>
         /// <param name="texture">The texture of the monster.</param>

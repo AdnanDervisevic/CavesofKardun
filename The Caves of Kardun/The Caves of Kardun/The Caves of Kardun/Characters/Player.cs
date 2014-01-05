@@ -240,7 +240,6 @@ namespace The_Caves_of_Kardun
         /// </summary>
         public void RandomTraits()
         {
-            /*
             this.PositiveTraits = 0;
             this.NegativeTraits = 0;
 
@@ -266,7 +265,7 @@ namespace The_Caves_of_Kardun
                     traits++;
                     this.NegativeTraits |= trait;
                 }
-            } while (traits < 2); */
+            } while (traits < 2);
         }
 
         /// <summary>

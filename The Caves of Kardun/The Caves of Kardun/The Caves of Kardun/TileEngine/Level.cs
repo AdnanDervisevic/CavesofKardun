@@ -67,14 +67,6 @@ namespace The_Caves_of_Kardun
         public static int LevelCount { get { return Level.levelCount; } }
 
         /// <summary>
-        /// Gets the map data.
-        /// </summary>
-        public int[,] MapData
-        {
-            get { return this.mapData; }
-        }
-
-        /// <summary>
         /// Gets the list of rooms.
         /// </summary>
         public ReadOnlyCollection<Room> Rooms 

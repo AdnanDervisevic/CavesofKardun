@@ -127,14 +127,6 @@ namespace The_Caves_of_Kardun
             get { return previousKeyboardState; }
         }
 
-        /// <summary>
-        /// player returned for traits purposes
-        /// </summary>
-        public Player pC
-        {
-            get { return player; }
-        }
-
         #endregion
 
         #region Constructors
