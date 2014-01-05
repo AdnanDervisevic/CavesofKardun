@@ -347,7 +347,7 @@ namespace The_Caves_of_Kardun
                 spriteBatch.Draw(Tooltip.borderTexture, new Rectangle((int)(position.X + width), (int)position.Y - 3, 3, (int)height + 6), Color.White);
                 spriteBatch.Draw(Tooltip.borderTexture, new Rectangle((int)(position.X), (int)(position.Y - 3), (int)width, 3), Color.White);
                 spriteBatch.Draw(Tooltip.borderTexture, new Rectangle((int)(position.X), (int)(position.Y + height), (int)width, 3), Color.White);
-                spriteBatch.Draw(Tooltip.blackTexture, new Rectangle((int)position.X, (int)position.Y, (int)width, (int)height), Color.White * 0.4f);
+                spriteBatch.Draw(Tooltip.blackTexture, new Rectangle((int)position.X, (int)position.Y, (int)width, (int)height), Color.White * 0.8f);
 
                 position += new Vector2(margin);
                 for (int i = 0; i < strings.Length; i++)
